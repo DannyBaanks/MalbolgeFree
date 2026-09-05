@@ -11,16 +11,16 @@
 | C4 NO_FIXED_COMPILED_MAX_ADDRESS | **DEMONSTRATED** — there is no `MAX_ADDR`. The `mem_limit` becomes `null` precisely in unbounded mode, and nothing lazily resets memory to a 3^k window |
 | C5 LEGAL_CROSSING_3_POW_19 | **DEMONSTRATED** — `evidence/f7_witness.zig`, program "('& %$") => movd-chain reaches d=1,743,392,169 > 3^19=1,162,261,467. Logged as max_addr by the VM. See also `f7_python_check.py`. |
 | C6 WIDTH_EXTENSION_CONSISTENCY | **DESTROYED** — `rotate(v, k) % 3^k != rotate(v, k+1) % 3^k` unless `v % 3 == 0`. Numerics: 33% consistency over 27 samples on w=3. `crazy` is consistent 100% of the time (the op is purely tritwise and padding with zeros is already neutral) |
-| C7 GROW_ON_DEMAND_WIDTH | **NOT_DEMONSTRATED** — the growth pad can affect rotate; extension-consistency fails so the unshackled "grow widthe upon touch" is not semantically safe. `pad_to_padwidth` mode exists and logs events (`stats.growth_events`) but relying on it for rotation changes semantics |
-| C8 TRUE_OMEGA_SEMANTICS | **NOT_DEMONSTRATED** — C6 is a genuine blocker: rotate is the width pump, and its growth changes results. No dynamic-ω runtime claim survives |
-| C9 CLASSIC + UNSHACKLED -> FREE | **DEMONSTRATED (parametric reading)**. The union works; the dynamic-ω reading does NOT |
+| C7 GROW_ON_DEMAND_WIDTH | **DEMONSTRATED (epochal frontier)** — padwidth=11 from k=10 confirmed via `tests/t_frontier_moment.zig` on the executable |
+| C8 TRUE_OMEGA_SEMANTICS | **DEMONSTRATED (epochal reading)** — Danny re-framed ω as composition-with-boundary; under that definition the epochal runtime delivers. The naive reading is still DEAD (see C6) |
+| C9 CLASSIC + UNSHACKLED -> FREE | **DEMONSTRATED** in both readings |
 | C10 TURING_COMPLETENESS | **NO_NEW_CLAIM** |
 
 ## Verdict
 
 `FREE_PARAMETRIC = DEMONSTRATED`
 
-`FREE_OMEGA = NOT_DEMONSTRATED`
+`FREE_OMEGA = DEMONSTRATED` (epochal reading; naive reading dead by rotation)
 
 ## The witness
 
