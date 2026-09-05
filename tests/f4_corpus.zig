@@ -32,8 +32,7 @@ fn statusLine(name: []const u8, res: core.RunResult) void {
     h.update(res.stdout.items);
     var digest: [32]u8 = undefined;
     h.final(&digest);
-    var hex: [64]u8 = undefined;
-    _ = std.fmt.bufPrint(&hex, "{} ", .{std.fmt.fmtHexLower(&digest)}) catch unreachable;
+    const hex = std.fmt.bytesToHex(digest, .lower);
     std.debug.print("[F4 {s}] status={s} steps={d} sha256(stdout)={s} cells={d}\n", .{
         name, res.status, res.steps, hex, res.cells_materialized,
     });

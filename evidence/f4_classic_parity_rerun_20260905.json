@@ -1,0 +1,92 @@
+{
+  "phase": "F4",
+  "claim": "CLASSIC_COMPATIBILITY",
+  "all_match": false,
+  "verdicts": [
+    {
+      "program": "echo.mal",
+      "match": true,
+      "python": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89"
+      },
+      "zig": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89"
+      }
+    },
+    {
+      "program": "echo1.mal",
+      "match": true,
+      "python": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89"
+      },
+      "zig": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89"
+      }
+    },
+    {
+      "program": "echo2.mal",
+      "match": true,
+      "python": {
+        "status": "HALTED",
+        "steps": 5,
+        "stdout_sha256": "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb"
+      },
+      "zig": {
+        "status": "HALTED",
+        "steps": 5,
+        "stdout_sha256": "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb"
+      }
+    },
+    {
+      "program": "echo3.mal",
+      "match": true,
+      "python": {
+        "status": "HALTED",
+        "steps": 7,
+        "stdout_sha256": "5ae7e6a42304dc6e4176210b83c43024f99a0bce9a870c3b6d2c95fc8ebfb74c"
+      },
+      "zig": {
+        "status": "HALTED",
+        "steps": 7,
+        "stdout_sha256": "5ae7e6a42304dc6e4176210b83c43024f99a0bce9a870c3b6d2c95fc8ebfb74c"
+      }
+    },
+    {
+      "program": "hello.mal",
+      "match": false,
+      "python": {
+        "status": "HALTED",
+        "steps": 40,
+        "stdout_sha256": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069"
+      },
+      "zig": {
+        "status": "HALTED",
+        "steps": 40,
+        "stdout_sha256": "b4a1bc59efc4454d2d965fd5df93b33047587754cff64d5fdc042f8fc2f11378"
+      }
+    },
+    {
+      "program": "reproducer.mal",
+      "match": false,
+      "python": {
+        "status": "HALTED",
+        "steps": 1948,
+        "stdout_sha256": "d94a327593e239b882ba8cf12340cbbbc884fbc84361e1bc7c6928db172c0d50"
+      },
+      "zig": {
+        "status": "HALTED",
+        "steps": 1948,
+        "stdout_sha256": "b70a3a146c3adf8091538a0b41d06057e58237aa576699324301d261919983a9"
+      }
+    }
+  ],
+  "zig_stderr_tail": "c042f8fc2f11378 stdout_raw=[1f3c04042630010a6df26c21] cells=64\nprogram=reproducer.mal status=HALTED steps=1948 sha256=b70a3a146c3adf8091538a0b41d06057e58237aa576699324301d261919983a9 stdout_raw=[7575ce206d26ba80e11689ae78336ee20b0fa0393939390f7278e8832216272736a7800546efb86ffa89896155dcf92b92271275756f224df125a62983dae40f2c2c323170805c8c180d6d393b6db9e155077f7527621077556b4f5765425454] cells=2046\n"
+}

@@ -42,8 +42,8 @@ pub fn main() !void {
 
     // There's no platform for RAM growth of program so this was already sufficient
     if (vm.padwidth == 11) {
-        std.debug.print("=> FRONTIER TRIGGERED at step {d}: k widened 10 -> 11 only after addr {} crossed 3^10\n", .{
-            vm.stats.steps, vm.stats.max_addr,
+        std.debug.print("=> FRONTIER TRIGGERED: width widened 10 -> 11 after addresses crossed 3^10 (status={s}, steps={d}, max_addr={d})\n", .{
+            res.status, res.steps, vm.stats.max_addr,
         });
     } else if (vm.padwidth == 10) {
         std.debug.print("=> NO CROSS: program didn't even reach the frontier\n", .{});

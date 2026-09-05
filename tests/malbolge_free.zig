@@ -9,12 +9,14 @@
 //!                det_growth_policy from Unshackled.c), lazy memory, Unicode-ish
 //!                I/O suppressed here (byte I/O for instrumentation).
 //!   Free       = unbounded memory (mem_limit = null), start width 10,
-//!                padwidth grows on demand via movd/rot evidence.
+//!                w (= padwidth) widens by address frontier under the
+//!                epochal policy: when c or d reaches 3^w, w += 1.
 //!
 //! Values: u128. Width bound: floor(log_3(2^127)) = 80.
 //! For k <= 80 all trit ops are exact. That covers k in {10..26} (crossing
-//! 3^19 needs only 20). Arbitrary-k via BigInt is a FUTURE decision; nobody
-//! claims omega yet.
+//! 3^19 needs only 20). Arbitrary-k via BigInt is a FUTURE decision.
+//! w is a plain finite integer at every executed step — nothing infinite
+//! is claimed anywhere in this file.
 
 const std = @import("std");
 const Allocator = std.mem.Allocator;
@@ -81,15 +83,20 @@ pub const GrowthPolicy = enum {
     /// ANCHORED / EPOCHAL WIDENING.
     ///
     /// Rules (this is a distinct machine, not "M_k postponed"):
-    ///   1. state carries current width `epoch_width`;
-    ///   2. all ops use `epoch_width` exactly like `fixed` does;
-    ///   3. when rotate/crazy/movd *would produce* a value not
-    ///      representable in `epoch_width` trits, we widen **before**
-    ///      executing the op (preflight), log a `WIDEN` event, execute at
-    ///      the new width;
+    ///   1. state carries the current width `padwidth` (docs call it `w`;
+    ///      always a concrete finite integer);
+    ///   2. rotate/crazy use `padwidth` just like `fixed` uses `width`;
+    ///   3. ACTUAL TRIGGER (address frontier): when `c` or `d` reaches
+    ///      `3^padwidth` — possible because unbounded mode never wraps the
+    ///      pointers — `frontierTrigger` bumps `padwidth` by 1 BEFORE the
+    ///      step executes and logs a `WIDEN` event (see `run`);
     ///   4. widening never touches any previously written cell, stdout byte,
     ///      steps count, or any other historical observables;
-    ///   5. `epoch_width` is monotonically non-decreasing.
+    ///   5. `padwidth` is monotonically non-decreasing;
+    ///   6. a VALUE-based trigger (widen when an op result would not fit)
+    ///      can never fire: no op at width k produces a value wider than k
+    ///      trits (see docs/EPOCHAL_ANALYSIS.md). `widenIfNeeded` below is
+    ///      retained for evidence only and is not called by `run`.
     ///
     /// Invariants verified (see tests/epochal.zig):
     ///   - P1 prefix preservation: until first WIDEN, trace equals `fixed` run
@@ -243,9 +250,11 @@ pub const MalbolgeCore = struct {
         }
     }
 
-    /// FRONTERA-BASED TRIGGER: proactively widen BEFORE reading a cell whose
-    /// ADDRESS (not only value) exceeds 3^k. This is the epochal widening that
-    /// Danny hypothesized is_the-semantically-cleaner promoted.
+    /// FRONTIER TRIGGER: widen when the ADDRESS of c or d reaches 3^w.
+    /// A value-based trigger can never fire (docs/EPOCHAL_ANALYSIS.md), but
+    /// in unbounded mode the pointers advance one cell per step and DO reach
+    /// the frontier. Measured once: WIDEN at c = 3^10, w: 10 -> 11
+    /// (tests/t_frontier_moment.zig).
     ///
     /// Contract:
     ///   - fires when c or d is about to reach `3^padwidth`

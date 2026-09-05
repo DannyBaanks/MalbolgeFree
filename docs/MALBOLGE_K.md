@@ -49,12 +49,21 @@ Classic called "the whole machine".
 
 ## Proposed free
 
-`Free` = let k be a runtime value, initially 10, and let `rotate_width(w)` and
-`crazy_width` be pure functions of the operands, NOT a global clamp. Then
-grow `k` only when a rotation produces a value whose width exceeds it.
+`Free` = let the width be a runtime variable `w`, initially 10, and let
+rotate/crazy consume `w` instead of a global clamp. Where `w` can change:
 
-If this works:
+- value-driven growth (rotate/operand overflow) was the first idea — it is
+  **destroyed**, because `rotate` results do not survive a width change
+  (see `evidence/f8_check.py`, 33.3% agreement).
+- address-driven growth (widen when `c` or `d` reaches `3^w`) is what shipped
+  as the `epochal` policy. One transition (`10 -> 11`) is demonstrated;
+  repeated widening is not.
 
-- `Free | k=10, growth=off` = Classic
-- `Free | k=10, growth=det_padding` = Unshackled-like
-- `Free | k=None, growth=det_padding` = Free ^ω^
+Instantiation guide:
+
+- `Free | w=10, fixed, wrap 3^10` = Classic
+- `Free | w=10, growth=det_padding` = Unshackled-like (not defended — C6)
+- `Free | w=10 start, epochal, unbounded memory` = Malbolge Free ^w^
+
+(`w` always holds a finite integer while running. Nothing here is infinite:
+each epoch is just a stretch of steps executed under one value of `w`.)

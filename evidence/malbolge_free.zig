@@ -13,8 +13,8 @@
 //!
 //! Values: u128. Width bound: floor(log_3(2^127)) = 80.
 //! For k <= 80 all trit ops are exact. That covers k in {10..26} (crossing
-//! 3^19 needs only 20). Arbitrary-k via BigInt is a FUTURE decision; nobody
-//! claims omega yet.
+//! 3^19 needs only 20). Arbitrary-k via BigInt is a FUTURE decision.
+//! The width is a finite integer at every step; no infinite width is claimed.
 
 const std = @import("std");
 const Allocator = std.mem.Allocator;

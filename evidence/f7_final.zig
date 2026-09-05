@@ -36,7 +36,7 @@ pub fn main() !void {
         const d_next = mem41;
         std.debug.print("  movd 1 (at c=1) => d := mem[41] = {d}\n", .{d_next});
         if (d_next >= boundary) {
-            std.debug.print("  => the next instruction reads mem[d] at d>3^19: LEGAL CROSSING ^ω^\n", .{});
+            std.debug.print("  => the next instruction reads mem[d] at d>3^19: LEGAL CROSSING ^w^\n", .{});
         }
     }
 }

@@ -55,7 +55,27 @@ To avoid confusion:
 - **MalbolgeFree(k)** — parametric core over arbitrary k + optional
   unbounded memory. C0-C5 work. This is the deliverable.
 - **MalbolgeFreeEpochal(k₀)** — machine starting at k₀; blocked from
-  widening by Malbolge's own closed-width design. NOT_DEMONSTRABLE.
-- **MalbolgeFreeω** — claimed only as "union_(finite k)" with NO dynamic
-  growth inside a run. Superseded label `^ω^` is retained only in
-  private-prose fashion, not for public claims.
+  widening by Malbolge's own closed-width design *on the value side*.
+  (See the correction below: the shipped trigger is address-based and did
+  fire once, `10 -> 11`.)
+
+## Correction (2026-09-05)
+
+This document analyzed **value-triggered** widening (widen when an op would
+produce a value that does not fit in the current width). That analysis still
+stands: inside a width-`w` machine no op produces a value wider than `w`
+trits, so a value trigger can never fire.
+
+The `epochal` policy that actually ships in `src/malbolge_free.zig` is
+**address-triggered**: with `mem_limit = null` the pointers `c`/`d` advance
+by one cell per step with no wrap, so `c` does reach `3^w`. The trigger fires
+there and widens `w` by one. Measured once (`tests/t_frontier_moment.zig`):
+`WIDEN step=59050 c=59049 d=59049 old_w=10 new_w=11`. So "epochal widening is
+structurally impossible" is wrong as stated; the right statement is:
+*value-triggered* widening is structurally dead, *address-frontier* widening
+works and one transition is demonstrated. Repeated widening
+(`11 -> 12 -> ...`) remains NOT_DEMONSTRATED.
+
+Naming note: earlier drafts called the composition idea `ω` (`MalbolgeFreeω`,
+`^ω^`). Retired on 2026-09-05 — the width is a finite-integer variable `w`,
+and the omega naming suggested claims this project does not make.

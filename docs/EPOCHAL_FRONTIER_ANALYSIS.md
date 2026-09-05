@@ -38,19 +38,37 @@ refuse to produce anything >3^k. Malbolge is closure-closed at 3^k.
 
 ## Consequence
 
-`epochal` growth **from within** is structurally impossible. Width changes
-must come from outside the machine (a reload event, a new phase, a program
-signal). There is no semantically-grounded way to "grow" mid-run without
-injecting a >k value by external action.
+`epochal` growth driven by **values** is structurally impossible. No op at
+width `k` produces a value with more than `k` trits, so a value-based trigger
+can never fire.
 
-Honest verdict:
+Honest verdict (as of the original analysis):
 
 ```
 C5 CROSSING: DEMONSTRATED via explicit k=20 boot
-ANCHORED_GROW_ON_DEMAND: structurally-not-feasible from internal triggers
+VALUE-TRIGGERED WIDENING: structurally-not-feasible from internal triggers
 ```
 
-Reframing `Free` uses of "ω": the parametric family `M_k` for any k is
-REACHABLE, and on each run k is max. The trigger that a *Malbolge program
-internally* decides to upgrade width does not exist, and this is a proof
-not an omission.
+## Correction (2026-09-05)
+
+The "structurally dead" conclusion above covered the wrap-addressing case
+(`mem_limit = 3^k`, where `c`/`d` are capped) and value-based triggers. The
+shipped `epochal` policy runs with `mem_limit = null`: there `c` and `d`
+increment by one cell per step with **no wrap**, so the *address* frontier
+`3^w` is genuinely reachable — and the trigger fires. Measured once by
+`tests/t_frontier_moment.zig`: `WIDEN step=59050 c=59049 d=59049 old_w=10
+new_w=11`, exactly one event, then the program halts at step 70076.
+
+So the corrected landscape is:
+
+- **Value-triggered widening**: structurally dead (this document's proof
+  stands).
+- **Address-frontier widening, unbounded memory**: demonstrated once,
+  `10 -> 11`, with the earlier trace untouched.
+- **Repeated widening** (`11 -> 12 -> ...`): NOT_DEMONSTRATED — reaching
+  `3^11 = 177147` would need a program that survives that many steps, and the
+  recorded witness halts at step 70076.
+
+The symbol `ω` used in earlier drafts of this note is retired: the width is
+an ordinary finite-integer variable `w`, and these documents should not
+suggest any infinite or ordinal claim.
