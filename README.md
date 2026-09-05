@@ -1,4 +1,4 @@
-# Malbolge Free
+# Malbolge Free ^ω^
 
 ```
 Malbolge Classic    :   >:(
