@@ -1,6 +1,6 @@
 """Phase 2 + F3 tests: core sanity, lazy-vs-eager parity, width=10 == Classic classical loader."""
-import sys, io
-sys.path.insert(0, r"C:\Development\ISyCo Git\malbolge-free\src")
+import sys, io, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src"))
 from malbolge_core import MalbolgeCore, crazy, rotate, _ENC, _CRAZY
 
 # ── lazy-vs-eager fill parity on small width ───────────────────────────────

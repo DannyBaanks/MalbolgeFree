@@ -2,7 +2,7 @@
 
 import pathlib
 
-CORPUS = pathlib.Path(r"C:\Development\ISyCo Git\malbolge-free\corpus\classic")
+CORPUS = pathlib.Path(__file__).resolve().parents[1] / "corpus" / "classic"
 progs = []
 for f in sorted(CORPUS.iterdir()):
     src = f.read_text(encoding="utf-8")
@@ -52,6 +52,6 @@ pub fn main() !void {
 """
 
 template = template.replace("PROGRAMS_HERE", body)
-out = pathlib.Path(r"C:\Development\ISyCo Git\malbolge-free\evidence\run_f4.zig")
+out = pathlib.Path(__file__).resolve().parent / "run_f4.zig"
 out.write_text(template, encoding="utf-8")
 print("wrote", out)

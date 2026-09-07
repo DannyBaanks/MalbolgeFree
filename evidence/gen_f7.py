@@ -37,7 +37,7 @@ program = "".join(prefix)
 op_z2 = (ord('z') + 3) % 94
 program += 'z' * 200
 
-out = pathlib.Path(r"C:\Development\ISyCo Git\malbolge-free\corpus\free")
+out = pathlib.Path(__file__).resolve().parents[1] / "corpus" / "free"
 out.mkdir(parents=True, exist_ok=True)
 (out / "cross_3pow19.mal").write_text(program, encoding="ascii")
 print("program:", repr(program[:20]), "len:", len(program))

@@ -1,8 +1,14 @@
 """F4 r1 complete: compare Python reference vs Zig core on the corpus."""
-import sys, json, hashlib, subprocess, pathlib
+import sys, os, json, hashlib, subprocess, pathlib
 
-ROOT = pathlib.Path(r"C:\Development\ISyCo Git\malbolge-free")
-sys.path.insert(0, r"C:\Development\ISyCo Git\MALDOOM\vendor\malbolge")
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+_VENDOR = os.environ.get("MALFREE_MALBOLGE_VENDOR")
+if not _VENDOR:
+    raise RuntimeError(
+        "Python reference 'malbolge' package not configured: set "
+        "MALFREE_MALBOLGE_VENDOR to the directory containing malbolge.py "
+        "(e.g. the MALDOOM repo's vendor/malbolge)")
+sys.path.insert(0, _VENDOR)
 import malbolge as pyref
 
 CORPUS = ROOT / "corpus" / "classic"
