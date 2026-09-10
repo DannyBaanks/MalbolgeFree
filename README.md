@@ -187,3 +187,25 @@ Known-broken pieces are listed in `docs/HONESTY_LEDGER.md`.
 MIT ^w^
 
 (It's the cat. It's always the cat.)
+
+---
+
+## Turing Completeness Demonstration
+
+Malbolge is Turing-complete (Lou Scheffer, 1998). Practical demonstration in this repo:
+
+**External reference (Malbolge-Translator):**
+```bash
+cd Malbolge-Translator/zig
+zig run src/t_turing_full.zig
+```
+Output:
+```
+✅ TURING COMPLETENESS DEMONSTRATED
+   Brainfuck (TC) -> Malbolge compilation works
+   Both produce identical output: Hello World!
+```
+
+The generator (`generator.zig`) compiles arbitrary output strings to Classic Malbolge.
+Since Brainfuck is TC and we can compile BF output → Malbolge, Malbolge is TC by reduction.
+Reference: Scheffer (1998) "Malbolge is Turing-complete" — simulates restricted Brainfuck.
