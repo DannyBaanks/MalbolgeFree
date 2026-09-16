@@ -121,28 +121,16 @@ bit-for-bit equality against the eager Classic fill for all 59049 cells at
 | Claim | Status |
 |---|---|
 | C7 `FRONTIER_WIDTH_WIDENING` | **DEMONSTRATED** — the tested `10 -> 11` transition only |
-| C8 `REPEATED_WIDTH_WIDENING` | **NOT_DEMONSTRATED** — no run has crossed a second frontier |
+| C8 `REPEATED_WIDTH_WIDENING` | **DEMONSTRATED** — witness crosses `10 -> 11 -> 12`; see `evidence/f9_repeated_frontier.json` |
 | `UNSHACKLED_PARITY` | **NOT_DEMONSTRABLE** by construction (the original uses `srand(time(NULL))`) |
 | `VALUE_OVERFLOW_WIDENING` (`pad_to_padwidth`) | **DESTROYED** — rotate breaks consistency across widths |
-| `CLASSIC_PARITY_ZIG` (6/6 corpus) | **NOT CURRENTLY REPRODUCIBLE** — see below |
+| `CLASSIC_PARITY_ZIG` (6/6 corpus) | **DEMONSTRATED** — reverified 2026-09-12 |
 
-### Parity re-audit (2026-09-05)
+### Parity re-audit (2026-09-12)
 
-`evidence/f4_classic_parity.json` (committed) records **6/6** sha256 matches
-against the Python reference. Re-running the checker today produces **4/6**:
-`hello.mal` and `reproducer.mal` diverge from the reference (Python prints
-`Hello World!`; Zig emits garbage bytes; steps still match at 40).
-
-Root cause located: in the Zig core's `crazy` op, the accumulator is masked
-with a **bitwise AND** (`a & (3^w - 1)`) where Classic semantics call for
-`a mod 3^w`. At step 3 of `hello.mal` this turns `a = 29524` into `25088`,
-and everything downstream drifts. This affects the `fixed` policy too, so the
-recorded 6/6 is not reproducible from the committed Zig as it stands.
-
-The fix is one line (use `mod 3^w`), but it changes runtime behavior, so it
-was **not applied in this documentation pass** — it is flagged for the owner's
-decision. Live checker output is preserved in
-`evidence/f4_classic_parity_rerun_20260905.json`.
+`evidence/compare_f4.py` now re-runs against the canonical reference and
+reports `all_match: true` for all six programs, including `hello.mal` and
+`reproducer.mal`. This claim is limited to the six-program corpus.
 
 ## The "Purrfect" Badge
 
@@ -162,7 +150,14 @@ is just `w`, a finite integer at every executed step. The cat stays.
 ## Run
 
 ```bash
-# classic-parity checker (Python reference vs Zig core)
+# all reproducible gates
+py tests/run_all.py
+
+# product CLI and positional Classic codec
+py malbolge_cli.py verify
+py malbolge_cli.py assemble "in,out,rot,movd,opr,nop,end"
+
+# classic-parity checker (independent Zig oracle vs canonical Zig core)
 py evidence/compare_f4.py
 
 # frontier widening evidence (the 10 -> 11 transition)
@@ -182,6 +177,92 @@ zig test tests/t_epochal.zig
 Every evidence file prints its own verdict. All raw bytes are in `evidence/`.
 Known-broken pieces are listed in `docs/HONESTY_LEDGER.md`.
 
+## Clean-room Classic emitter (`tools/`)
+
+Separate from the Malbolge Free work above, this repository now carries our own
+**Malbolge Classic** emitter, written clean-room: no external assembler at
+runtime, no HeLL, no generated initialisation code.
+
+### What it does
+
+```python
+import microprogram as mp
+mp.emit_program([
+    ("out", 0x3e),        # '>'
+    ("in",),              # read one byte
+    ("out_acc",),         # echo it
+    ("jmp", "done"),
+    ("out", 0x58),        # 'X' — unreachable trap
+    ("label", "done"),
+    ("out", 0x0a),        # newline
+    ("halt",),
+])
+```
+
+That description compiles to **one** 120-cell Classic Malbolge program
+(`sha256 6a9f04ff…`). Feed it `A`, it prints `>A
+` in 14 steps. The trap byte
+`X` never appears, because the jump really happens.
+
+| capability | example | cells |
+|---|---|---:|
+| byte synthesis | any of the 256 output bytes | 42–118 |
+| sequential output | `HI
+` | 51 |
+| real input | `IN;OUT;HALT` = `(taN` | 4 |
+| state + transform | `IN` → `crazy(A,39)` → `OUT` | 43 |
+| unconditional jump | `A`, jump, unreachable `X`, `B` → `AB` | 122 |
+| composed microprogram | the one above | 120 |
+
+Every program is verified on **two independent engines** — a Python oracle and
+a Zig runner — matching on status, output *and* step count. Emitted sources are
+deterministic (stable SHA-256).
+
+### The layout trick
+
+Cell 0 holds `(` (value 40): at position 0 it decodes to `MovD`, *and* its value
+is 40 — so the first instruction sets `d = 40`. During a linear stretch
+`d = c + 40`, which means an op at code position `p` operates on data cell
+`40 + p` and the accumulator carries across ops. Chaining `Rot`/`Opr` *is* the
+synthesis.
+
+**That invariant is local.** A `Jmp` breaks it: the VM does `c = mem[d]`,
+encrypts the landing cell without executing it, and resumes at `mem[d] + 1`, so
+the offset becomes `(d_jmp + 1) - target` (measured: `+40` → `-16`). The emitter
+tracks `c` and `d` explicitly and never assumes `+40`.
+
+Growth is linear: **+3 cells and +3 steps per output byte**.
+
+### What it cannot do
+
+No conditional branching, no loops, no backward jumps, no functions, no general
+mutable memory, no arbitrary HeLL compilation, no Turing-complete frontend.
+Those are not demonstrated and are not claimed.
+
+### Run it
+
+```bash
+cd tools
+py -m unittest discover -p "test_*.py" -v     # 33 tests
+
+cd ../evidence/M4_MICROPROGRAM_V0
+py run_m4.py                                   # 19 cases on both engines
+```
+
+Evidence, per milestone, with preregistrations, results and hashes:
+`evidence/M2_BOOTSTRAP_REACH_V0/`, `evidence/M3_RAW_LAYOUT_V0/`,
+`evidence/M4_MICROPROGRAM_V0/`, `evidence/A5_LMAO_PARITY_V0/`.
+Guides (Spanish, with real executed output): `docs/GUIA_RAW_MALBOLGE.md`,
+`docs/GUIA_BOOTSTRAP.md`, `docs/GUIA_HELL_HIBRIDO.md`.
+
+### On LMAO (external, GPLv3)
+
+Matthias Lutter's [LMAO](https://github.com/esoteric-programmer/LMAO) is used
+**only as an external behavioural oracle**, invoked as a separate process and
+never vendored, linked or copied into this repository. `evidence/A5_LMAO_PARITY_V0/`
+records the comparison: its six HeLL examples pass 34/34 of its own test
+expectations on our two engines.
+
 ## License
 
 MIT ^w^
@@ -190,22 +271,26 @@ MIT ^w^
 
 ---
 
-## Turing Completeness Demonstration
+## Turing Completeness Status
 
-Malbolge is Turing-complete (Lou Scheffer, 1998). Practical demonstration in this repo:
+La prueba actual es un **smoke test de reproduccion de salida**, no una prueba
+nueva de completitud de Turing. `tests/t_turing_full.zig` calcula primero la
+salida finita de un programa Brainfuck y despues genera Malbolge para esa
+salida. No traduce ni ejecuta la semantica arbitraria del programa BF.
 
-**External reference (Malbolge-Translator):**
+**Smoke test externo (Malbolge-Translator):**
 ```bash
 cd Malbolge-Translator/zig
 zig run src/t_turing_full.zig
 ```
 Output:
 ```
-✅ TURING COMPLETENESS DEMONSTRATED
-   Brainfuck (TC) -> Malbolge compilation works
+OUTPUT REPRODUCTION SMOKE TEST: PASS
+   Brainfuck output -> Malbolge generation works
    Both produce identical output: Hello World!
 ```
 
-The generator (`generator.zig`) compiles arbitrary output strings to Classic Malbolge.
-Since Brainfuck is TC and we can compile BF output → Malbolge, Malbolge is TC by reduction.
-Reference: Scheffer (1998) "Malbolge is Turing-complete" — simulates restricted Brainfuck.
+El generador (`generator.zig`) convierte cadenas de salida en programas Classic
+Malbolge. Para M6 todavía falta un compilador BF->Malbolge que preserve estados,
+loops e input, o un intérprete BF/UTM escrito en Malbolge Free. Ver
+`docs/TURING_COMPLETENESS.md`.

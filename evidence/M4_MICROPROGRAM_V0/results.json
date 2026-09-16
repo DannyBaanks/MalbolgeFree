@@ -1,0 +1,386 @@
+{
+  "milestones": {
+    "M4A_multi_output": [
+      {
+        "case": "out b'A'",
+        "cells": 44,
+        "steps": 6,
+        "sha256": "3a88bed0d551f74c797023b70e2572249543d3107587cf3579d97cce17a01439",
+        "stdin": "",
+        "expected": "41",
+        "oracle": "41",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 6,
+          "out": "41"
+        },
+        "parity": true
+      },
+      {
+        "case": "out b'AB'",
+        "cells": 47,
+        "steps": 9,
+        "sha256": "168337466cb9bbead02f00a462f40bb758a72488448794f35bffefc66f46e115",
+        "stdin": "",
+        "expected": "4142",
+        "oracle": "4142",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 9,
+          "out": "4142"
+        },
+        "parity": true
+      },
+      {
+        "case": "out b'HI\\n'",
+        "cells": 51,
+        "steps": 13,
+        "sha256": "6b72d76199588766a65bb503a32bd54cb82a68f3dd61321cc179002dea0a420f",
+        "stdin": "",
+        "expected": "48490a",
+        "oracle": "48490a",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 13,
+          "out": "48490a"
+        },
+        "parity": true
+      },
+      {
+        "case": "out b'\\x00\\xff\\x7f'",
+        "cells": 51,
+        "steps": 13,
+        "sha256": "1038e6b18125a0b10beb36c31da2ddf04b2839f56bf6d9f344d47e0030e3092f",
+        "stdin": "",
+        "expected": "00ff7f",
+        "oracle": "00ff7f",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 13,
+          "out": "00ff7f"
+        },
+        "parity": true
+      },
+      {
+        "case": "out b'>A\\n'",
+        "cells": 52,
+        "steps": 14,
+        "sha256": "df6d28e3483af06670a873773b09bc6e5fdbc2b107da95de3b5bdc9cf5382933",
+        "stdin": "",
+        "expected": "3e410a",
+        "oracle": "3e410a",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 14,
+          "out": "3e410a"
+        },
+        "parity": true
+      }
+    ],
+    "M4B_input": [
+      {
+        "case": "echo 00",
+        "cells": 4,
+        "steps": 4,
+        "sha256": "abd2c7bfdadd85f9ec0e77e274f4834cf0bcc8a15153df9da750ce0d8d0290a9",
+        "stdin": "00",
+        "expected": "00",
+        "oracle": "00",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 4,
+          "out": "00"
+        },
+        "parity": true
+      },
+      {
+        "case": "echo 41",
+        "cells": 4,
+        "steps": 4,
+        "sha256": "abd2c7bfdadd85f9ec0e77e274f4834cf0bcc8a15153df9da750ce0d8d0290a9",
+        "stdin": "41",
+        "expected": "41",
+        "oracle": "41",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 4,
+          "out": "41"
+        },
+        "parity": true
+      },
+      {
+        "case": "echo 7f",
+        "cells": 4,
+        "steps": 4,
+        "sha256": "abd2c7bfdadd85f9ec0e77e274f4834cf0bcc8a15153df9da750ce0d8d0290a9",
+        "stdin": "7f",
+        "expected": "7f",
+        "oracle": "7f",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 4,
+          "out": "7f"
+        },
+        "parity": true
+      },
+      {
+        "case": "echo ff",
+        "cells": 4,
+        "steps": 4,
+        "sha256": "abd2c7bfdadd85f9ec0e77e274f4834cf0bcc8a15153df9da750ce0d8d0290a9",
+        "stdin": "ff",
+        "expected": "ff",
+        "oracle": "ff",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 4,
+          "out": "ff"
+        },
+        "parity": true
+      },
+      {
+        "case": "EOF",
+        "cells": 4,
+        "steps": 4,
+        "sha256": "abd2c7bfdadd85f9ec0e77e274f4834cf0bcc8a15153df9da750ce0d8d0290a9",
+        "stdin": "",
+        "expected": "a8",
+        "oracle": "a8",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 4,
+          "out": "a8"
+        },
+        "parity": true
+      }
+    ],
+    "M4C_state": [
+      {
+        "case": "crazy(65,39)",
+        "cells": 43,
+        "steps": 5,
+        "sha256": "57013ef32fa631e876681dbdb5ef3fa2184ed973a797ce7ea2966a19f21b1a55",
+        "stdin": "41",
+        "expected": "65",
+        "oracle": "65",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 5,
+          "out": "65"
+        },
+        "parity": true
+      },
+      {
+        "case": "crazy(0,39)",
+        "cells": 43,
+        "steps": 5,
+        "sha256": "57013ef32fa631e876681dbdb5ef3fa2184ed973a797ce7ea2966a19f21b1a55",
+        "stdin": "00",
+        "expected": "54",
+        "oracle": "54",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 5,
+          "out": "54"
+        },
+        "parity": true
+      },
+      {
+        "case": "crazy(255,39)",
+        "cells": 43,
+        "steps": 5,
+        "sha256": "57013ef32fa631e876681dbdb5ef3fa2184ed973a797ce7ea2966a19f21b1a55",
+        "stdin": "ff",
+        "expected": "55",
+        "oracle": "55",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 5,
+          "out": "55"
+        },
+        "parity": true
+      },
+      {
+        "case": "crazy(122,39)",
+        "cells": 43,
+        "steps": 5,
+        "sha256": "57013ef32fa631e876681dbdb5ef3fa2184ed973a797ce7ea2966a19f21b1a55",
+        "stdin": "7a",
+        "expected": "db",
+        "oracle": "db",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 5,
+          "out": "db"
+        },
+        "parity": true
+      }
+    ],
+    "M4D_jump": [
+      {
+        "case": "A jmp X done B",
+        "cells": 122,
+        "steps": 10,
+        "sha256": "503ed3dbf82412dc2ef3cb8aad25d30302f099ce6f0f9f0f4bb3d43bfa7b2e01",
+        "stdin": "",
+        "expected": "4142",
+        "oracle": "4142",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 10,
+          "out": "4142"
+        },
+        "parity": true,
+        "trap_byte_absent": true
+      }
+    ],
+    "M4E_microprogram": [
+      {
+        "case": "prompt+echo 41",
+        "cells": 120,
+        "steps": 14,
+        "sha256": "6a9f04ff3f3b5dc5c449b326083c2ee1799c6ca9ed0d6af3b12d18d61657fbb3",
+        "stdin": "41",
+        "expected": "3e410a",
+        "oracle": "3e410a",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 14,
+          "out": "3e410a"
+        },
+        "parity": true
+      },
+      {
+        "case": "prompt+echo 00",
+        "cells": 120,
+        "steps": 14,
+        "sha256": "6a9f04ff3f3b5dc5c449b326083c2ee1799c6ca9ed0d6af3b12d18d61657fbb3",
+        "stdin": "00",
+        "expected": "3e000a",
+        "oracle": "3e000a",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 14,
+          "out": "3e000a"
+        },
+        "parity": true
+      },
+      {
+        "case": "prompt+echo 7a",
+        "cells": 120,
+        "steps": 14,
+        "sha256": "6a9f04ff3f3b5dc5c449b326083c2ee1799c6ca9ed0d6af3b12d18d61657fbb3",
+        "stdin": "7a",
+        "expected": "3e7a0a",
+        "oracle": "3e7a0a",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 14,
+          "out": "3e7a0a"
+        },
+        "parity": true
+      },
+      {
+        "case": "prompt+echo ff",
+        "cells": 120,
+        "steps": 14,
+        "sha256": "6a9f04ff3f3b5dc5c449b326083c2ee1799c6ca9ed0d6af3b12d18d61657fbb3",
+        "stdin": "ff",
+        "expected": "3eff0a",
+        "oracle": "3eff0a",
+        "oracle_status": "HALTED",
+        "oracle_ok": true,
+        "zig": {
+          "status": "HALTED",
+          "steps": 14,
+          "out": "3eff0a"
+        },
+        "parity": true
+      }
+    ]
+  },
+  "eof_semantics": "sin entrada, IN deja A = 59048 (C2); OUT emite 59048 % 256 = 0xa8",
+  "m4c_operand": 39,
+  "m4e_source": "(=<;:^o\\ZZ:9876543210/.-,+*)('&%$#\"!~}|{z9rqputsrk1inmlkjihgfedcba`_^]\\[ZYXWVUTSRQPONMLKJIHGFEDCBA@?>=<;:9876543210p('K8",
+  "m4e_sha256": "6a9f04ff3f3b5dc5c449b326083c2ee1799c6ca9ed0d6af3b12d18d61657fbb3",
+  "determinism": {
+    "m4e_sha_stable": true,
+    "m4a_sha_stable": true
+  },
+  "m3_regression": "256/256",
+  "growth": [
+    {
+      "bytes": 1,
+      "cells": 44,
+      "steps": 6,
+      "cells_per_byte": 44.0
+    },
+    {
+      "bytes": 2,
+      "cells": 47,
+      "steps": 9,
+      "cells_per_byte": 23.5
+    },
+    {
+      "bytes": 3,
+      "cells": 50,
+      "steps": 12,
+      "cells_per_byte": 16.7
+    },
+    {
+      "bytes": 5,
+      "cells": 56,
+      "steps": 18,
+      "cells_per_byte": 11.2
+    },
+    {
+      "bytes": 8,
+      "cells": 65,
+      "steps": 27,
+      "cells_per_byte": 8.1
+    }
+  ],
+  "summary": {
+    "cases": 19,
+    "oracle_ok": 19,
+    "parity_ok": 19,
+    "verdict": "M4_PASS",
+    "runtime_seconds": 27.4
+  }
+}

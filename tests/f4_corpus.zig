@@ -2,7 +2,7 @@
 //! Evidence discipline: every run records status + steps + stdout Sha256.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 const MEM_3_10: u128 = 3 * 3 * 3 * 3 * 3 * 3 * 3 * 3 * 3 * 3;
@@ -40,7 +40,7 @@ fn statusLine(name: []const u8, res: core.RunResult) void {
 
 test "F4 corpus: hello world baseline" {
     const alloc = std.heap.page_allocator;
-    var vm = MalbolgeCore.init(alloc, 10, MEM_3_10, .fixed);
+    var vm = MalbolgeCore.initClassic(alloc);
     defer vm.deinit();
     try vm.load(HELLO_WORLD);
     const res = try vm.run(2_000_000, "");
@@ -50,7 +50,7 @@ test "F4 corpus: hello world baseline" {
 
 test "F4 corpus: hello world V2" {
     const alloc = std.heap.page_allocator;
-    var vm = MalbolgeCore.init(alloc, 10, MEM_3_10, .fixed);
+    var vm = MalbolgeCore.initClassic(alloc);
     defer vm.deinit();
     try vm.load(HELLO_WORLD_V2);
     const res = try vm.run(2_000_000, "");
@@ -60,7 +60,7 @@ test "F4 corpus: hello world V2" {
 
 test "F4 corpus: hello world V3 (alternative program)" {
     const alloc = std.heap.page_allocator;
-    var vm = MalbolgeCore.init(alloc, 10, MEM_3_10, .fixed);
+    var vm = MalbolgeCore.initClassic(alloc);
     defer vm.deinit();
     try vm.load(HELLO_WORLD_V3);
     const res = try vm.run(2_000_000, "");
@@ -70,7 +70,7 @@ test "F4 corpus: hello world V3 (alternative program)" {
 
 test "F4 corpus: cat echo" {
     const alloc = std.heap.page_allocator;
-    var vm = MalbolgeCore.init(alloc, 10, MEM_3_10, .fixed);
+    var vm = MalbolgeCore.initClassic(alloc);
     defer vm.deinit();
     try vm.load(CAT_PROGRAM);
     const res = try vm.run(5_000_000, "A");

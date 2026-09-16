@@ -1,0 +1,74 @@
+{
+  "experiment": "M2_BOOTSTRAP_REACH_V0",
+  "frozen_utc": "2026-09-14T01:20:54.806442+00:00",
+  "milestone": "lmao-lite M2 (own runtime initializer): first measured question before writing any emitter.",
+  "question": "Starting from the runtime seed C1=29524 (crazy(0,x) for x with no trit 2 = all-ones), using only the Classic micro-ops Rot (rotate one trit) and Opr (crazy with A), which of the 256 output byte values (A mod 256) are reachable, and in how many ops? This is the primitive LMAO's gen_init depends on; we measure it clean-room.",
+  "engine_facts_frozen": {
+    "crazy_table": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        2
+      ],
+      [
+        2,
+        2,
+        1
+      ]
+    ],
+    "crazy_index": "CRAZY[b%3][a%3]",
+    "crazy_0_x_tritmap": {
+      "0": 1,
+      "1": 1,
+      "2": 2
+    },
+    "crazy_x_x_tritmap": {
+      "0": 1,
+      "1": 0,
+      "2": 1
+    },
+    "rot": "v//3 + (v%3)*3**9  (rotate right one trit over 10 trits)",
+    "seed_C1": 29524,
+    "source": "MALBOLGE/malbolge.py verified crazy/rot"
+  },
+  "move_model": {
+    "state": "A (single accumulator); after Opr or Rot on the working cell, that cell equals A, so rot(A) is available as a move",
+    "moves": [
+      "rot: A -> rot(A)",
+      "opr_k: A -> crazy(A, k) for k in operand_bank"
+    ],
+    "operand_bank": "bootstrap fixpoint: start {C1}; a value k may join the bank iff k is itself reachable AND load-valid-representable as a data cell at some position (printable 33..126 with (k+pos)%94 a valid opcode for some pos). Measured, not assumed.",
+    "start_A": 29524
+  },
+  "measurements": {
+    "M1_reach_bytes": "BFS over A in 0..59048; report which of 256 values (A mod 256) are reachable and min op-count",
+    "M2_reach_values": "count of distinct A values reachable within depth<=12",
+    "M3_bank_growth": "operand bank size at fixpoint",
+    "M4_faithfulness": "for 8 preregistered target bytes (0,10,65,72,126,168,200,255), if reachable, emit a HeLL routine using the found op-sequence, assemble via external LMAO, and verify on BOTH engines (oracle+Zig) that output == target byte AND the target value is never stored in a data cell (negative control: grep the emitted-value list)"
+  },
+  "targets": [
+    0,
+    10,
+    65,
+    72,
+    126,
+    168,
+    200,
+    255
+  ],
+  "verdicts": {
+    "BOOTSTRAP_ALL_BYTES_REACHABLE": "DEMONSTRATED iff all 256 byte residues reachable; else PARTIAL with the reachable count and the missing residues",
+    "M4_FAITHFUL": "PASS iff every reachable preregistered target reproduces byte-exact on both engines with pass steps equal, and none stored the target"
+  },
+  "scope": "Reachability of A via Rot/Opr from the seed. NOT a full initializer: placing gadgets, restoring cells (R_), and multi-cell writes remain later M2 slices. LMAO stays an external oracle; no LMAO code read.",
+  "prior_exposure": [
+    "crazy(0,x)=29524 and the two trit-maps were computed before freezing (this session).",
+    "mini-Lutter (experiments0000/MALBOLGE_MINI_LUTTER_V0) already reported 29524 as the seed; this re-derives reachability independently.",
+    "Expectation stated before running: not all 256 reachable with Rot+Opr alone from a single seed; a richer bank may be needed. A full 256/256 would be a surprise."
+  ]
+}

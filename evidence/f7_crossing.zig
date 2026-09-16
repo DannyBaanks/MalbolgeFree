@@ -4,7 +4,7 @@
 //! then subsequent pointer hops can memorialize the traverse.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 pub fn main() !void {
@@ -18,7 +18,7 @@ pub fn main() !void {
     // Read one byte, echo, halt
     const src = "(=&" ++ "\\" ++ "#";
 
-    var vm = MalbolgeCore.init(alloc, 10, null, .pad_to_padwidth);
+    var vm = MalbolgeCore.initFreePure(alloc, 10, .pad_to_padwidth);
     defer vm.deinit();
     try vm.load(src);
     const res = try vm.run(2_000_000, "A");

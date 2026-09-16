@@ -13,7 +13,7 @@
 //! it will never fire — matching the claimed topology proof.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 pub fn main() !void {
@@ -25,7 +25,7 @@ pub fn main() !void {
 
     std.debug.print("PROGRAM length: {d}\n", .{src.len});
 
-    var vm = MalbolgeCore.init(alloc, 10, null, .epochal);
+    var vm = MalbolgeCore.initFreePure(alloc, 10, .epochal);
     defer vm.deinit();
     try vm.load(src);
 

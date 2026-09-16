@@ -3,7 +3,7 @@
 //! core, which is exactly what run() does. No host intervention.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 pub fn main() !void {
@@ -18,7 +18,7 @@ pub fn main() !void {
     };
 
     for (Cfgs) |cfg| {
-        var vm = MalbolgeCore.init(alloc, cfg.w, null, cfg.g);
+    var vm = MalbolgeCore.initFreePure(alloc, cfg.w, cfg.g);
         defer vm.deinit();
         try vm.load(src);
         const res = try vm.run(50, "");

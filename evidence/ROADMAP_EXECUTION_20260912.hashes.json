@@ -1,0 +1,16 @@
+{
+  "format": "malbolge-free-execution/1",
+  "generated_utc": "2026-09-12",
+  "files": {
+    "src/malbolge_free.zig": "9b3212fded1282879eece95855247fe6cd62865513e8f20285acefa51466598a",
+    "tools/classic_codec.py": "81df620ba222ff037c8c6b1bea2b14e3f014f8c4f621c79b45a6b8520a360e01",
+    "tools/constructive_assembler.py": "73c9b46cb5afff8df549ec3ccae37c26af2768019a7779e5f3a2553ff7fe4adc",
+    "malbolge_cli.py": "605675cd93daa849d2932be41edadb54a0ad41524873bc216f762c17d3033b2a",
+    "tests/test_classic_codec.py": "01474d37e26dfd065b691b2578fb1e0b204824a5f09ffbde569044a48d2af69b",
+    "tests/test_constructive_assembler.py": "fc2d1a7cf6633f46bce7d3f3a42838b74bdce3138a50dd3d3f7d70d80deac25f",
+    "tests/t_unshackled_k19.zig": "1608349c235ea27dee2136775dfe04e1ec6d8e13e2cdbed38cdb811eca0d4aa6",
+    "tests/run_all.py": "87ec22b662eae398bae192fa6dbf87cf6e436dd46351dac0ddcbc7a44ff6f00b",
+    "README.md": "ce21bfd0fad62bd148d0d920e63a3701f4e4b8812a2b5281504eb925dcbabfc1",
+    "GUIA.md": "24cdd56e7a8cf62fda47d26dbebc9a0c5d0a29cd03a5a0a2697805f68b091e50"
+  }
+}

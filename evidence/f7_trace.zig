@@ -1,7 +1,7 @@
 //! F7 diagnostic: trace (step, c, d, op, a) for the first N steps.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 const crazy = core.crazy;
 const _ENC = core._ENC;
@@ -10,7 +10,7 @@ pub fn main() !void {
     const alloc = std.heap.page_allocator;
     const src = "('&%$" ++ "z" ** 200;
 
-    var vm = MalbolgeCore.init(alloc, 20, null, .fixed);
+    var vm = MalbolgeCore.initFreePure(alloc, 20, .fixed);
     defer vm.deinit();
     try vm.load(src);
 

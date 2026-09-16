@@ -1,0 +1,9 @@
+{
+  "reachable_count": 201,
+  "verified_oracle": 201,
+  "verified_zig": 23,
+  "zig_checked": 23,
+  "failures": [],
+  "no_store_violations": 0,
+  "verdict": "INLINE_SYNTH_E2E = PASS"
+}

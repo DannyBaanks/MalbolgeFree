@@ -5,7 +5,7 @@
 //! Evidence '{"program","stdout","steps","status","sha"}.claim' produced per run.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 const HELLO_WORLD =
@@ -15,7 +15,7 @@ const HELLO_WORLD =
 test "F4 classic hello world" {
     const alloc = std.heap.page_allocator;
 
-    var vm = MalbolgeCore.init(alloc, 10, 3 * 3 * 3 * 3 * 3 * 3 * 3 * 3 * 3 * 3, .fixed);
+    var vm = MalbolgeCore.initClassic(alloc);
     defer vm.deinit();
     try vm.load(HELLO_WORLD);
 

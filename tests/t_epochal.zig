@@ -5,7 +5,7 @@
 //! NEVER widens (nothing in Malbolge produces wider-than-current values).
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 test "epochal k=10 == fixed k=10 (no widening trigger)" {
@@ -15,12 +15,12 @@ test "epochal k=10 == fixed k=10 (no widening trigger)" {
         \\(=<`#9]~6ZY327Uv4-QsqpMn&+Ij"'E%e{Ab~w=_:]Kw%o44Uqp0/Q?xNvL:`H%c#DD2^WV>gY;dts76qKJImZkj
     ;
 
-    var e = MalbolgeCore.init(alloc, 10, null, .epochal);
+    var e = MalbolgeCore.initFreePure(alloc, 10, .epochal);
     defer e.deinit();
     try e.load(prog);
     const r_e = try e.run(2_000_000, "");
 
-    var f = MalbolgeCore.init(alloc, 10, null, .fixed);
+    var f = MalbolgeCore.initFreePure(alloc, 10, .fixed);
     defer f.deinit();
     try f.load(prog);
     const r_f = try f.run(2_000_000, "");
@@ -39,7 +39,7 @@ test "epochal from k=20: a rot ALSO can't widen (rot needs operands wider than w
         \\(=<`#9]~6ZY327Uv4-QsqpMn&+Ij"'E%e{Ab~w=_:]Kw%o44Uqp0/Q?xNvL:`H%c#DD2^WV>gY;dts76qKJImZkj
     ;
 
-    var e = MalbolgeCore.init(alloc, 20, null, .epochal);
+    var e = MalbolgeCore.initFreePure(alloc, 20, .epochal);
     defer e.deinit();
     try e.load(prog);
     _ = try e.run(5_000, "");

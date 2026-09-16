@@ -1,13 +1,10 @@
-// t_turing.zig — Turing completeness demonstration for malbolge-free
+// t_turing.zig — output-reproduction smoke test for malbolge-free
 //
-// Brainfuck is Turing-complete. If we can compile BF → Malbolge and get
-// identical output, Malbolge is TC by reduction.
-//
-// This test uses the Malbolge-Translator Zig generator (external) to compile
-// BF "Hello World" to Malbolge, then runs it through malbolge-free core.
+// This does not compile arbitrary BF. It compares the output of a fixed BF
+// program with a pre-generated Malbolge program, so it is not a TC proof.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 const BF_HELLO = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
@@ -79,21 +76,19 @@ pub fn main() !void {
     std.debug.print("Malbolge program: {d} cells\n", .{malbolge_src.len});
 
     // 3. Run through malbolge-free core
-    var vm = MalbolgeCore.init(allocator, 10, 59049, .fixed);
+    var vm = MalbolgeCore.initClassic(allocator);
     defer vm.deinit();
     try vm.load(malbolge_src);
 
-    const result = try vm.run(2_000_000, &.{});
-    // result.stdout is std.ArrayList(u8), managed by the allocator
-    // We need to free the underlying slice
-    defer allocator.free(result.stdout.items);
+    var result = try vm.run(2_000_000, &.{});
+    defer result.stdout.deinit(allocator);
 
     std.debug.print("Malbolge status: {s}, steps: {d}\n", .{result.status, result.steps});
     std.debug.print("Malbolge output: {s}\n", .{result.stdout.items});
 
     // 4. Verify
     if (std.mem.eql(u8, bf_output, result.stdout.items)) {
-        std.debug.print("\n✅ TURING COMPLETENESS: BF -> Malbolge compilation works\n", .{});
+        std.debug.print("\nOUTPUT REPRODUCTION SMOKE TEST: PASS\n", .{});
     } else {
         std.debug.print("\n❌ MISMATCH\n", .{});
         return error.OutputMismatch;

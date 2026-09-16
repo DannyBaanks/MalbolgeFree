@@ -5,7 +5,7 @@
 //! Backed by evidence: crazy chain from any seed is 6-periodic from index 1.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 pub fn main() !void {
@@ -25,7 +25,7 @@ pub fn main() !void {
     std.debug.print("(this witnesses what touching a huge address means; not an executable run)\n", .{});
 
     for (Cfgs) |cfg| {
-        var vm = MalbolgeCore.init(alloc, cfg.w, null, .fixed);
+        var vm = MalbolgeCore.initFreePure(alloc, cfg.w, .fixed);
         defer vm.deinit();
         try vm.load(src);
 

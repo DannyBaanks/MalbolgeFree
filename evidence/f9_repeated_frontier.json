@@ -1,0 +1,31 @@
+{
+  "phase": "M5",
+  "claim": "REPEATED_WIDTH_WIDENING",
+  "status": "DEMONSTRATED",
+  "policy": "epochal",
+  "initial_width": 10,
+  "memory_limit": null,
+  "witness": "tests/frontier_witness.txt",
+  "witness_bytes": 190000,
+  "witness_sha256": "3370003cfa18b02e21f095173328d1fa758722dae6e280e78413e3903013a57",
+  "max_steps": 190000,
+  "events": [
+    {
+      "step": 59050,
+      "c": 59049,
+      "d": 59049,
+      "old_width": 10,
+      "new_width": 11
+    },
+    {
+      "step": 177148,
+      "c": 177147,
+      "d": 177147,
+      "old_width": 11,
+      "new_width": 12
+    }
+  ],
+  "final_width": 12,
+  "growth_events": 2,
+  "verdict": "PASS"
+}

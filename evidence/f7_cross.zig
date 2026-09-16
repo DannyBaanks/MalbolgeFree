@@ -3,7 +3,7 @@
 //! any touched address exceeds 3^19 during a LEGAL execution.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 pub fn main() !void {
@@ -16,7 +16,7 @@ pub fn main() !void {
         .{ .w = 20, .g = .fixed, .name = "w20_fixed" },
         .{ .w = 20, .g = .pad_to_padwidth, .name = "w20_pad" },
     }) |cfg| {
-        var vm = MalbolgeCore.init(alloc, cfg.w, null, cfg.g);
+        var vm = MalbolgeCore.initFreePure(alloc, cfg.w, cfg.g);
         defer vm.deinit();
         try vm.load(src);
         const res = try vm.run(100_000, "");

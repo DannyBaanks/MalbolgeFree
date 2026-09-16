@@ -1,0 +1,39 @@
+H1 example_adder stdin=b'0 0\n' zig=['PASS', 'HALTED', 168058] oracle=['PASS', 'HALTED', 168058] (2s)
+H1 example_adder stdin=b'1 0\n' zig=['PASS', 'HALTED', 168653] oracle=['PASS', 'HALTED', 168653] (2s)
+H1 example_adder stdin=b'0 1\n' zig=['PASS', 'HALTED', 168655] oracle=['PASS', 'HALTED', 168655] (2s)
+H1 example_adder stdin=b'1 1\n' zig=['PASS', 'HALTED', 168669] oracle=['PASS', 'HALTED', 168669] (2s)
+H1 example_adder stdin=b'999 2\n' zig=['PASS', 'HALTED', 253280] oracle=['PASS', 'HALTED', 253280] (3s)
+H1 example_adder stdin=b'222111 555\n' zig=['PASS', 'HALTED', 400641] oracle=['PASS', 'HALTED', 400641] (3s)
+H2 example_adder -> {"stage": "behaviour", "driver_tail": "", "source_cells": 160}
+H1 example_cat_halt_on_eof stdin=b'000000000000' zig=['PASS', 'HALTED', 472965] oracle=['PASS', 'HALTED', 472965] (4s)
+H2 example_cat_halt_on_eof -> {"stage": "behaviour", "driver_tail": "", "source_cells": 74}
+H1 example_digital_root stdin=b'\n' zig=['PASS', 'HALTED', 42890] oracle=['PASS', 'HALTED', 42890] (5s)
+H1 example_digital_root stdin=b'0\n' zig=['PASS', 'HALTED', 83406] oracle=['PASS', 'HALTED', 83406] (5s)
+H1 example_digital_root stdin=b'xxx0aaa\n' zig=['PASS', 'HALTED', 359562] oracle=['PASS', 'HALTED', 359562] (5s)
+H1 example_digital_root stdin=b'1\n' zig=['PASS', 'HALTED', 84680] oracle=['PASS', 'HALTED', 84680] (5s)
+H1 example_digital_root stdin=b'11\n' zig=['PASS', 'HALTED', 126475] oracle=['PASS', 'HALTED', 126475] (6s)
+H1 example_digital_root stdin=b'99999999999\n' zig=['PASS', 'HALTED', 572131] oracle=['PASS', 'HALTED', 572131] (6s)
+H1 example_digital_root stdin=b'1337\n' zig=['PASS', 'HALTED', 218597] oracle=['PASS', 'HALTED', 218597] (6s)
+H2 example_digital_root -> {"stage": "behaviour", "driver_tail": "", "source_cells": 120}
+H1 example_hello_world stdin=b'' zig=['PASS', 'HALTED', 27938] oracle=['PASS', 'HALTED', 27938] (7s)
+H2 example_hello_world -> {"stage": "layout", "driver_tail": "STAGE=layout ERROR=UnknownLabel\n"}
+H1 example_simple_cat stdin=b'000000000000' zig=['PASS', 'OUTPUT_CAP', 591688] oracle=['PASS', 'OUT_OF_FUEL', 5000000] (9s)
+H2 example_simple_cat -> {"stage": "behaviour", "driver_tail": "", "source_cells": 12}
+H1 example_simple_hello_world stdin=b'' zig=['PASS', 'HALTED', 4475] oracle=['PASS', 'HALTED', 4475] (9s)
+H2 example_simple_hello_world -> {"stage": "emit", "driver_tail": "STAGE=emit ERROR=InvalidDataValue\n"}
+{
+ "H1_LUTTER_ON_OUR_MACHINERY": "PASS",
+ "H1_check_counts": {
+  "PASS": 34
+ },
+ "H2_per_program": {
+  "example_adder": "FAIL at behaviour",
+  "example_cat_halt_on_eof": "FAIL at behaviour",
+  "example_digital_root": "FAIL at behaviour",
+  "example_hello_world": "FAIL at layout",
+  "example_simple_cat": "FAIL at behaviour",
+  "example_simple_hello_world": "FAIL at emit"
+ },
+ "H2_LMAOLITE_PARITY": "FALSIFIED",
+ "A5_GATE": "FAIL"
+}

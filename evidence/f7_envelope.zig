@@ -4,7 +4,7 @@
 //! reachable envelope so far.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 const Program = struct {
@@ -24,7 +24,7 @@ pub fn main() !void {
     const alloc = std.heap.page_allocator;
 
     for (PROGRAMS) |p| {
-        var vm = MalbolgeCore.init(alloc, p.width, null, p.growth);
+        var vm = MalbolgeCore.initFreePure(alloc, p.width, p.growth);
         defer vm.deinit();
         try vm.load(p.src);
         const res = try vm.run(2_000_000, "");

@@ -1,0 +1,10 @@
+{
+  "artifacts": {
+    "M2_TRACE_DIFFERENTIAL_20260912.md": "c841161a5d477406a75c2d21dc559dcd8889ac1a296de7302ebfbd7359090dae",
+    "../src/malbolge_free.zig": "a0b03f5b819c712e035090f1aec3f2c74f4b8c6f0f75a05c3cff505c44d68a73",
+    "compare_m2.py": "c37afd189ab2f47feaf4f825b80de6412959525f53c89158e32a4b8dfb1b5945",
+    "run_m2.zig": "55853e251467bebca1113b79ec9cedad573fd044d2c747d879d91f36b3ee0506"
+  },
+  "verdict": "CLASSIC_TRACE_CONFORMANCE=PASS",
+  "scope": "8 valid fixtures, 3 error fixtures, 44 trace steps; compact differential campaign"
+}

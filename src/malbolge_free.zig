@@ -54,10 +54,11 @@ pub fn rotate(v: u128, width: u8) u128 {
     return v / 3 + (v % 3) * p;
 }
 
-/// 3^n — exact for n <= 78. Fits within u128 since 3^78 < 2^125.
-/// Above 79 we are in undefined-width territory: that's not Free, it's broken.
+/// 3^n — exact for n <= 80. 3^81 does not fit in u128.
+/// Widths above 80 are outside the defined runtime and saturate here so
+/// callers cannot mistake an overflowing value for an exact power.
 pub fn pow3(n: u8) u128 {
-    if (n >= 79) return std.math.maxInt(u128);
+    if (n >= 81) return std.math.maxInt(u128);
     var p: u128 = 1;
     var i: u8 = 0;
     while (i < n) : (i += 1) p *= 3;
@@ -109,6 +110,18 @@ pub const GrowthPolicy = enum {
     epochal,
 };
 
+/// Execution profile. `free_assisted` preserves the existing BF substrate;
+/// `classic` and `free_pure` accept only positional Classic source opcodes.
+pub const ExecutionProfile = enum {
+    classic,
+    free_pure,
+    free_assisted,
+    /// Deterministic fixed-width k=19 profile. This is the local
+    /// Unshackled-shaped runtime; parity with an external Unshackled build is
+    /// a separate claim and is not implied by this constructor.
+    unshackled_k19,
+};
+
 pub const tritlen2 = tritlen; pub const rotate2 = rotate; pub const crazy2 = crazy; pub const pow3_ = pow3; pub const RunResult = struct {
     status: []const u8, // "HALTED" | "MAX_STEPS"
     steps: u64,
@@ -116,6 +129,24 @@ pub const tritlen2 = tritlen; pub const rotate2 = rotate; pub const crazy2 = cra
     max_addr_touched: u128,
     max_value: u128,
     cells_materialized: u32,
+    final_c: u128,
+    final_d: u128,
+    assisted_opcodes: u32,
+    encrypted_cells: u32,
+};
+
+pub const TraceEvent = struct {
+    step: u64,
+    a_before: u128,
+    c_before: u128,
+    d_before: u128,
+    op: u128,
+    cell_before: u128,
+    a_after: u128,
+    c_after: u128,
+    d_after: u128,
+    encrypted_addr: ?u128,
+    encrypted_value: ?u128,
 };
 
 pub const MalbolgeCore = struct {
@@ -123,9 +154,12 @@ pub const MalbolgeCore = struct {
     width: u8,
     mem_limit: ?u128, // None => unbounded (no wrap at all)
     growth: GrowthPolicy,
+    profile: ExecutionProfile,
     padwidth: u8,
     mem: std.AutoHashMap(u128, u128),
+    initial_tail: [12]u128,
     program_len: u128,
+    lock_noencrypt: bool = false,
     stats: struct {
         max_addr: u128 = 0,
         max_value: u128 = 0,
@@ -133,16 +167,43 @@ pub const MalbolgeCore = struct {
     },
 
     pub fn init(alloc: Allocator, width: u8, mem_limit: ?u128, growth: GrowthPolicy) MalbolgeCore {
+        std.debug.assert(width >= 1 and width <= 80);
         return .{
             .alloc = alloc,
             .width = width,
             .mem_limit = mem_limit,
             .growth = growth,
+            // Backward-compatible constructor for the existing assisted
+            // Free/BF substrate. Strict profiles use the named constructors.
+            .profile = .free_assisted,
             .padwidth = width,
             .mem = std.AutoHashMap(u128, u128).init(alloc),
+            .initial_tail = [_]u128{0} ** 12,
             .program_len = 0,
             .stats = .{},
         };
+    }
+
+    pub fn initClassic(alloc: Allocator) MalbolgeCore {
+        var self = init(alloc, 10, pow3(10), .fixed);
+        self.profile = .classic;
+        return self;
+    }
+
+    pub fn initFreeAssisted(alloc: Allocator, width: u8, mem_limit: ?u128, growth: GrowthPolicy) MalbolgeCore {
+        return init(alloc, width, mem_limit, growth);
+    }
+
+    pub fn initFreePure(alloc: Allocator, width: u8, growth: GrowthPolicy) MalbolgeCore {
+        var self = init(alloc, width, null, growth);
+        self.profile = .free_pure;
+        return self;
+    }
+
+    pub fn initUnshackledK19(alloc: Allocator) MalbolgeCore {
+        var self = init(alloc, 19, pow3(19), .fixed);
+        self.profile = .unshackled_k19;
+        return self;
     }
 
     pub fn deinit(self: *MalbolgeCore) void {
@@ -155,11 +216,32 @@ pub const MalbolgeCore = struct {
         for (source) |ch| {
             if (ch == ' ' or ch == '\t' or ch == '\r' or ch == '\n') continue;
             if (ch < 33 or ch > 126) return error.InvalidSource;
+            if (self.profile != .free_assisted and !isClassicSourceOpcode(ch, i)) {
+                return error.InvalidSourceOpcode;
+            }
             try self.mem.put(i, ch);
             i += 1;
         }
         if (i < 2) return error.ProgramTooShort;
         self.program_len = i;
+        // Freeze the seed and one full 12-cell period of the Classic crazy-fill tail
+        // before execution can encrypt source cells. Later lazy reads repeat
+        // this immutable initialized tail rather than recomputing from mutated
+        // source, matching eager 59,049-cell initialization.
+        var tail_i = self.program_len;
+        while (tail_i < self.program_len + 12) : (tail_i += 1) {
+            const v1 = self.mem.get(tail_i - 1) orelse return error.InvalidLoad;
+            const v2 = self.mem.get(tail_i - 2) orelse return error.InvalidLoad;
+            try self.mem.put(tail_i, crazy(v1, v2, self.width));
+            self.initial_tail[@intCast(tail_i - self.program_len)] = self.mem.get(tail_i).?;
+        }
+    }
+
+    fn isClassicSourceOpcode(ch: u8, position: u128) bool {
+        return switch ((@as(u128, ch) + position) % 94) {
+            4, 5, 23, 39, 40, 62, 68, 81 => true,
+            else => false,
+        };
     }
 
     fn touch(self: *MalbolgeCore, addr: u128) void {
@@ -168,28 +250,18 @@ pub const MalbolgeCore = struct {
 
     /// Lazy read with Classic crazy-fill semantics:
     ///   cell[i] = crazy(cell[i-1], cell[i-2])   for i >= program_len
-    /// Early exit: after the first two lazy cells, the chain enters a period-6
-    /// cycle (proven numerically for widths 10..26 on every seed tested).
-    ///
-    /// We cache the 6 cycle values only when actually needed:
-    ///   cycle_base = program_len + 2   (first 6 values of the periodic tail)
-    ///   value(i) = cycle[(i - cycle_base) % 6]   for i >= cycle_base
+    /// The fully initialized Classic tail is represented lazily. Its period-12
+    /// values are derived from the original source tail, exactly as eager
+    /// initialization would do before execution starts.
     pub fn cell(self: *MalbolgeCore, addr0: u128) !u128 {
         var i = addr0;
         if (self.mem_limit) |lim| i %= lim;
         self.touch(i);
         if (self.mem.get(i)) |v| return v;
 
-        // Manifest only the region the runtime actually queries.
-        // The lazy chain from program_len onward:
-        //   mem[i] = crazy(mem[i-1], mem[i-2])        for i in [program_len, program_len+1]
-        //   mem[i] = cycle[(i - base) % 6]          for i >= base = program_len + 2
-        const base: u128 = self.program_len + 2;
-        if (i >= base) {
-            return self.cycleAt(@mod(i - base, 6));
-        }
+        const base: u128 = self.program_len;
+        if (i >= base + 12) return self.cycleAt(@mod(i - base, 12));
 
-        // lazy chain from program_len to i (safe: i < base implies i - program_len < 2)
         var t = self.program_len;
         while (t <= i) : (t += 1) {
             const v1 = self.mem.get(t - 1) orelse return error.InvalidLoad;
@@ -200,16 +272,7 @@ pub const MalbolgeCore = struct {
     }
 
     fn cycleAt(self: *MalbolgeCore, idx: u128) !u128 {
-        const base: u128 = self.program_len + 2;
-        // Ensure cells program_len .. base+5 are all materialized
-        var t = self.program_len;
-        while (t <= base + 5) : (t += 1) {
-            if (self.mem.get(t) != null) continue;
-            const v1 = self.mem.get(t - 1) orelse return error.InvalidLoad;
-            const v2 = self.mem.get(t - 2) orelse return error.InvalidLoad;
-            try self.mem.put(t, crazy(v1, v2, self.width));
-        }
-        return self.mem.get(base + (idx % 6)).?;
+        return self.initial_tail[@intCast(idx % 12)];
     }
 
     pub fn cellWrite(self: *MalbolgeCore, addr0: u128, v: u128) !void {
@@ -218,6 +281,20 @@ pub const MalbolgeCore = struct {
         self.touch(i);
         if (v > self.stats.max_value) self.stats.max_value = v;
         try self.mem.put(i, v);
+    }
+
+    /// Read a 3-digit big-endian base-94 immediate stored in cells c+1..c+3.
+    /// Each digit cell holds a printable value 33..126; digit = value - 33.
+    fn readImm94(self: *MalbolgeCore, c0: u128) !u128 {
+        const base = if (self.mem_limit) |lim| c0 % lim else c0;
+        var target: u128 = 0;
+        var i: u128 = 1;
+        while (i <= 3) : (i += 1) {
+            const v = try self.cell(base + i);
+            const digit: u128 = if (v >= 33 and v <= 126) v - 33 else 0;
+            target = target * 94 + digit;
+        }
+        return target;
     }
 
     /// Effective rotate width under each policy.
@@ -274,12 +351,22 @@ pub const MalbolgeCore = struct {
     /// Run up to max_steps. I/O is byte-oriented for cross-runtime parity
     /// (Classic-compatible). Unicode I/O from Unshackled is out of scope here.
     pub fn run(self: *MalbolgeCore, max_steps: u64, stdin_data: []const u8) !RunResult {
+        return self.runInternal(max_steps, stdin_data, null);
+    }
+
+    pub fn runWithTrace(self: *MalbolgeCore, max_steps: u64, stdin_data: []const u8, trace: *std.ArrayList(TraceEvent)) !RunResult {
+        return self.runInternal(max_steps, stdin_data, trace);
+    }
+
+    fn runInternal(self: *MalbolgeCore, max_steps: u64, stdin_data: []const u8, trace: ?*std.ArrayList(TraceEvent)) !RunResult {
         var a: u128 = 0;
         var c: u128 = 0;
         var d: u128 = 0;
         var out = std.ArrayList(u8).empty;
         var stdin_idx: usize = 0;
         var steps: u64 = 0;
+        var assisted_opcodes: u32 = 0;
+        var encrypted_cells: u32 = 0;
 
         const status: []const u8 = blk: {
             while (steps < max_steps) {
@@ -292,8 +379,20 @@ pub const MalbolgeCore = struct {
                 const cc = if (self.mem_limit) |lim| c % lim else c;
                 const cellv = try self.cell(cc);
                 const op = (cellv + cc) % 94;
+                const a_before = a;
+                const c_before = c;
+                const d_before = d;
+                var halted = false;
+                var encrypted_addr: ?u128 = null;
+                var encrypted_value: ?u128 = null;
+                if (self.profile == .free_assisted and op >= 69 and op <= 79) {
+                    assisted_opcodes += 1;
+                }
+                // The BF substrate is opt-in. In strict profiles, extension
+                // opcodes are ordinary runtime NOPs, as they are in Classic.
+                const effective_op = if (self.profile != .free_assisted and op >= 69 and op <= 79) 68 else op;
 
-                switch (op) {
+                switch (effective_op) {
                     4 => { // jmp
                         const dd = if (self.mem_limit) |lim| d % lim else d;
                         c = try self.cell(dd);
@@ -331,28 +430,126 @@ pub const MalbolgeCore = struct {
                             .pad_to_padwidth => @min(79, @max(@max(self.padwidth, tritlen(v)), tritlen(@min(a, @as(u128, 1) << 126)))),
                             .epochal => self.padwidth,
                         };
-                        const mask: u128 = pow3(w) - 1;
-                        const opA = if (a == EOF_SENTINEL) mask else (a & mask);
+                        const modulus: u128 = pow3(w);
+                        const opA = if (a == EOF_SENTINEL) modulus - 1 else (a % modulus);
                         const nv = crazy(opA, v, w);
                         try self.cellWrite(dd, nv);
                         a = nv;
                     },
                     68 => {}, // nop
-                    81 => break :blk "HALTED",
+                    69 => { // read_d_0 — read cell[0] into accumulator
+                        const v = try self.cell(0);
+                        a = v;
+                    },
+                    70 => { // jmp_a — jump to address in accumulator
+                        // EOF_SENTINEL is never a valid address (it would
+                        // overflow c+1 in unbounded mode); normalize to 0,
+                        // mirroring how OPR normalizes it to modulus-1.
+                        c = if (a == EOF_SENTINEL) 0 else a;
+                    },
+                    71 => { // inc — increment cell[d] modulo 256 (BF semantics)
+                        const dd = if (self.mem_limit) |lim| d % lim else d;
+                        const v = try self.cell(dd);
+                        const nv = (v + 1) % 256;
+                        try self.cellWrite(dd, nv);
+                        a = nv;
+                    },
+                    72 => { // dec — decrement cell[d] modulo 256 (BF semantics)
+                        const dd = if (self.mem_limit) |lim| d % lim else d;
+                        const v = try self.cell(dd);
+                        const nv = (v + 255) % 256;
+                        try self.cellWrite(dd, nv);
+                        a = nv;
+                    },
+                    73 => { // load_d — a = cell[d] without modifying the cell
+                        const dd = if (self.mem_limit) |lim| d % lim else d;
+                        a = try self.cell(dd);
+                    },
+                    74 => { // store — cell[d] = a (byte-wrapped, EOF -> 0)
+                        const dd = if (self.mem_limit) |lim| d % lim else d;
+                        const v: u128 = if (a == EOF_SENTINEL) 0 else (a % 256);
+                        try self.cellWrite(dd, v);
+                    },
+75 => { // tape_base — enter the data tape at a stable address
+                        var tape_index: u128 = 0;
+                        while (tape_index < 256) : (tape_index += 1) {
+                            try self.cellWrite(1000 + tape_index, 0);
+                        }
+                        // The Free substrate is stable: from here on, Free
+                        // opcodes (69..79) are not self-encrypted. Classic
+                        // opcodes keep Classic self-modification.
+                        self.lock_noencrypt = true;
+                        d = 999;
+                    },
+                    76 => { // d_rewind — compensate the post-step d increment
+                        d = if (d >= 2) d - 2 else 0;
+                    },
+77 => { // d_left — move the logical BF pointer one cell left
+                        d = if (d >= 2) d - 2 else 0;
+                    },
+                    78 => { // jz — if cell[d]==0, jump to the base-94 immediate at c+1..c+3
+                        const target = try self.readImm94(c);
+                        const dd = if (self.mem_limit) |lim| d % lim else d;
+                        const cv = try self.cell(dd);
+                        d = if (d >= 1) d - 1 else 0;
+                        if (cv == 0) {
+                            c = if (target >= 1) target - 1 else 0;
+                        } else {
+                            c = c + 3;
+                        }
+                    },
+                    79 => { // jnz — if cell[d]!=0, jump to the base-94 immediate
+                        const target = try self.readImm94(c);
+                        const dd = if (self.mem_limit) |lim| d % lim else d;
+                        const cv = try self.cell(dd);
+                        d = if (d >= 1) d - 1 else 0;
+                        if (cv != 0) {
+                            c = if (target >= 1) target - 1 else 0;
+                        } else {
+                            c = c + 3;
+                        }
+                    },
+                    81 => halted = true,
                     else => {}, // invalid => nop
                 }
 
-                // self-encryption on the cell we just stepped on
-                const cc2 = if (self.mem_limit) |lim| c % lim else c;
-                const mc = try self.cell(cc2);
-                if (mc >= 33 and mc <= 126) {
-                    const idx: usize = @intCast(mc - 33);
-                    const enc = TRANSLATED[idx];
-                    try self.cellWrite(cc2, enc);
+                if (halted) {
+                    if (trace) |events| try events.append(self.alloc, .{
+                        .step = steps, .a_before = a_before, .c_before = c_before,
+                        .d_before = d_before, .op = op, .cell_before = cellv,
+                        .a_after = a, .c_after = c, .d_after = d,
+                        .encrypted_addr = null, .encrypted_value = null,
+                    });
+                    break :blk "HALTED";
+                }
+
+                // self-encryption on the cell we just stepped on. Once
+                // TAPE_BASE has armed the stable Free substrate, self-
+                // modification is disabled entirely (Free programs are a
+                // stable substrate; they use explicit jumps, not self-
+                // modifying trampolines). Classic programs never execute
+                // TAPE_BASE, so Classic parity is untouched.
+                if (!self.lock_noencrypt) {
+                    const cc2 = if (self.mem_limit) |lim| c % lim else c;
+                    const mc = try self.cell(cc2);
+                    if (mc >= 33 and mc <= 126) {
+                        const idx: usize = @intCast(mc - 33);
+                        const enc = TRANSLATED[idx];
+                        try self.cellWrite(cc2, enc);
+                        encrypted_cells += 1;
+                        encrypted_addr = cc2;
+                        encrypted_value = enc;
+                    }
                 }
 
                 c = if (self.mem_limit) |lim| (c + 1) % lim else c + 1;
                 d = if (self.mem_limit) |lim| (d + 1) % lim else d + 1;
+                if (trace) |events| try events.append(self.alloc, .{
+                    .step = steps, .a_before = a_before, .c_before = c_before,
+                    .d_before = d_before, .op = op, .cell_before = cellv,
+                    .a_after = a, .c_after = c, .d_after = d,
+                    .encrypted_addr = encrypted_addr, .encrypted_value = encrypted_value,
+                });
             }
             break :blk "MAX_STEPS";
         };
@@ -364,6 +561,10 @@ pub const MalbolgeCore = struct {
             .max_addr_touched = self.stats.max_addr,
             .max_value = self.stats.max_value,
             .cells_materialized = self.mem.count(),
+            .final_c = c,
+            .final_d = d,
+            .assisted_opcodes = assisted_opcodes,
+            .encrypted_cells = encrypted_cells,
         };
     }
 

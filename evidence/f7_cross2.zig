@@ -9,7 +9,7 @@
 //! loadable Malbolge program against legal crazy-fill.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 pub fn main() !void {
@@ -26,7 +26,7 @@ pub fn main() !void {
         .{ .w = 20, .name = "k20_free" },
     };
     for (configs) |cfg| {
-        var vm = MalbolgeCore.init(alloc, cfg.w, null, .fixed);
+        var vm = MalbolgeCore.initFreePure(alloc, cfg.w, .fixed);
         defer vm.deinit();
         try vm.load(src);
         const res = try vm.run(100, "");

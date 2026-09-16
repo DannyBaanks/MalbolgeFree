@@ -1,0 +1,14 @@
+byte 0: oracle HALTED 00 (1 ok)
+byte 32: oracle HALTED 20 (33 ok)
+byte 64: oracle HALTED 40 (65 ok)
+byte 96: oracle HALTED 60 (97 ok)
+byte 128: oracle HALTED 80 (129 ok)
+byte 224: oracle HALTED e0 (170 ok)
+{
+ "reachable_count": 201,
+ "verified_oracle": 201,
+ "verified_zig": 23,
+ "zig_checked": 23,
+ "no_store_violations": 0,
+ "verdict": "INLINE_SYNTH_E2E = PASS"
+}

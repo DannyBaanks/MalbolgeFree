@@ -1,5 +1,5 @@
-// t_turing_full.zig — Turing completeness demonstration: BF → Malbolge → output
-// Uses Malbolge-Translator's own engine for consistency.
+// t_turing_full.zig — output-reproduction smoke test, not a TC proof.
+// Uses Malbolge-Translator's own engine for the generated Classic program.
 
 const std = @import("std");
 const engine = @import("engine.zig");
@@ -34,8 +34,8 @@ fn runTest(allocator: std.mem.Allocator) !void {
 
     // 4. Verify exact match
     if (std.mem.eql(u8, bf_output, result.output)) {
-        std.debug.print("\n✅ TURING COMPLETENESS DEMONSTRATED\n", .{});
-        std.debug.print("   Brainfuck (TC) -> Malbolge compilation works\n", .{});
+        std.debug.print("\nOUTPUT REPRODUCTION SMOKE TEST: PASS\n", .{});
+        std.debug.print("   BF output -> Malbolge generation works\n", .{});
         std.debug.print("   Both produce identical output: {s}\n", .{bf_output});
     } else {
         std.debug.print("\n❌ OUTPUT MISMATCH\n", .{});

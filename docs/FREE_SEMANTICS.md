@@ -89,9 +89,9 @@ C7  FRONTIER_WIDTH_WIDENING        = DEMONSTRATED — the tested 10 -> 11
                                      transition only (tests/t_frontier_moment.zig:
                                      WIDEN at c = 3^10, history preserved,
                                      w = 11 from that step on)
-C8  REPEATED_WIDTH_WIDENING        = NOT_DEMONSTRATED — no recorded run has
-                                     crossed a second frontier (the witness
-                                     halts at step 70076 < 3^11)
+ C8  REPEATED_WIDTH_WIDENING        = DEMONSTRATED — witness crosses
+                                      10 -> 11 at step 59050 and 11 -> 12 at
+                                      step 177148 (evidence/f9_repeated_frontier.json)
 C9  CLASSIC+UNSHACKLED=>FREE       = DEMONSTRATED (parametric reading)
 C10 TURING_COMPLETENESS            = NO_NEW_CLAIM
 ```
@@ -103,7 +103,7 @@ definitions changed — 2026-09-05, when the old omega-based names were retired.
 
 - That `w` is infinite, unbounded-in-principle, ordinal, or anything other
   than a variable holding one finite integer per step.
-- That widening can repeat arbitrarily often: one `10 -> 11` transition is
-  recorded; nothing more is claimed.
+- That widening can repeat arbitrarily often: two transitions are recorded;
+  behavior beyond `12` remains unclaimed.
 - That epochs are equivalent views of each other: rotate breaks any
   simultaneous-equivalence reading (C6); the claim is sequential only.

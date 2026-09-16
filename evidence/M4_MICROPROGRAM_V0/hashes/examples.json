@@ -1,0 +1,23 @@
+{
+  "m4a_hi.mb": {
+    "cells": 51,
+    "sha256": "6b72d76199588766a65bb503a32bd54cb82a68f3dd61321cc179002dea0a420f"
+  },
+  "m4b_echo.mb": {
+    "cells": 4,
+    "sha256": "abd2c7bfdadd85f9ec0e77e274f4834cf0bcc8a15153df9da750ce0d8d0290a9"
+  },
+  "m4d_jump.mb": {
+    "cells": 122,
+    "sha256": "503ed3dbf82412dc2ef3cb8aad25d30302f099ce6f0f9f0f4bb3d43bfa7b2e01"
+  },
+  "m4e_micro.mb": {
+    "cells": 120,
+    "sha256": "6a9f04ff3f3b5dc5c449b326083c2ee1799c6ca9ed0d6af3b12d18d61657fbb3"
+  },
+  "m4c_state.mb": {
+    "cells": 43,
+    "sha256": "57013ef32fa631e876681dbdb5ef3fa2184ed973a797ce7ea2966a19f21b1a55",
+    "operand": 39
+  }
+}

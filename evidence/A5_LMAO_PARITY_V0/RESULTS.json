@@ -1,0 +1,475 @@
+{
+  "preregistration_sha256": "c88de44fa42fbd1c6af84af1d9d910286790aac17e0a2267b220817a7a2d824a",
+  "runtime_seconds": 9.2,
+  "deviations": [
+    "example_simple_cat fuel capped at 5000000 for both engines (declared in code before running)",
+    "first run (run_log_first_run_bug.txt) built the cat input with a fresh Random per byte, giving 256 copies of 0x30 instead of 256 random bytes; fixed and rerun, both logs kept"
+  ],
+  "results": {
+    "H1": {
+      "example_adder": {
+        "lmao_source_cells": 55724,
+        "lmao_source_sha256": "c4a08a402852194d5c1867845c54c50483f1844b19910005c5dd405e6613f889",
+        "cases": [
+          {
+            "stdin": "3020300a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              168058
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              168058
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "3120300a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              168653
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              168653
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "3020310a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              168655
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              168655
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "3120310a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              168669
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              168669
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "39393920320a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              253280
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              253280
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "323232313131203535350a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              400641
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              400641
+            ],
+            "engines_agree": true
+          }
+        ]
+      },
+      "example_cat_halt_on_eof": {
+        "lmao_source_cells": 20775,
+        "lmao_source_sha256": "be5077de51f0230c4b2b2e90a097b372be8ff67a61121b546999e379ed347ba1",
+        "cases": [
+          {
+            "stdin": "306177bec0d7aa1abaca6a44531dfcff48cffbdb3e832a9f",
+            "zig": [
+              "PASS",
+              "HALTED",
+              472965
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              472965
+            ],
+            "engines_agree": true
+          }
+        ]
+      },
+      "example_digital_root": {
+        "lmao_source_cells": 31754,
+        "lmao_source_sha256": "b64986e2e267b46b1cce36aed2c7b502e6bb1a03f576b4dcebdf369a7dd2ab15",
+        "cases": [
+          {
+            "stdin": "0a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              42890
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              42890
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "300a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              83406
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              83406
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "787878306161610a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              359562
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              359562
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "310a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              84680
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              84680
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "31310a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              126475
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              126475
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "39393939393939393939390a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              572131
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              572131
+            ],
+            "engines_agree": true
+          },
+          {
+            "stdin": "313333370a",
+            "zig": [
+              "PASS",
+              "HALTED",
+              218597
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              218597
+            ],
+            "engines_agree": true
+          }
+        ]
+      },
+      "example_hello_world": {
+        "lmao_source_cells": 14795,
+        "lmao_source_sha256": "55657a799ce2bf57b65fc10e56588264b9c0c45b9e93f06bb27eeb6b75fb545e",
+        "cases": [
+          {
+            "stdin": "",
+            "zig": [
+              "PASS",
+              "HALTED",
+              27938
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              27938
+            ],
+            "engines_agree": true
+          }
+        ]
+      },
+      "example_simple_cat": {
+        "lmao_source_cells": 2050,
+        "lmao_source_sha256": "d21a530efc7153395170b3b466e572e8298def8eab20f1641b039cef499d4c2b",
+        "cases": [
+          {
+            "stdin": "306177bec0d7aa1abaca6a44531dfcff48cffbdb3e832a9f",
+            "zig": [
+              "PASS",
+              "OUTPUT_CAP",
+              591688
+            ],
+            "oracle": [
+              "PASS",
+              "OUT_OF_FUEL",
+              5000000
+            ],
+            "engines_agree": true
+          }
+        ]
+      },
+      "example_simple_hello_world": {
+        "lmao_source_cells": 4607,
+        "lmao_source_sha256": "70d877a10add964707bade71729c77db5df293f008f7df57ac89af6a6ef7f265",
+        "cases": [
+          {
+            "stdin": "",
+            "zig": [
+              "PASS",
+              "HALTED",
+              4475
+            ],
+            "oracle": [
+              "PASS",
+              "HALTED",
+              4475
+            ],
+            "engines_agree": true
+          }
+        ]
+      }
+    },
+    "H2": {
+      "example_adder": {
+        "stage": "behaviour",
+        "driver_tail": "",
+        "source_cells": 160,
+        "cases": [
+          {
+            "stdin": "3020300a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              129
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "3120300a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              129
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "3020310a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              129
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "3120310a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              129
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "39393920320a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              129
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "323232313131203535350a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              129
+            ],
+            "out_head": ""
+          }
+        ]
+      },
+      "example_cat_halt_on_eof": {
+        "stage": "behaviour",
+        "driver_tail": "",
+        "source_cells": 74,
+        "cases": [
+          {
+            "stdin": "306177bec0d7aa1abaca6a44531dfcff48cffbdb3e832a9f",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              4
+            ],
+            "out_head": ""
+          }
+        ]
+      },
+      "example_digital_root": {
+        "stage": "behaviour",
+        "driver_tail": "",
+        "source_cells": 120,
+        "cases": [
+          {
+            "stdin": "0a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              66
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "300a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              66
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "787878306161610a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              66
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "310a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              66
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "31310a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              66
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "39393939393939393939390a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              66
+            ],
+            "out_head": ""
+          },
+          {
+            "stdin": "313333370a",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              66
+            ],
+            "out_head": ""
+          }
+        ]
+      },
+      "example_hello_world": {
+        "stage": "layout",
+        "driver_tail": "STAGE=layout ERROR=UnknownLabel\n"
+      },
+      "example_simple_cat": {
+        "stage": "behaviour",
+        "driver_tail": "",
+        "source_cells": 12,
+        "cases": [
+          {
+            "stdin": "306177bec0d7aa1abaca6a44531dfcff48cffbdb3e832a9f",
+            "oracle": [
+              "FAIL",
+              "HALTED",
+              99
+            ],
+            "out_head": "61"
+          }
+        ]
+      },
+      "example_simple_hello_world": {
+        "stage": "emit",
+        "driver_tail": "STAGE=emit ERROR=InvalidDataValue\n"
+      }
+    }
+  },
+  "verdicts": {
+    "H1_LUTTER_ON_OUR_MACHINERY": "PASS",
+    "H1_check_counts": {
+      "PASS": 34
+    },
+    "H2_per_program": {
+      "example_adder": "FAIL at behaviour",
+      "example_cat_halt_on_eof": "FAIL at behaviour",
+      "example_digital_root": "FAIL at behaviour",
+      "example_hello_world": "FAIL at layout",
+      "example_simple_cat": "FAIL at behaviour",
+      "example_simple_hello_world": "FAIL at emit"
+    },
+    "H2_LMAOLITE_PARITY": "FALSIFIED",
+    "A5_GATE": "FAIL"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "experiment": "A5_LMAO_PARITY_V0",
+  "frozen_utc": "2026-09-13T23:08:57.039556+00:00",
+  "roadmap_gate": "malbolge-free/docs/LMAO_LITE_ROADMAP.md A5: 'comportamiento igual en lmao-lite y LMAO' (was BLOCKED UNTIL LMAO BUILD)",
+  "questions": {
+    "H1_LUTTER_ON_OUR_MACHINERY": "Do LMAO v0.6.0 outputs meet LMAO's own testcases.bash expectations when run on OUR Classic engines (MALBOLGE/malbolge.py oracle and MALBOLGE/intermediate_vm_runner.exe)?",
+    "H2_LMAOLITE_PARITY": "Does lmao-lite (malbolge-free/src/hell.zig) assemble the same 6 HeLL examples into programs that meet the same expectations? Stage reached per program: parse / layout / emit / load / behaviour."
+  },
+  "external_oracle": {
+    "repo": "https://github.com/esoteric-programmer/LMAO",
+    "commit": "3ea747e16b45ea7627018b291409b12c1f9ca3dc",
+    "license": "GPLv3, used only as external oracle, not vendored into lmao-lite",
+    "build": "win_bison -d lmao.y; win_flex --wincompat lmao.l; gcc -O2 all src/*.c (mingw-winlibs); winflexbison v2.5.25 zip sha256 8d324b62be33604b2c45ad1dd34ab93d722534448f55a16ca7292de32b6ac135",
+    "lmao_exe_sha256": "1b65a6497d65d85d4b49ce7a857f3985e86936b3e456f1c6d6d9681ef5af4c17"
+  },
+  "examples_sha256": {
+    "example_adder.hell": "3de580abba03da59af5172e04da9a0822bfe50cb152b9b781a03af451a30fe6e",
+    "example_cat_halt_on_eof.hell": "46ee8a493e6b9a3f8fbfcecc0501d297f61b12e06cf716ff2f677e60e17e293c",
+    "example_digital_root.hell": "46cc707cedc988e1b99fe5bdf13bef8b8bb5895f332cf7889c47702ad3cb6fe0",
+    "example_hello_world.hell": "63b9360b7b31474b68ee2366410e10022a208d8f401629cfd286a19851140210",
+    "example_simple_cat.hell": "2875fa3989ff92413f731608b377a609d26bff44c523f7a2f2ff43b34bf7dd47",
+    "example_simple_hello_world.hell": "aca0a195b886dc7ad3079ba6d4d0e44974ecc64ddd17c1d3c63b0b5852b065ac"
+  },
+  "spec_source": "LMAO testcases.bash (expected values written by LMAO authors, not by us)",
+  "spec": {
+    "example_simple_hello_world": "stdout hex 48656c6c6f2c20576f726c64210a, HALTED",
+    "example_hello_world": "stdout hex 48656c6c6f2c20576f726c64210a, HALTED",
+    "example_simple_cat": "input 256 seeded random bytes: first 256 output bytes == input (infinite loop: run with fuel, status OUT_OF_FUEL accepted)",
+    "example_cat_halt_on_eof": "input 256 seeded random bytes: output == input exactly, HALTED",
+    "example_digital_root": {
+      "\n": "0",
+      "0\n": "0",
+      "xxx0aaa\n": "0",
+      "1\n": "1",
+      "11\n": "2",
+      "99999999999\n": "9",
+      "1337\n": "5"
+    },
+    "example_adder": {
+      "0 0\n": "0",
+      "1 0\n": "1",
+      "0 1\n": "1",
+      "1 1\n": "2",
+      "999 2\n": "1001",
+      "222111 555\n": "666"
+    }
+  },
+  "spec_notes": "testcases.bash compares via $(...), which strips trailing newlines; digital_root/adder expectations are therefore compared after stripping trailing \n/\r from stdout. Random bytes: random.Random(20260913).",
+  "engines": {
+    "oracle_python": {
+      "path": "MALBOLGE/malbolge.py",
+      "sha256": "e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b",
+      "fuel": 50000000
+    },
+    "zig_runner": {
+      "path": "MALBOLGE/intermediate_vm_runner.exe",
+      "sha256": "006b585706d41138c9f9813ef09a261a856ecdee3540d15d48956e35a34917f1",
+      "fuel": 500000000,
+      "source": "@file form"
+    }
+  },
+  "fuel_rule": "OUT_OF_FUEL on a halting spec is NOT_EVALUABLE for that engine (not FAIL), except example_simple_cat where it is expected",
+  "lmaolite": {
+    "hell_zig_sha256": "248edbddbf9283596794fd2989562a09326fe815eb951edaed4eeed270d2a59c",
+    "driver": "lmaolite_driver.zig in this folder: parse -> resolveLayout -> emit, exactly the calls used by malbolge-free tests; no changes to lmao-lite"
+  },
+  "prior_exposure_disclosed": [
+    "Read hell.zig emit/layout before freezing: sequential placement from cell 0, no ENTRY, no initialization code, first command of xlat2 cycles only, data values restricted to 33..126, XLAT2 filler characters.",
+    "Read t_a6_cat.zig: checks 12 printable chars and label positions; never executes the cat.",
+    "Expectation stated before running: H2 FAIL for all 6 (most likely at emit or load). Stated so that a PASS would be a genuine surprise.",
+    "LMAO outputs have been assembled (sizes seen) but NOT executed on any engine."
+  ],
+  "verdicts": {
+    "H1": "PASS iff every spec check passes on both engines (NOT_EVALUABLE checks listed separately and do not count as PASS)",
+    "H2": "per program: PASS iff lmao-lite output meets the spec on the oracle; global PARITY_PASS iff 6/6, else FALSIFIED with the stage of failure per program",
+    "A5_GATE": "PASS iff H1 PASS and H2 PARITY_PASS"
+  }
+}

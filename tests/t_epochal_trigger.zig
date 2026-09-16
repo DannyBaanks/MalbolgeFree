@@ -4,7 +4,7 @@
 //! The program is entirely NOPs, so pointer advance is exactly c=d=step.
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 pub fn main() !void {
@@ -15,7 +15,7 @@ pub fn main() !void {
     var prog_buf: [1000]u8 = undefined;
     for (&prog_buf) |*b| b.* = 'z';
 
-    var vm = MalbolgeCore.init(alloc, 10, null, .epochal);
+    var vm = MalbolgeCore.initFreePure(alloc, 10, .epochal);
     defer vm.deinit();
     try vm.load(&prog_buf);
 

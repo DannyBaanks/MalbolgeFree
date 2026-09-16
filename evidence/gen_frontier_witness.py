@@ -11,7 +11,7 @@ produce a non-forbidden op character at that position:
 OP_OK = {5, 23, 62, 68}
 OP_FORBIDDEN = {4, 40, 81}
 
-TARGET_LEN = 70_000  # > 3^10 = 59049
+TARGET_LEN = 190_000  # > 3^11 = 177147; crosses 10 -> 11 -> 12
 
 def op_for_char(char_val, pos):
     return (char_val + pos) % 94
@@ -28,7 +28,10 @@ for pos in range(TARGET_LEN):
         raise SystemExit(f"no char survives at position {pos}")
 
 src = "".join(program)
-open("70000char_witness.out", "w", encoding="latin-1").write(src)
+from pathlib import Path
+Path(__file__).resolve().parents[1].joinpath("tests", "frontier_witness.txt").write_text(
+    src, encoding="latin-1"
+)
 # print the first 100 chars' ops so reviewers can verify
 for i in range(80):
     print(f"pos={i:3d} char={src[i]!r} op={op_for_char(ord(src[i]), i)}")

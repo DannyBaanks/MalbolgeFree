@@ -1,0 +1,243 @@
+{
+  "consts": {
+    "C0": 0,
+    "C1": 29524,
+    "C2": 59048,
+    "C20": 59046,
+    "C21": 59047
+  },
+  "max_depth": 14,
+  "starts": {
+    "C0": {
+      "start_value": 0,
+      "values_reachable": 4711,
+      "bytes_reachable": 256,
+      "op_count_histogram": {
+        "0": 1,
+        "1": 3,
+        "2": 4,
+        "3": 8,
+        "4": 14,
+        "5": 23,
+        "6": 38,
+        "7": 44,
+        "8": 48,
+        "9": 39,
+        "10": 23,
+        "11": 7,
+        "12": 3,
+        "13": 1
+      },
+      "replay_parity_mismatches": 0,
+      "example_sequences": {
+        "0": {
+          "value": 0,
+          "n_ops": 0,
+          "ops": []
+        },
+        "10": {
+          "value": 52490,
+          "n_ops": 7,
+          "ops": [
+            "opr C2",
+            "opr C21",
+            "rot",
+            "opr C20",
+            "rot",
+            "opr C21",
+            "opr C1"
+          ]
+        },
+        "65": {
+          "value": 13121,
+          "n_ops": 5,
+          "ops": [
+            "opr C2",
+            "opr C21",
+            "rot",
+            "opr C20",
+            "rot"
+          ]
+        },
+        "72": {
+          "value": 29768,
+          "n_ops": 7,
+          "ops": [
+            "opr C20",
+            "rot",
+            "rot",
+            "rot",
+            "rot",
+            "rot",
+            "opr C21"
+          ]
+        },
+        "126": {
+          "value": 16766,
+          "n_ops": 7,
+          "ops": [
+            "opr C20",
+            "rot",
+            "opr C21",
+            "rot",
+            "rot",
+            "opr C20",
+            "rot"
+          ]
+        },
+        "168": {
+          "value": 59048,
+          "n_ops": 1,
+          "ops": [
+            "opr C2"
+          ]
+        },
+        "200": {
+          "value": 39368,
+          "n_ops": 4,
+          "ops": [
+            "opr C20",
+            "rot",
+            "opr C21",
+            "opr C1"
+          ]
+        },
+        "255": {
+          "value": 36095,
+          "n_ops": 12,
+          "ops": [
+            "opr C2",
+            "opr C21",
+            "rot",
+            "rot",
+            "rot",
+            "rot",
+            "rot",
+            "rot",
+            "opr C20",
+            "rot",
+            "rot",
+            "opr C21"
+          ]
+        }
+      }
+    },
+    "rot_C1": {
+      "start_value": 29524,
+      "values_reachable": 4711,
+      "bytes_reachable": 256,
+      "op_count_histogram": {
+        "0": 1,
+        "1": 3,
+        "2": 5,
+        "3": 8,
+        "4": 14,
+        "5": 22,
+        "6": 37,
+        "7": 46,
+        "8": 49,
+        "9": 37,
+        "10": 23,
+        "11": 7,
+        "12": 3,
+        "13": 1
+      },
+      "replay_parity_mismatches": 0,
+      "example_sequences": {
+        "0": {
+          "value": 0,
+          "n_ops": 1,
+          "ops": [
+            "opr C0"
+          ]
+        },
+        "10": {
+          "value": 52490,
+          "n_ops": 7,
+          "ops": [
+            "opr C2",
+            "opr C21",
+            "rot",
+            "opr C20",
+            "rot",
+            "opr C21",
+            "opr C1"
+          ]
+        },
+        "65": {
+          "value": 13121,
+          "n_ops": 5,
+          "ops": [
+            "opr C2",
+            "opr C21",
+            "rot",
+            "opr C20",
+            "rot"
+          ]
+        },
+        "72": {
+          "value": 29768,
+          "n_ops": 7,
+          "ops": [
+            "opr C20",
+            "rot",
+            "rot",
+            "rot",
+            "rot",
+            "rot",
+            "opr C21"
+          ]
+        },
+        "126": {
+          "value": 16766,
+          "n_ops": 7,
+          "ops": [
+            "opr C20",
+            "rot",
+            "opr C21",
+            "rot",
+            "rot",
+            "opr C20",
+            "rot"
+          ]
+        },
+        "168": {
+          "value": 59048,
+          "n_ops": 1,
+          "ops": [
+            "opr C2"
+          ]
+        },
+        "200": {
+          "value": 39368,
+          "n_ops": 4,
+          "ops": [
+            "opr C20",
+            "rot",
+            "opr C21",
+            "opr C1"
+          ]
+        },
+        "255": {
+          "value": 36095,
+          "n_ops": 12,
+          "ops": [
+            "opr C2",
+            "opr C21",
+            "rot",
+            "rot",
+            "rot",
+            "rot",
+            "rot",
+            "rot",
+            "opr C20",
+            "rot",
+            "rot",
+            "opr C21"
+          ]
+        }
+      }
+    }
+  },
+  "verdict": "CONST_BANK_REACHES_ALL_BYTES = DEMONSTRATED"
+}

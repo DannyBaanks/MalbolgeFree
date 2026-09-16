@@ -31,7 +31,7 @@ pub fn main() !void {
     const alloc = std.heap.page_allocator;
 
     for (PROGRAMS) |p| {
-        var vm = MalbolgeCore.init(alloc, 10, MEM_3_10, .fixed);
+        var vm = MalbolgeCore.initClassic(alloc);
         defer vm.deinit();
         try vm.load(p.src);
         const res = try vm.run(2_000_000, p.stdin);

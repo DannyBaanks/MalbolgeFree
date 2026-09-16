@@ -1,6 +1,6 @@
 # Malbolge Free — Release Readiness Checklist
 
-**Status**: CORE COMPLETE — ready for v1.0 tag once C8 is resolved
+**Status**: CORE COMPLETE — C8 repeated widening demonstrated; M6 remains open
 
 ---
 
@@ -18,13 +18,12 @@
 
 ---
 
-## ❌ BLOCKING FOR "COMPLETE MACHINE" RELEASE
+## ✅ COMPLETED SINCE V1.0
 
 ### C8: REPEATED_WIDTH_WIDENING (11→12)
-- **What**: Demonstrate second frontier crossing at 3^11 = 177,147
-- **Blocker**: Current `frontier_witness.txt` is only 70,000 chars (reaches 59,049 but not 177,147)
-- **Fix**: Generate longer witness (~180k+ chars) using `gen_frontier_witness.py` scaled up
-- **Estimated effort**: ~30 min to generate + verify
+- **PASS**: `evidence/f9_repeated_frontier.json`
+- Witness: 190,000 bytes, SHA-256 `3370003cfa18b02e21f095173328d1fa758722dae6e280e78413e3903013a57`
+- Events: step 59,050 (`10→11`) and step 177,148 (`11→12`)
 
 ---
 
@@ -85,7 +84,7 @@ malbolge-free/
 │   ├── t_frontier_moment.zig     # 10→11 widening demo
 │   ├── t_epochal.zig             # Invariants
 │   ├── t_phase23.py              # Lazy/eager + Classic loader parity
-│   └── frontier_witness.txt      # 70k program (needs 180k+ for 11→12)
+│   └── frontier_witness.txt      # 190k program (crosses 10→11→12)
 └── Malbolge-Translator/zig/      # External Zig reference (generator, PCA, epoch, etc.)
     └── parity_check.exe          # 6/6 corpus JSON oracle
 ```

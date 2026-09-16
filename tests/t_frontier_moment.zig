@@ -2,7 +2,7 @@
 //! growth_events increments (i.e., when the width widens).
 
 const std = @import("std");
-const core = @import("malbolge_free.zig");
+const core = @import("malbolge_free");
 const MalbolgeCore = core.MalbolgeCore;
 
 pub fn main() !void {
@@ -10,14 +10,14 @@ pub fn main() !void {
 
 const src = @embedFile("frontier_witness.txt");
 
-    var vm = MalbolgeCore.init(alloc, 10, null, .epochal);
+    var vm = MalbolgeCore.initFreePure(alloc, 10, .epochal);
     defer vm.deinit();
     try vm.load(src);
 
     var a: u128 = 0;
     var c: u128 = 0;
     var d: u128 = 0;
-    const MAX: u64 = 200_000;
+    const MAX: u64 = 190_000;
 
     var steps: u64 = 0;
     var widen_events: u32 = 0;
