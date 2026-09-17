@@ -1,0 +1,106 @@
+[
+  {
+    "target_w": 13,
+    "verdict": "PASS",
+    "exit_code": 0,
+    "seconds_including_compile": 16.2,
+    "estimated_bytes": 35135466,
+    "label": "laptop-15gib",
+    "os": "Windows",
+    "processor": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD",
+    "ram_total_gib": 15.2,
+    "fields": {
+      "target": "13",
+      "status": "MAX_STEPS",
+      "steps": "531442",
+      "padwidth": "13",
+      "growth": "3",
+      "final_c": "531442",
+      "cells": "532454",
+      "capacity": "1048576",
+      "stdout_len": "175267"
+    },
+    "tail": [
+      "reserved capacity=1048576 (~33 MiB of key/value/metadata)",
+      "RESULT target=13 status=MAX_STEPS steps=531442 padwidth=13 growth=3 final_c=531442 cells=532454 capacity=1048576 stdout_len=175267"
+    ]
+  },
+  {
+    "target_w": 14,
+    "verdict": "PASS",
+    "exit_code": 0,
+    "seconds_including_compile": 19.6,
+    "estimated_bytes": 70801356,
+    "label": "laptop-15gib",
+    "os": "Windows",
+    "processor": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD",
+    "ram_total_gib": 15.2,
+    "fields": {
+      "target": "14",
+      "status": "MAX_STEPS",
+      "steps": "1594324",
+      "padwidth": "14",
+      "growth": "4",
+      "final_c": "1594324",
+      "cells": "1595336",
+      "capacity": "2097152",
+      "stdout_len": "525791"
+    },
+    "tail": [
+      "reserved capacity=2097152 (~66 MiB of key/value/metadata)",
+      "RESULT target=14 status=MAX_STEPS steps=1594324 padwidth=14 growth=4 final_c=1594324 cells=1595336 capacity=2097152 stdout_len=525791"
+    ]
+  },
+  {
+    "target_w": 15,
+    "verdict": "PASS",
+    "exit_code": 0,
+    "seconds_including_compile": 14.6,
+    "estimated_bytes": 281608050,
+    "label": "laptop-15gib",
+    "os": "Windows",
+    "processor": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD",
+    "ram_total_gib": 15.2,
+    "fields": {
+      "target": "15",
+      "status": "MAX_STEPS",
+      "steps": "4782970",
+      "padwidth": "15",
+      "growth": "5",
+      "final_c": "4782970",
+      "cells": "4783982",
+      "capacity": "8388608",
+      "stdout_len": "1577368"
+    },
+    "tail": [
+      "reserved capacity=8388608 (~264 MiB of key/value/metadata)",
+      "RESULT target=15 status=MAX_STEPS steps=4782970 padwidth=15 growth=5 final_c=4782970 cells=4783982 capacity=8388608 stdout_len=1577368"
+    ]
+  },
+  {
+    "target_w": 16,
+    "verdict": "PASS",
+    "exit_code": 0,
+    "seconds_including_compile": 22.2,
+    "estimated_bytes": 1121646180,
+    "label": "laptop-15gib",
+    "os": "Windows",
+    "processor": "AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD",
+    "ram_total_gib": 15.2,
+    "fields": {
+      "target": "16",
+      "status": "MAX_STEPS",
+      "steps": "14348908",
+      "padwidth": "16",
+      "growth": "6",
+      "final_c": "14348908",
+      "cells": "14349920",
+      "capacity": "33554432",
+      "stdout_len": "4732088"
+    },
+    "tail": [
+      "reserved capacity=33554432 (~1056 MiB of key/value/metadata)",
+      "RESULT target=16 status=MAX_STEPS steps=14348908 padwidth=16 growth=6 final_c=14348908 cells=14349920 capacity=33554432 stdout_len=4732088"
+    ]
+  }
+]

@@ -18,6 +18,7 @@ Malbolge Free       :   ^w^   (Malbolgato)
    ```
    x = 10        <- right now the width is 10
    x = 11        <- later it can be 11
+   x = 12        <- and later 12, one rung at a time
    ```
 
    Same variable, new finite value. Nothing in this project is infinite.
@@ -33,7 +34,8 @@ Optional notation, if you like symbols (skip it if you don't — the words above
 already say the same thing):
 
 - `w_t` = the value of `w` at execution step `t`. From the recorded run:
-  `w = 10` for the first 59049 steps, then `w = 11`.
+  `w = 10` for the first 59049 steps, `w = 11` until step 177147, then
+  `w = 12`.
 - `W(state, current_width) -> next_width` = the rule that decides when `w`
   changes. The implemented rule: *if a pointer has reached `3^w`, bump `w` by
   one before running that step.*
@@ -51,7 +53,7 @@ decides when the value changes.
 A: No.
 
 **Q: Does `w` have a real value while the program runs?**
-A: Yes. Always a plain finite integer — for example 10, or later 11.
+A: Yes. Always a plain finite integer — for example 10, later 11, later 12.
 
 **Q: Why would `w` change?**
 A: Because execution reached the edge of the current address space and the
@@ -61,8 +63,10 @@ next step needs more room.
 A: No. What ran at 10 stays exactly as it ran at 10.
 
 **Q: Have we shown `w` can grow forever?**
-A: No. We have shown one recorded transition, `10 -> 11`. Nothing more is
-claimed.
+A: No. We have shown a finite ladder: `10 -> 11 -> 12` in the committed
+witness, and every rung up to `16` measured on the real VM loop. Each rung
+costs three times the steps and memory of the previous one, so this is a
+measured ladder, not a proof of unbounded growth.
 
 ## The machine
 
@@ -75,21 +79,24 @@ In the code, the current value of `w` is stored in a field called `padwidth`
 |---|---|---|---|
 | `fixed` | no | classic frozen width | Classic parity semantics |
 | `pad_to_padwidth` | yes — by value overflow | pads operands when big values appear | **DESTROYED** by rotate (see below) |
-| `epochal` | yes — by address frontier | widens `w` when `c`/`d` reach `3^w` | **DEMONSTRATED** for the tested `10 -> 11` transition |
+| `epochal` | yes — by address frontier | widens `w` when `c`/`d` reach `3^w` | **DEMONSTRATED** — ladder `10 -> 16` measured on the real VM |
 
-## Demonstrated (re-verified 2026-09-05)
+## Demonstrated (re-verified 2026-09-16)
 
-**FRONTIER WIDTH WIDENING** (`epochal` policy, unbounded memory): a
-70000-character witness program built from `in`/`out`/`crazy`/`nop` ops only
-(`evidence/gen_frontier_witness.py`) runs until `c` reaches `3^10 = 59049`;
-the trigger fires exactly once, `w` goes `10 -> 11`, and the run continues.
-The witness halts at step 70076 (a lazily-filled cell decodes `hlt`), long
-before the next frontier `3^11 = 177147`. Actual output, reproduced twice:
+**FRONTIER WIDTH WIDENING** (`epochal` policy, unbounded memory): a witness
+program built from `in`/`out`/`crazy`/`nop` ops only
+(`evidence/gen_frontier_witness.py`) walks `c` linearly. When `c` reaches
+`3^10 = 59049` the trigger fires, `w` goes `10 -> 11`, and the run continues;
+the first 70000-character witness (kept as `evidence/frontier_witness.txt`)
+halted at step 70076, before a second frontier. The current 190000-character
+witness (`tests/frontier_witness.txt`) goes on to the next one. Actual output
+of `tests/t_frontier_moment.zig` on 2026-09-16:
 
 ```
 WIDEN step=59050 c=59049 d=59049 old_w=10 new_w=11
-run status: steps=70076 widen_events=1 at steps { 59050 }
-final padwidth=11
+WIDEN step=177148 c=177147 d=177147 old_w=11 new_w=12
+run status: steps=190000 widen_events=2 at steps { 59050, 177148 }
+final padwidth=12
 ```
 
 **3^19 CROSSING** (legal-movd witness): the program `' & % $` booted at
@@ -116,12 +123,69 @@ all sampled seeds. This makes single-cell lazy lookup O(1). Claim stays at
 bit-for-bit equality against the eager Classic fill for all 59049 cells at
 `k=10`, plus spot checks at `k = 11, 12, 19`.
 
+**REPEATED WIDTH WIDENING** (the epochal ladder): a 190000-character witness
+of the same kind crosses two frontiers, `10 -> 11` at step 59050 and
+`11 -> 12` at step 177148. `tests/t_m5_full_vm.zig` runs it through the real
+`vm.run` loop (not a hand-stepped loop) and checks both rungs; the record is
+`evidence/f9_repeated_frontier.json`.
+
+How far it climbs is limited by memory, not by the rule: to reach `w` the
+pointer must walk to `3^(w-1)`, and every executed cell is stored.
+`evidence/M5_LADDER_SCALE/` generates longer witnesses and runs them on the
+real VM. Measured on a 15 GiB laptop (2026-09-16), each rung from a fresh
+`w = 10`:
+
+| climbs to | steps | widenings | cells stored |
+|---:|---:|---:|---:|
+| 13 | 531,442 | 3 | 532,454 |
+| 14 | 1,594,324 | 4 | 1,595,336 |
+| 15 | 4,782,970 | 5 | 4,783,982 |
+| 16 | 14,348,908 | 6 | 14,349,920 |
+
+Estimated hash-table size for the next rungs (not run yet): `17` ~2.1 GiB,
+`18` ~8.4 GiB, `19` ~16.9 GiB. `19` needs 387,420,489 steps and a machine
+with roughly 20+ GiB free. The Python oracle does not implement `epochal`, so
+this ladder is checked on one engine (Zig) only.
+
+## E10 -> E19 epoch ladder (toy)
+
+`epoch_ladder/` carries a separate, smaller experiment that *does* reach 19.
+It is a **toy** and is labelled as one everywhere it appears.
+
+- `dimension_epoch_ladder.py`: a parametric family with memory `3^k` and
+  `c`/`d` wrapping at `3^k`, for `k = 10 .. 19`. The same three-op program
+  `ubO` (`in`, `out`, `end`) runs in each dimension and the state byte `Z`
+  crosses every boundary sealed by a hash. Replay passes, tamper is rejected.
+- `offset_epoch_ladder.py`: a preregistered test of whether the three-region
+  offset formula of the real 19-trit runtime generalises to `k = 11 .. 18`.
+  The table is frozen by hash before running. Result: round-trip and boundary
+  gates pass at every `k`, `first_failure: null`, and the same formula
+  reproduces the existing E19 offsets.
+
+```
+E10 -> E11 -> E12 -> E13 -> E14 -> E15 -> E16 -> E17 -> E18 -> E19
+state 5a at every boundary, 3 steps per epoch     LADDER PASS
+FORMULA_GENERALIZES_E11_TO_E18=DEMONSTRATED
+```
+
+What it does **not** show: there is no historical Malbolge at 11..18 trits,
+so E11–E18 are toy profiles, not recovered languages. What crosses the ladder
+is state and the positional codec; `crazy`, rotation, encryption and jumps
+are not demonstrated at the intermediate widths, and no arbitrary program is
+claimed to be equivalent across them. Only E10 (Classic) and E19
+(Unshackled-style) are real anchors. This is also a different thing from the
+epochal ladder above: there `w` changes *inside one run*; here each epoch is
+its own fixed dimension.
+
 ## Not demonstrated / destroyed
 
 | Claim | Status |
 |---|---|
-| C7 `FRONTIER_WIDTH_WIDENING` | **DEMONSTRATED** — the tested `10 -> 11` transition only |
-| C8 `REPEATED_WIDTH_WIDENING` | **DEMONSTRATED** — witness crosses `10 -> 11 -> 12`; see `evidence/f9_repeated_frontier.json` |
+| C7 `FRONTIER_WIDTH_WIDENING` | **DEMONSTRATED** — `10 -> 11` |
+| C8 `REPEATED_WIDTH_WIDENING` | **DEMONSTRATED** — committed witness `10 -> 11 -> 12` on the real VM; rungs up to `16` measured in `evidence/M5_LADDER_SCALE/` |
+| `UNBOUNDED_WIDTH_GROWTH` | **NOT_DEMONSTRATED** — only a finite ladder is measured; `17..19` not run yet |
+| `EPOCHAL_PYTHON_PARITY` | **NOT_DEMONSTRATED** — the Python oracle has no `epochal` policy |
+| `E10_TO_E19_TOY_LADDER` | **DEMONSTRATED (toy)** — state transport + codec only; see `epoch_ladder/` |
 | `UNSHACKLED_PARITY` | **NOT_DEMONSTRABLE** by construction (the original uses `srand(time(NULL))`) |
 | `VALUE_OVERFLOW_WIDENING` (`pad_to_padwidth`) | **DESTROYED** — rotate breaks consistency across widths |
 | `CLASSIC_PARITY_ZIG` (6/6 corpus) | **DEMONSTRATED** — reverified 2026-09-12 |
@@ -160,8 +224,16 @@ py malbolge_cli.py assemble "in,out,rot,movd,opr,nop,end"
 # classic-parity checker (independent Zig oracle vs canonical Zig core)
 py evidence/compare_f4.py
 
-# frontier widening evidence (the 10 -> 11 transition)
+# frontier widening evidence (10 -> 11 -> 12 on the committed witness)
 zig run tests/t_frontier_moment.zig
+
+# ladder on the real VM loop, then climb further (see the scale guide)
+py evidence/M5_LADDER_SCALE/run_ladder_scale.py --estimate 17 18 19
+py evidence/M5_LADDER_SCALE/run_ladder_scale.py 13 14 15 16
+
+# E10 -> E19 toy ladder
+py epoch_ladder/dimension_epoch_ladder.py
+py epoch_ladder/offset_epoch_ladder.py run
 
 # 3^19 crossing witness (k=20)
 zig run evidence/f7_witness.zig
@@ -252,7 +324,7 @@ py run_m4.py                                   # 19 cases on both engines
 Evidence, per milestone, with preregistrations, results and hashes:
 `evidence/M2_BOOTSTRAP_REACH_V0/`, `evidence/M3_RAW_LAYOUT_V0/`,
 `evidence/M4_MICROPROGRAM_V0/`, `evidence/A5_LMAO_PARITY_V0/`.
-Guides (Spanish, with real executed output): `docs/GUIA_RAW_MALBOLGE.md`,
+Guides (Spanish, with real executed output): `docs/GUIA_ESCALERA.md`, `docs/GUIA_RAW_MALBOLGE.md`,
 `docs/GUIA_BOOTSTRAP.md`, `docs/GUIA_HELL_HIBRIDO.md`.
 
 ### On LMAO (external, GPLv3)

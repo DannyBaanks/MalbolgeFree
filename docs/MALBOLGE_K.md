@@ -56,8 +56,14 @@ rotate/crazy consume `w` instead of a global clamp. Where `w` can change:
   **destroyed**, because `rotate` results do not survive a width change
   (see `evidence/f8_check.py`, 33.3% agreement).
 - address-driven growth (widen when `c` or `d` reaches `3^w`) is what shipped
-  as the `epochal` policy. One transition (`10 -> 11`) is demonstrated;
-  repeated widening is not.
+  as the `epochal` policy. Repeated widening is demonstrated as a finite
+  ladder: `10 -> 11 -> 12` on the committed witness and every rung up to `16`
+  measured on the real VM (`evidence/M5_LADDER_SCALE/`). Unbounded growth is
+  not demonstrated; each rung costs 3x the steps and memory.
+- a separate toy family, `Malbolge(k)` for `k = 10..19` with one fixed
+  dimension per epoch, lives in `epoch_ladder/`. It transports state and the
+  positional codec across E10 -> E19; it does not define real semantics for
+  `k = 11..18`.
 
 Instantiation guide:
 

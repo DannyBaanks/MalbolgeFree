@@ -60,7 +60,7 @@ do.
 |---|---|---|
 | CLASSIC + UNSHACKLED = FREE | Both are instances of the parametric machine | DEMONSTRATED |
 | FRONTIER_WIDTH_WIDENING | one run, two widths (`10 -> 11`), history intact | DEMONSTRATED (`tests/t_frontier_moment.zig`) |
-| REPEATED_WIDTH_WIDENING | frontier after frontier, `11 -> 12 -> ...` | DEMONSTRATED for `10 -> 11 -> 12`; beyond 12 unclaimed |
+| REPEATED_WIDTH_WIDENING | frontier after frontier, `11 -> 12 -> ...` | DEMONSTRATED for `10 -> 11 -> 12` (committed witness) and rungs up to `16` (`evidence/M5_LADDER_SCALE/`); beyond 16 unclaimed |
 | rewrite history under a new width | recompute the past at `w+1` | DESTROYED (rotate is inconsistent across widths) |
 
 ## Chanzazo — "Desperdicio final"

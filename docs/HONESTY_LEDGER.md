@@ -5,11 +5,13 @@ What we got, how we got it, and where we know we cheated.
 ## VARIABLE WIDTH IS NOT INFINITY
 
 The symbol `w` denotes the active width. At every executed step it has a
-concrete finite integer value (10, then 11, in the recorded run). Current
-evidence demonstrates exactly the tested frontier transition (`10 -> 11`,
-`tests/t_frontier_moment.zig`), **not** an infinite sequence of widenings and
-not even a second one: the witness run halts at step 70076, long before the
-`3^11` frontier. Nothing in this repo claims otherwise. Earlier drafts used
+concrete finite integer value (10, then 11, then 12, ... in the recorded
+runs). Current evidence demonstrates a **finite ladder**: `10 -> 11 -> 12` on
+the committed witness, and every rung up to `16` measured on the real VM loop
+(entries 14-16 below). It does **not** demonstrate an infinite sequence of
+widenings. (Entry 7 records the earlier state, when the witness halted at
+step 70076 and only one widening was exercised.) Nothing in this repo claims
+otherwise. Earlier drafts used
 the symbol `ω` for the composition idea; that notation was retired on
 2026-09-05 because it suggested infinity/ordinal semantics that Malbolge Free
 does not make.
@@ -34,6 +36,14 @@ does not make.
 | 11 | `tests/f4_classic.zig` compiles but **fails** | expects `"Hello, world."`, gets garbage bytes | same root cause as #8 (bitwise mask in `crazy`); left failing on purpose — it is the failing-test evidence for the bug |
 | 12 | `tests/t_phase23.py` tail "should not crash" crashes | `MemoryError` in `MalbolgeCore._cell` chain walk, growth_policy=`pad_to_padwidth` with an injected 7-trit cell at addr 200 | the *Python* core has no period-6 lazy shortcut, and the `pad_to_padwidth` route throws `d` to a giant address that `_cell` then walks cell-by-cell. All earlier asserts in the file PASS (lazy==eager k∈{10,11,12,19}, k=10 == Classic 59049 eager fill); only the destroyed-policy tail dies |
 | 13 | `evidence/f8_check.py` exits non-zero | its final `assert` demands *crazy* be inconsistent too | the printed numbers (rotate 9/27 = 33.3%, crazy 729/729 = 100%) are the evidence and they reproduce; the assert's wording contradicts the docs. Left untouched — noisy exit, truthful numbers |
+
+## Re-audit entries (2026-09-16) — the ladder
+
+| # | Claim | Evidence | Cheat check |
+|---|---|---|---|
+| 14 | Repeated widening `10 -> 11 -> 12` on the real VM loop | `tests/t_m5_full_vm.zig` runs the 190000-char witness through `vm.run`: 2 widenings, `padwidth=12`, `final_c=190000`; stopping at step 177147 leaves `padwidth=11` | `t_m5_repeated.zig` and `t_frontier_moment.zig` step the VM by hand (they skip `crazy`/`out` and encryption), so the full-loop test was added. `f9_repeated_frontier.json` had a 63-char `witness_sha256` (one `2` missing); corrected to the real hash `3370003c...3013a57` |
+| 15 | Ladder up to `16` | `evidence/M5_LADDER_SCALE/run_ladder_scale.py 13 14 15 16`: each rung PASS from a fresh `w=10`, widenings 3/4/5/6, results in `results.json` | the limit is memory: every executed cell is stored (u128 -> u128). `17..19` estimated at ~2.1 / 8.4 / 16.9 GiB and **not run** on the 15 GiB laptop. Zig only: the Python oracle has no `epochal` policy |
+| 16 | E10 -> E19 toy epoch ladder | `epoch_ladder/` (copied from the sibling MALBOLGE lab, byte-identical fixture): `LADDER PASS`, offset formula `first_failure: null` for `k=11..18`, 7 unit tests | **toy**: E11-E18 are not historical languages; only state transport and the positional codec cross the ladder. `crazy`, rotation, encryption and jumps at intermediate widths are not demonstrated. It is not the same claim as entries 14-15 (fixed dimension per epoch vs `w` changing inside one run) |
 
 ## Legitimate ambiguity on C3/C7
 

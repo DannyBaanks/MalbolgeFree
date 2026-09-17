@@ -7,7 +7,7 @@
   "memory_limit": null,
   "witness": "tests/frontier_witness.txt",
   "witness_bytes": 190000,
-  "witness_sha256": "3370003cfa18b02e21f095173328d1fa758722dae6e280e78413e3903013a57",
+  "witness_sha256": "3370003cfa18b02e21f095173328d1fa7587222dae6e280e78413e3903013a57",
   "max_steps": 190000,
   "events": [
     {
