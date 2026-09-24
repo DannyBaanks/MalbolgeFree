@@ -13,7 +13,10 @@ Design (cell-verified against MEOW-ENGINE/interpreters/brainfuck.py):
 """
 import sys
 
-sys.path.insert(0, r"C:\Development\ISyCo Git\MEOW-ENGINE\interpreters")
+from pathlib import Path
+
+# Sibling checkout of MEOW-ENGINE next to this repo.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "MEOW-ENGINE" / "interpreters"))
 from brainfuck import run as _run
 
 # ----------------------------------------------------------------------------

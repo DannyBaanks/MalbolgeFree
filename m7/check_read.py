@@ -1,6 +1,7 @@
 """Verify READ stage tape layout: opcodes contiguous in cells 2..n+1, n in cell1."""
 import sys
-sys.path.insert(0, r"C:\Development\ISyCo Git\malbolge-free\m7")
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gen import build_compiler
 
 

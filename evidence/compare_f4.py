@@ -28,7 +28,7 @@ if zig_proc.returncode != 0:
     raise RuntimeError(zig_proc.stderr or zig_proc.stdout)
 
 oracle_proc = subprocess.run(
-    [r"C:\Development\ISyCo Git\Malbolge-Translator\zig\parity_check.exe"],
+    [str(pathlib.Path(__file__).resolve().parents[2] / "Malbolge-Translator" / "zig" / "parity_check.exe")],
     capture_output=True,
     text=True,
     timeout=60,
