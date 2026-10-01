@@ -181,6 +181,6 @@ guía.
 | M4 Extensión conservadora | PASS: degeneración, preservación, determinismo y no-replay observables |
 | M4b Slice vertical free-pure | PASS: fixture con salida dependiente del input usando solo los 8 opcodes Classic, `assisted=0`, `lock_noencrypt=false`, cifrado activo; prefijo identico a Classic y frontera cruzada sin ISA aux (`t_free_pure_vertical_slice.zig`, 3/3) |
 | M5 Segunda frontera | PASS: `10->11->12` demostrado; evidencia F9; escalera hasta `19` medida (2026-10-01, densa) |
-| M6 Turing completeness válida | PARCIAL: claim corregido; smoke test pasa, reducción semántica pendiente |
+| M6 Turing completeness válida | PARCIAL: claim corregido; smoke test pasa, reducción semántica pendiente. Frontera medida: control por output SÍ con 8 opcodes; movimiento de puntero por dato NO en el espacio buscado (`docs/M6_EIGHT_OPCODE_BOUNDARY.md`). El claim sigue NOT_DEMONSTRATED |
 | M7 Producto operable | PARCIAL |
 | M8 Release formal 1.0 | PENDIENTE |

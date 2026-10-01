@@ -159,6 +159,12 @@ GATES = [
         f"-Mhell={ROOT / 'src' / 'hell.zig'}",
         f"-Mmalbolge_free={ROOT / 'src' / 'malbolge_free.zig'}",
     ]),
+    ("M6 eight-opcode boundary (bounded negative + control)", [
+        "zig", "test", "--dep", "hell=hell", "--dep", "malbolge_free=malbolge_free",
+        f"-Mroot={ROOT / 'tests' / 't_m6_eight_opcode_boundary.zig'}",
+        f"-Mhell={ROOT / 'src' / 'hell.zig'}",
+        f"-Mmalbolge_free={ROOT / 'src' / 'malbolge_free.zig'}",
+    ]),
     ("M0 EOF and numeric precision", zig_test("tests/t_m0_eof_precision.zig")),
     ("M0 free-pure vertical slice (8 opcodes only)", [
         "zig", "test", "--dep", "hell=hell", "--dep", "malbolge_free=malbolge_free",

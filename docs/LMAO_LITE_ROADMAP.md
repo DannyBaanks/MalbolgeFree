@@ -242,4 +242,9 @@ A5 LMAO comparison        FAIL (LMAO 34/34 en nuestros motores; lmao-lite 0/6)
 A6 multi-byte cat         PASS (7/7 tests)
 A7 BFIR1 backend          PASS (10/10 + 4/4 structural tests)
 A7.1 conditional e2e      NOT_DEMONSTRATED (math verified; runtime pending)
+                         -> partial answer 2026-10-01: control that changes OUTPUT is
+                            demonstrated with 8 Classic opcodes only
+                            (t_free_pure_vertical_slice.zig). Input-dependent POINTER
+                            movement is not, in the searched space. See
+                            docs/M6_EIGHT_OPCODE_BOUNDARY.md
 ```
