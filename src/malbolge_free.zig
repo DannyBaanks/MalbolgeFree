@@ -157,6 +157,18 @@ pub const MalbolgeCore = struct {
     profile: ExecutionProfile,
     padwidth: u8,
     mem: std.AutoHashMap(u128, u128),
+    /// Opt-in dense representation of the materialised range [0, program_len+12).
+    /// The hash map spends ~33 bytes per source cell (16 key + 16 value + 1 meta)
+    /// for what is, before self-modification, one ASCII byte. A ladder witness is
+    /// almost entirely source, so the map dominates RAM. When set, those cells
+    /// live in a flat u32 array instead (4 bytes) and the hash map only holds
+    /// writes that land outside the dense range.
+    ///
+    /// OFF by default: every existing constructor keeps the historical
+    /// representation, so canonical Classic/epochal evidence is untouched.
+    /// Equivalence is asserted by tests/t_dense_differential.zig.
+    dense: ?[]u32 = null,
+    dense_enabled: bool = false,
     initial_tail: [12]u128,
     program_len: u128,
     lock_noencrypt: bool = false,
@@ -165,6 +177,13 @@ pub const MalbolgeCore = struct {
         max_value: u128 = 0,
         growth_events: u32 = 0,
     },
+
+    /// Switch to the dense representation for the next `load`. Refuses when the
+    /// width can produce values that do not fit the u32 element type.
+    pub fn enableDenseSource(self: *MalbolgeCore) !void {
+        if (pow3(self.width) > std.math.maxInt(u32)) return error.DenseRangeTooNarrow;
+        self.dense_enabled = true;
+    }
 
     pub fn init(alloc: Allocator, width: u8, mem_limit: ?u128, growth: GrowthPolicy) MalbolgeCore {
         std.debug.assert(width >= 1 and width <= 80);
@@ -207,11 +226,13 @@ pub const MalbolgeCore = struct {
     }
 
     pub fn deinit(self: *MalbolgeCore) void {
+        if (self.dense) |dn| self.alloc.free(dn);
         self.mem.deinit();
     }
 
     /// Loader: strip whitespace, enforce printable range, store program cells.
     pub fn load(self: *MalbolgeCore, source: []const u8) !void {
+        if (self.dense_enabled) return self.loadDense(source);
         var i: u128 = 0;
         for (source) |ch| {
             if (ch == ' ' or ch == '\t' or ch == '\r' or ch == '\n') continue;
@@ -235,6 +256,44 @@ pub const MalbolgeCore = struct {
             try self.mem.put(tail_i, crazy(v1, v2, self.width));
             self.initial_tail[@intCast(tail_i - self.program_len)] = self.mem.get(tail_i).?;
         }
+    }
+
+    /// Dense counterpart of `load`. Same validation and same 12-cell frozen
+    /// tail, but the materialised range lives in a flat u32 array. Two passes:
+    /// validate and count first (so an invalid source never allocates), then fill.
+    fn loadDense(self: *MalbolgeCore, source: []const u8) !void {
+        var n: u128 = 0;
+        for (source) |ch| {
+            if (ch == ' ' or ch == '\t' or ch == '\r' or ch == '\n') continue;
+            if (ch < 33 or ch > 126) return error.InvalidSource;
+            if (self.profile != .free_assisted and !isClassicSourceOpcode(ch, n)) {
+                return error.InvalidSourceOpcode;
+            }
+            n += 1;
+        }
+        if (n < 2) return error.ProgramTooShort;
+        if (n + 12 > std.math.maxInt(u32)) return error.DenseRangeTooNarrow;
+
+        const dn = try self.alloc.alloc(u32, @intCast(n + 12));
+        errdefer self.alloc.free(dn);
+        var k: usize = 0;
+        for (source) |ch| {
+            if (ch == ' ' or ch == '\t' or ch == '\r' or ch == '\n') continue;
+            dn[k] = ch;
+            k += 1;
+        }
+        self.program_len = n;
+        // Freeze one full 12-cell period of the Classic crazy-fill tail, exactly
+        // as the hash-map path does, so reads beyond the range agree.
+        var t: u128 = n;
+        while (t < n + 12) : (t += 1) {
+            const v1 = dn[@intCast(t - 1)];
+            const v2 = dn[@intCast(t - 2)];
+            const cv = crazy(v1, v2, self.width);
+            dn[@intCast(t)] = @intCast(cv);
+            self.initial_tail[@intCast(t - n)] = cv;
+        }
+        self.dense = dn;
     }
 
     fn isClassicSourceOpcode(ch: u8, position: u128) bool {
@@ -261,6 +320,12 @@ pub const MalbolgeCore = struct {
         var i = addr0;
         if (self.mem_limit) |lim| i %= lim;
         self.touch(i);
+        if (self.dense) |dn| {
+            // Dense covers exactly [0, program_len+12). Everything past that is
+            // the frozen periodic tail, so no lazy walk is ever needed.
+            if (i < dn.len) return dn[@intCast(i)];
+            return self.cycleAt(@mod(i - self.program_len, 12));
+        }
         if (self.mem.get(i)) |v| return v;
 
         const base: u128 = self.program_len;
@@ -284,6 +349,16 @@ pub const MalbolgeCore = struct {
         if (self.mem_limit) |lim| i %= lim;
         self.touch(i);
         if (v > self.stats.max_value) self.stats.max_value = v;
+        if (self.dense) |dn| {
+            if (i < dn.len) {
+                if (v > std.math.maxInt(u32)) return error.DenseRangeTooNarrow;
+                dn[@intCast(i)] = @intCast(v);
+                return;
+            }
+            // Self-modification outside the dense range still needs the map.
+            try self.mem.put(i, v);
+            return;
+        }
         try self.mem.put(i, v);
     }
 
@@ -564,7 +639,10 @@ pub const MalbolgeCore = struct {
             .stdout = out,
             .max_addr_touched = self.stats.max_addr,
             .max_value = self.stats.max_value,
-            .cells_materialized = self.mem.count(),
+            .cells_materialized = if (self.dense) |dn|
+                @intCast(dn.len + self.mem.count())
+            else
+                @intCast(self.mem.count()),
             .final_c = c,
             .final_d = d,
             .assisted_opcodes = assisted_opcodes,

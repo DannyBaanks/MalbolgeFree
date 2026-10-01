@@ -35,19 +35,34 @@ pub fn main() !void {
 
     var vm = core.MalbolgeCore.initFreePure(alloc, 10, .epochal);
     defer vm.deinit();
-    try vm.mem.ensureTotalCapacity(@intCast(len + 16));
-    std.debug.print("reserved capacity={d} (~{d} MiB of key/value/metadata)\n", .{
-        vm.mem.capacity(),
-        @as(u64, vm.mem.capacity()) * (2 * @sizeOf(u128) + 1) / (1024 * 1024),
-    });
+    if (cfg.dense) {
+        // Dense representation: the materialised range is a flat u32 array, so
+        // there is nothing to pre-reserve in the hash map. Reserving here would
+        // defeat the whole point (it is ~33 bytes per source cell).
+        try vm.enableDenseSource();
+        std.debug.print("representation=dense (u32 array, {d} bytes for {d} cells)\n", .{
+            (@as(u64, len) + 12) * @sizeOf(u32),
+            len + 12,
+        });
+    } else {
+        try vm.mem.ensureTotalCapacity(@intCast(len + 16));
+        std.debug.print("reserved capacity={d} (~{d} MiB of key/value/metadata)\n", .{
+            vm.mem.capacity(),
+            @as(u64, vm.mem.capacity()) * (2 * @sizeOf(u128) + 1) / (1024 * 1024),
+        });
+    }
     try vm.load(src);
 
     var res = try vm.run(need, "");
     defer res.stdout.deinit(alloc);
 
+    // Representation-independent view of the same measurement, so a dense run
+    // stays comparable with a historical hash-map row.
+    const cells: usize = if (vm.dense) |dn| dn.len + vm.mem.count() else vm.mem.count();
+
     std.debug.print(
-        "RESULT target={d} status={s} steps={d} padwidth={d} growth={d} final_c={d} cells={d} capacity={d} stdout_len={d}\n",
-        .{ target, res.status, res.steps, vm.padwidth, vm.stats.growth_events, res.final_c, vm.mem.count(), vm.mem.capacity(), res.stdout.items.len },
+        "RESULT target={d} status={s} steps={d} padwidth={d} growth={d} final_c={d} cells={d} capacity={d} stdout_len={d} repr={s}\n",
+        .{ target, res.status, res.steps, vm.padwidth, vm.stats.growth_events, res.final_c, cells, vm.mem.capacity(), res.stdout.items.len, if (cfg.dense) "dense" else "hash" },
     );
     if (vm.padwidth != target or vm.stats.growth_events != target - 10) return error.LadderDidNotReachTarget;
 }

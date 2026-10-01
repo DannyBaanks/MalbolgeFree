@@ -17,7 +17,7 @@ infinity claims this project does not make.)
 | C5 LEGAL_CROSSING_3_POW_19 | **DEMONSTRATED** — `evidence/f7_witness.zig`, program "('& %$") => movd-chain reaches d=1,743,392,169 > 3^19=1,162,261,467. Re-run 2026-09-05: `cfg=k20_fixed status=MAX_STEPS steps=50 max_addr=1743392210 >3^19=true`. See also `f7_python_check.py`. |
 | C6 WIDTH_EXTENSION_CONSISTENCY | **DESTROYED** — `rotate(v, k) % 3^k != rotate(v, k+1) % 3^k` unless `v % 3 == 0`. Numerics: 33% consistency over 27 samples on w=3. `crazy` is consistent 100% of the time (the op is purely tritwise and padding with zeros is already neutral). Re-verified 2026-09-05 via `f8_check.py` |
 | C7 FRONTIER_WIDTH_WIDENING | **DEMONSTRATED** — `tests/t_frontier_moment.zig` prints `WIDEN step=59050 c=59049 d=59049 old_w=10 new_w=11`; the same witness continues through the C8 event. |
-| C8 REPEATED_WIDTH_WIDENING | **DEMONSTRATED** for two frontiers: `10→11` at step 59050 and `11→12` at step 177148. Evidence: `f9_repeated_frontier.json`, `tests/t_m5_full_vm.zig`. Rungs up to 16 measured on the real VM (2026-09-16, `M5_LADDER_SCALE/results.json`). Do not extrapolate beyond 16. |
+| C8 REPEATED_WIDTH_WIDENING | **DEMONSTRATED** for two frontiers: `10→11` at step 59050 and `11→12` at step 177148. Evidence: `f9_repeated_frontier.json`, `tests/t_m5_full_vm.zig`. Rungs up to 16 measured on the real VM (2026-09-16, `M5_LADDER_SCALE/results.json`); rungs 17/18/19 measured 2026-10-01 with the dense representation (`--dense`, label `linux-14gib-dense`, peak RSS 1.92 GiB). Step counts identical to the hash predictions. Do not extrapolate beyond 19. |
 | C9 CLASSIC + UNSHACKLED -> FREE | **DEMONSTRATED** in both readings |
 | C10 TURING_COMPLETENESS | **NO_NEW_CLAIM** |
 

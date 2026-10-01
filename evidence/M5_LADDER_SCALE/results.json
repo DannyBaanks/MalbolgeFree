@@ -102,5 +102,86 @@
       "reserved capacity=33554432 (~1056 MiB of key/value/metadata)",
       "RESULT target=16 status=MAX_STEPS steps=14348908 padwidth=16 growth=6 final_c=14348908 cells=14349920 capacity=33554432 stdout_len=4732088"
     ]
+  },
+  {
+    "target_w": 17,
+    "verdict": "PASS",
+    "exit_code": 0,
+    "seconds_including_compile": 16.0,
+    "estimated_bytes": 2257640250,
+    "label": "linux-14gib-dense",
+    "os": "Linux",
+    "processor": "x86_64",
+    "ram_total_gib": 14.8,
+    "fields": {
+      "target": "17",
+      "status": "MAX_STEPS",
+      "steps": "43046722",
+      "padwidth": "17",
+      "growth": "7",
+      "final_c": "43046722",
+      "cells": "43047734",
+      "capacity": "0",
+      "stdout_len": "14196264",
+      "repr": "dense"
+    },
+    "tail": [
+      "representation=dense (u32 array, 172190936 bytes for 43047734 cells)",
+      "RESULT target=17 status=MAX_STEPS steps=43046722 padwidth=17 growth=7 final_c=43046722 cells=43047734 capacity=0 stdout_len=14196264 repr=dense"
+    ]
+  },
+  {
+    "target_w": 18,
+    "verdict": "PASS",
+    "exit_code": 0,
+    "seconds_including_compile": 22.4,
+    "estimated_bytes": 8987511228,
+    "label": "linux-14gib-dense",
+    "os": "Linux",
+    "processor": "x86_64",
+    "ram_total_gib": 14.8,
+    "fields": {
+      "target": "18",
+      "status": "MAX_STEPS",
+      "steps": "129140164",
+      "padwidth": "18",
+      "growth": "8",
+      "final_c": "129140164",
+      "cells": "129141176",
+      "capacity": "0",
+      "stdout_len": "42588775",
+      "repr": "dense"
+    },
+    "tail": [
+      "representation=dense (u32 array, 516564704 bytes for 129141176 cells)",
+      "RESULT target=18 status=MAX_STEPS steps=129140164 padwidth=18 growth=8 final_c=129140164 cells=129141176 capacity=0 stdout_len=42588775 repr=dense"
+    ]
+  },
+  {
+    "target_w": 19,
+    "verdict": "PASS",
+    "exit_code": 0,
+    "seconds_including_compile": 38.5,
+    "estimated_bytes": 18104161602,
+    "label": "linux-14gib-dense",
+    "os": "Linux",
+    "processor": "x86_64",
+    "ram_total_gib": 14.8,
+    "fields": {
+      "target": "19",
+      "status": "MAX_STEPS",
+      "steps": "387420490",
+      "padwidth": "19",
+      "growth": "9",
+      "final_c": "387420490",
+      "cells": "387421502",
+      "capacity": "0",
+      "stdout_len": "127766332",
+      "repr": "dense"
+    },
+    "tail": [
+      "representation=dense (u32 array, 1549686008 bytes for 387421502 cells)",
+      "RESULT target=19 status=MAX_STEPS steps=387420490 padwidth=19 growth=9 final_c=387420490 cells=387421502 capacity=0 stdout_len=127766332 repr=dense"
+    ]
   }
 ]

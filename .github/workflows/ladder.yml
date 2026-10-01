@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       targets:
-        description: "Widths to climb (e.g. '17 18'). Hosted runners cap at 18."
+        description: "Widths to climb (e.g. '17 18 19'). Dense representation, so 19 fits."
         required: true
-        default: "17 18"
+        default: "17 18 19"
 
 jobs:
   ladder:
@@ -32,7 +32,7 @@ jobs:
           echo "/opt/zig-x86_64-linux-0.16.0" >> "$GITHUB_PATH"
           zig version
 
-      - name: Refuse memory-infeasible targets on a hosted runner
+      - name: Refuse a hash-map run that cannot fit on a hosted runner
         shell: bash
         run: |
           set -euo pipefail
@@ -44,17 +44,20 @@ jobs:
           try:
               ts = [int(x) for x in raw]
           except ValueError:
-              raise SystemExit("targets must be integers, e.g. '17 18'")
+              raise SystemExit("targets must be integers, e.g. '17 18 19'")
           if not ts:
               raise SystemExit("no targets given")
-          too_big = [t for t in ts if t >= 19]
+          # In --dense mode a rung costs ~4 bytes per cell (1.55 GB at w=19), so a
+          # 16 GB runner reaches 19 easily. In hash mode the same rung needs
+          # ~16.9 GiB of table and would be OOM-killed, so refuse it here rather
+          # than let the job die ambiguously.
+          too_big = [t for t in ts if t >= 20]
           if too_big:
               raise SystemExit(
-                  "refusing w={} on a hosted runner: the ladder stores every executed\n"
-                  "cell, so w=19 needs ~16.9 GiB of table plus a ~387 MB witness\n"
-                  "(~17.3 GiB peak) and will be OOM-killed here.\n"
-                  "Run it on a >=32 GiB machine instead:\n"
-                  "  python3 evidence/M5_LADDER_SCALE/run_ladder_scale.py --label <host> 19".format(too_big)
+                  "refusing w={} in dense mode: cells are stored as u32 and 3^20 "
+                  "already exceeds the element type (enableDenseSource refuses it).\n"
+                  "The hash representation has no such ceiling but costs ~33 bytes "
+                  "per cell (w=20 => ~50 GiB), so it needs a big host.".format(too_big)
               )
           print("feasible targets:", ts)
           PY
@@ -62,12 +65,12 @@ jobs:
       - name: Show memory estimate
         run: python3 evidence/M5_LADDER_SCALE/run_ladder_scale.py --estimate ${{ inputs.targets }}
 
-      - name: Run the ladder
+      - name: Run the ladder (dense representation)
         id: ladder
         shell: bash
         run: |
           set -o pipefail
-          python3 evidence/M5_LADDER_SCALE/run_ladder_scale.py \
+          python3 evidence/M5_LADDER_SCALE/run_ladder_scale.py --dense \
             --label "github-ubuntu-${{ runner.os }}-${{ runner.arch }}" \
             ${{ inputs.targets }} 2>&1 | tee ladder.log
 

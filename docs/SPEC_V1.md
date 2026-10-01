@@ -120,7 +120,11 @@ Estado: **NOT_RELEASED**.
 - nunca reescribe memoria, salida o pasos historicos;
 - `w` es siempre un entero finito y monotono.
 
-Estado: `10 -> 11` demostrado; `11 -> 12` aun `NOT_DEMONSTRATED`.
+Estado: `10 -> 11 -> 12` demostrado en el witness comprometido
+(`evidence/f9_repeated_frontier.json`, steps 59050 and 177148). Escalera adicional hasta
+`19` medida el 2026-10-01 con la representacion densa
+(`evidence/M5_LADDER_SCALE/results.json`, filas `linux-14gib-dense`). Verificar
+el disco antes de citar: este texto quedo detras de la evidencia.
 
 ## 6. EOF
 
@@ -156,7 +160,8 @@ contra el oraculo externo de Malbolge-Translator.
 - [x] Instrucciones y post-instruccion escritas.
 - [x] Modos y limitaciones declarados.
 - [x] Contradiccion entre copias detectada.
-- [ ] Decisiones de precision numerica cerradas.
+- [ ] Decisiones de precision numerica cerradas. (Nota: la via densa fija un
+      techo en `w = 20` porque `3^21` no cabe en `u32`; la via hash no lo tiene.)
 - [ ] EOF fijado con casos normativos.
 - [x] Un unico runtime marcado como canonico.
 

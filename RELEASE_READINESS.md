@@ -1,6 +1,7 @@
 # Malbolge Free — Release Readiness Checklist
 
-**Status**: CORE COMPLETE — C8 repeated widening demonstrated; M6 remains open
+**Status**: CORE COMPLETE — C8 repeated widening demonstrated (ladder measured to
+`w=19`, 2026-10-01); M6 remains open
 
 ---
 

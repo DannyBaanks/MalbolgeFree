@@ -64,7 +64,7 @@ A: No. What ran at 10 stays exactly as it ran at 10.
 
 **Q: Have we shown `w` can grow forever?**
 A: No. We have shown a finite ladder: `10 -> 11 -> 12` in the committed
-witness, and every rung up to `16` measured on the real VM loop. Each rung
+witness, and every rung up to `19` measured on the real VM loop. Each rung
 costs three times the steps and memory of the previous one, so this is a
 measured ladder, not a proof of unbounded growth.
 
@@ -79,7 +79,7 @@ In the code, the current value of `w` is stored in a field called `padwidth`
 |---|---|---|---|
 | `fixed` | no | classic frozen width | Classic parity semantics |
 | `pad_to_padwidth` | yes — by value overflow | pads operands when big values appear | **DESTROYED** by rotate (see below) |
-| `epochal` | yes — by address frontier | widens `w` when `c`/`d` reach `3^w` | **DEMONSTRATED** — ladder `10 -> 16` measured on the real VM |
+| `epochal` | yes — by address frontier | widens `w` when `c`/`d` reach `3^w` | **DEMONSTRATED** — ladder `10 -> 19` measured on the real VM |
 
 ## Demonstrated (re-verified 2026-09-16)
 
@@ -133,7 +133,7 @@ How far it climbs is limited by memory, not by the rule: to reach `w` the
 pointer must walk to `3^(w-1)`, and every executed cell is stored.
 `evidence/M5_LADDER_SCALE/` generates longer witnesses and runs them on the
 real VM. Measured on a 15 GiB laptop (2026-09-16), each rung from a fresh
-`w = 10`:
+`w = 10`, using the hash-map representation:
 
 | climbs to | steps | widenings | cells stored |
 |---:|---:|---:|---:|
@@ -142,10 +142,51 @@ real VM. Measured on a 15 GiB laptop (2026-09-16), each rung from a fresh
 | 15 | 4,782,970 | 5 | 4,783,982 |
 | 16 | 14,348,908 | 6 | 14,349,920 |
 
-Estimated hash-table size for the next rungs (not run yet): `17` ~2.1 GiB,
-`18` ~8.4 GiB, `19` ~16.9 GiB. `19` needs 387,420,489 steps and a machine
-with roughly 20+ GiB free. The Python oracle does not implement `epochal`, so
-this ladder is checked on one engine (Zig) only.
+**The ladder now reaches 19** (2026-10-01), after the dense representation
+described below removed the memory wall that stopped it at 16:
+
+| climbs to | steps | widenings | cells stored | seconds | array |
+|---:|---:|---:|---:|---:|---:|
+| 17 | 43,046,722 | 7 | 43,047,734 | 16.0 | 172 MB |
+| 18 | 129,140,164 | 8 | 129,141,176 | 22.4 | 516 MB |
+| 19 | 387,420,490 | 9 | 387,421,502 | 38.5 | 1.55 GB |
+
+Measured on Linux x86_64, 14.8 GiB RAM, peak RSS 1.92 GiB for all three rungs
+together (`run_ladder_scale.py --dense`, rows tagged `linux-14gib-dense` in
+`evidence/M5_LADDER_SCALE/results.json`). Step counts match the hash-map
+measurements exactly where both exist (rung 17: `43046722`, `padwidth=17`,
+`growth=7`), so the representation changed the cost, not the measurement.
+
+The old estimates for `17`/`18`/`19` (~2.1 / 8.4 / 16.9 GiB) were hash-map
+figures and no longer apply. `19` no longer needs a 32 GiB machine. The Python
+oracle still does not implement `epochal`, so this ladder is checked on one
+engine (Zig) only.
+
+### Dense representation (why 19 became reachable)
+
+The hash map spends ~33 bytes per cell (16-byte key + 16-byte value + 1
+metadata byte) on what is, before self-modification, **one ASCII byte** — and a
+ladder witness is almost entirely source. That map, not the computation, was the
+memory wall.
+
+With `--dense`, the materialised range `[0, program_len+12)` is a flat `u32`
+array (4 bytes per cell) and the hash map keeps only writes that land outside
+it. Consequences:
+
+- ~8x less RAM per rung; the `19` rung costs 1.55 GB instead of ~16.9 GiB.
+- **Off by default.** Every existing constructor keeps the historical
+  representation, so Classic parity and the epochal evidence are untouched.
+- `enableDenseSource()` **refuses** widths whose values do not fit `u32`, i.e.
+  `w >= 21` (`3^21` overflows). So the dense path has a structural ceiling at
+  `w = 20`. The hash path has no such ceiling but costs ~33 bytes per cell.
+- Equivalence is asserted, not assumed: `tests/t_dense_differential.zig` runs
+  both representations and requires identical stdout, status, steps, final
+  `a`/`c`/`d`, cells touched, encrypted cells and a field-by-field trace match.
+
+`UNBOUNDED_WIDTH_GROWTH` therefore remains **NOT_DEMONSTRATED**, and now for a
+sharper reason than "we stopped measuring": the ladder is finite by
+construction, and in the dense representation it is bounded at `w = 20` by the
+element type.
 
 ## E10 -> E19 epoch ladder (toy)
 
@@ -182,8 +223,8 @@ its own fixed dimension.
 | Claim | Status |
 |---|---|
 | C7 `FRONTIER_WIDTH_WIDENING` | **DEMONSTRATED** — `10 -> 11` |
-| C8 `REPEATED_WIDTH_WIDENING` | **DEMONSTRATED** — committed witness `10 -> 11 -> 12` on the real VM; rungs up to `16` measured in `evidence/M5_LADDER_SCALE/` |
-| `UNBOUNDED_WIDTH_GROWTH` | **NOT_DEMONSTRATED** — only a finite ladder is measured; `17..19` not run yet |
+| C8 `REPEATED_WIDTH_WIDENING` | **DEMONSTRATED** — committed witness `10 -> 11 -> 12` on the real VM; rungs up to `19` measured in `evidence/M5_LADDER_SCALE/` (17-19 via the dense representation) |
+| `UNBOUNDED_WIDTH_GROWTH` | **NOT_DEMONSTRATED** — the ladder is finite by construction and now measured to `19`; the dense path is additionally bounded at `w = 20` by the `u32` element type |
 | `EPOCHAL_PYTHON_PARITY` | **NOT_DEMONSTRATED** — the Python oracle has no `epochal` policy |
 | `E10_TO_E19_TOY_LADDER` | **DEMONSTRATED (toy)** — state transport + codec only; see `epoch_ladder/` |
 | `UNSHACKLED_PARITY` | **NOT_DEMONSTRABLE** by construction (the original uses `srand(time(NULL))`) |

@@ -57,7 +57,7 @@ rotate/crazy consume `w` instead of a global clamp. Where `w` can change:
   (see `evidence/f8_check.py`, 33.3% agreement).
 - address-driven growth (widen when `c` or `d` reaches `3^w`) is what shipped
   as the `epochal` policy. Repeated widening is demonstrated as a finite
-  ladder: `10 -> 11 -> 12` on the committed witness and every rung up to `16`
+  ladder: `10 -> 11 -> 12` on the committed witness and every rung up to `19`
   measured on the real VM (`evidence/M5_LADDER_SCALE/`). Unbounded growth is
   not demonstrated; each rung costs 3x the steps and memory.
 - a separate toy family, `Malbolge(k)` for `k = 10..19` with one fixed

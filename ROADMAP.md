@@ -179,7 +179,7 @@ guía.
 | M2 Harness reproducible | PASS: `py tests/run_all.py` ejecuta todos los gates M2 |
 | M3 Paridad Classic | PASS: corpus 6/6 contra oraculo independiente |
 | M4 Extensión conservadora | PASS: degeneración, preservación, determinismo y no-replay observables |
-| M5 Segunda frontera | PASS: `10->11->12` demostrado; evidencia F9 |
+| M5 Segunda frontera | PASS: `10->11->12` demostrado; evidencia F9; escalera hasta `19` medida (2026-10-01, densa) |
 | M6 Turing completeness válida | PARCIAL: claim corregido; smoke test pasa, reducción semántica pendiente |
 | M7 Producto operable | PARCIAL |
 | M8 Release formal 1.0 | PENDIENTE |

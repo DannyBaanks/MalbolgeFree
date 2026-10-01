@@ -158,6 +158,7 @@ GATES = [
         f"-Mhell={ROOT / 'src' / 'hell.zig'}",
         f"-Mmalbolge_free={ROOT / 'src' / 'malbolge_free.zig'}",
     ]),
+    ("dense representation differential", zig_test("tests/t_dense_differential.zig")),
     ("epochal invariants", zig_test("tests/t_epochal.zig")),
     ("frontier 10 to 12", zig_run("tests/t_frontier_moment.zig")),
 ]

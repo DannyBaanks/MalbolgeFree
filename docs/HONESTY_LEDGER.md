@@ -7,7 +7,7 @@ What we got, how we got it, and where we know we cheated.
 The symbol `w` denotes the active width. At every executed step it has a
 concrete finite integer value (10, then 11, then 12, ... in the recorded
 runs). Current evidence demonstrates a **finite ladder**: `10 -> 11 -> 12` on
-the committed witness, and every rung up to `16` measured on the real VM loop
+the committed witness, and every rung up to `19` measured on the real VM loop
 (entries 14-16 below). It does **not** demonstrate an infinite sequence of
 widenings. (Entry 7 records the earlier state, when the witness halted at
 step 70076 and only one widening was exercised.) Nothing in this repo claims
@@ -42,7 +42,9 @@ does not make.
 | # | Claim | Evidence | Cheat check |
 |---|---|---|---|
 | 14 | Repeated widening `10 -> 11 -> 12` on the real VM loop | `tests/t_m5_full_vm.zig` runs the 190000-char witness through `vm.run`: 2 widenings, `padwidth=12`, `final_c=190000`; stopping at step 177147 leaves `padwidth=11` | `t_m5_repeated.zig` and `t_frontier_moment.zig` step the VM by hand (they skip `crazy`/`out` and encryption), so the full-loop test was added. `f9_repeated_frontier.json` had a 63-char `witness_sha256` (one `2` missing); corrected to the real hash `3370003c...3013a57` |
-| 15 | Ladder up to `16` | `evidence/M5_LADDER_SCALE/run_ladder_scale.py 13 14 15 16`: each rung PASS from a fresh `w=10`, widenings 3/4/5/6, results in `results.json` | the limit is memory: every executed cell is stored (u128 -> u128). `17..19` estimated at ~2.1 / 8.4 / 16.9 GiB and **not run** on the 15 GiB laptop. Zig only: the Python oracle has no `epochal` policy |
+| 15 | Ladder up to `16` | `evidence/M5_LADDER_SCALE/run_ladder_scale.py 13 14 15 16`: each rung PASS from a fresh `w=10`, widenings 3/4/5/6, results in `results.json` | superseded for rungs 17+ by entry 17; the hash-map ceiling it describes is real but no longer the binding one. Zig only: the Python oracle has no `epochal` policy |
+| 17 | Ladder up to `19` + dense representation | `run_ladder_scale.py --dense --label linux-14gib-dense 17 18 19`: PASS, widenings 7/8/9, steps 43,046,722 / 129,140,164 / 387,420,490, `padwidth` 17/18/19, peak RSS 1.92 GiB for all three (Linux x86_64, 14.8 GiB). Rows tagged `repr=dense` in `results.json` | the `~33 bytes/cell` hash map was the wall, not the maths: the materialised range `[0, program_len+12)` is now a flat `u32` array (~4 B/cell) with the map keeping only out-of-range writes. **Off by default**; equivalence asserted field-by-field in `tests/t_dense_differential.zig` (4/4). Rung 17 steps/padwidth/growth identical across both representations, so this changed cost, not measurement. Dense **refuses** `w >= 21` (3^21 overflows u32), so that path is structurally bounded at `w=20` — a ceiling, not a claim. Single engine: Python oracle has no `epochal` |
+
 | 16 | E10 -> E19 toy epoch ladder | `epoch_ladder/` (copied from the sibling MALBOLGE lab, byte-identical fixture): `LADDER PASS`, offset formula `first_failure: null` for `k=11..18`, 7 unit tests | **toy**: E11-E18 are not historical languages; only state transport and the positional codec cross the ladder. `crazy`, rotation, encryption and jumps at intermediate widths are not demonstrated. It is not the same claim as entries 14-15 (fixed dimension per epoch vs `w` changing inside one run) |
 
 ## Legitimate ambiguity on C3/C7

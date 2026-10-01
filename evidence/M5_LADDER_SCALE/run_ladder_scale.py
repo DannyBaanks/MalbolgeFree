@@ -61,10 +61,12 @@ def total_ram_gib() -> float | None:
     return None
 
 
-def run_rung(target: int, label: str) -> dict:
+def run_rung(target: int, label: str, dense: bool) -> dict:
     with tempfile.TemporaryDirectory() as tmp:
         cfg = Path(tmp) / "ladder_cfg.zig"
-        cfg.write_text(f"pub const target_w: u8 = {target};\n", encoding="ascii")
+        cfg.write_text(
+            f"pub const target_w: u8 = {target};\npub const dense: bool = {'true' if dense else 'false'};\n",
+            encoding="ascii")
         cmd = [
             "zig", "run", "-O", "ReleaseFast",
             "--dep", "malbolge_free", "--dep", "ladder_cfg",
@@ -99,6 +101,8 @@ def main() -> int:
     parser.add_argument("targets", nargs="+", type=int)
     parser.add_argument("--estimate", action="store_true")
     parser.add_argument("--label", default="", help="free-text machine label (no hostnames)")
+    parser.add_argument("--dense", action="store_true",
+                        help="use the dense u32 representation (~8x less RAM per rung)")
     args = parser.parse_args()
 
     for target in args.targets:
@@ -111,7 +115,7 @@ def main() -> int:
     results = json.loads(RESULTS.read_text(encoding="utf-8")) if RESULTS.exists() else []
     failed = False
     for target in args.targets:
-        row = run_rung(target, args.label)
+        row = run_rung(target, args.label, args.dense)
         print(json.dumps(row))
         results.append(row)
         RESULTS.write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
