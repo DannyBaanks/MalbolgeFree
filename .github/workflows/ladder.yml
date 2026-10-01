@@ -1,0 +1,113 @@
+name: ladder
+
+# Manual only: this is a long, memory-hungry measurement, never part of the
+# per-push gate. It climbs the epochal ladder 10 -> N on the real VM loop.
+on:
+  workflow_dispatch:
+    inputs:
+      targets:
+        description: "Widths to climb (e.g. '17 18'). Hosted runners cap at 18."
+        required: true
+        default: "17 18"
+
+jobs:
+  ladder:
+    name: epochal ladder (ubuntu)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout MalbolgeFree
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Zig 0.16.0
+        run: |
+          curl -fsSL https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz -o /tmp/zig.tar.xz
+          tar -xf /tmp/zig.tar.xz -C /opt
+          ln -sf /opt/zig-x86_64-linux-0.16.0/zig /usr/local/bin/zig
+          echo "/opt/zig-x86_64-linux-0.16.0" >> "$GITHUB_PATH"
+          zig version
+
+      - name: Refuse memory-infeasible targets on a hosted runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          targets="${{ inputs.targets }}"
+          echo "requested: $targets"
+          python3 - "$targets" <<'PY'
+          import sys
+          raw = sys.argv[1].replace(",", " ").split()
+          try:
+              ts = [int(x) for x in raw]
+          except ValueError:
+              raise SystemExit("targets must be integers, e.g. '17 18'")
+          if not ts:
+              raise SystemExit("no targets given")
+          too_big = [t for t in ts if t >= 19]
+          if too_big:
+              raise SystemExit(
+                  "refusing w={} on a hosted runner: the ladder stores every executed\n"
+                  "cell, so w=19 needs ~16.9 GiB of table plus a ~387 MB witness\n"
+                  "(~17.3 GiB peak) and will be OOM-killed here.\n"
+                  "Run it on a >=32 GiB machine instead:\n"
+                  "  python3 evidence/M5_LADDER_SCALE/run_ladder_scale.py --label <host> 19".format(too_big)
+              )
+          print("feasible targets:", ts)
+          PY
+
+      - name: Show memory estimate
+        run: python3 evidence/M5_LADDER_SCALE/run_ladder_scale.py --estimate ${{ inputs.targets }}
+
+      - name: Run the ladder
+        id: ladder
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 evidence/M5_LADDER_SCALE/run_ladder_scale.py \
+            --label "github-ubuntu-${{ runner.os }}-${{ runner.arch }}" \
+            ${{ inputs.targets }} 2>&1 | tee ladder.log
+
+      # run_ladder_scale.py APPENDS to results.json. Never commit from CI: the
+      # committed 13..16 rows were measured on another machine and must stay
+      # as they are. The artifact is the deliverable.
+      - name: Upload results (append-only artifact, never committed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ladder-results
+          path: evidence/M5_LADDER_SCALE/results.json
+
+      - name: Summarise in the job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "### Epochal ladder: ${{ inputs.targets }}"
+            echo
+            echo '```'
+            tail -n 20 ladder.log 2>/dev/null || echo "(no ladder log)"
+            echo '```'
+            echo
+            echo "Rows appended by this run:"
+            python3 - <<'PY'
+          import json, pathlib
+          p = pathlib.Path("evidence/M5_LADDER_SCALE/results.json")
+          if p.exists():
+              rows = json.loads(p.read_text())
+              keep = [r for r in rows if r.get("label", "").startswith("github-")]
+              if keep:
+                  for r in keep:
+                      f = r["fields"]
+                      print("- w={tw}: **{v}** steps={s} padwidth={p} cells={c} "
+                            "status={st} {sec}s".format(
+                                tw=r["target_w"], v=r["verdict"], s=f.get("steps"),
+                                p=f.get("padwidth"), c=f.get("cells"),
+                                st=f.get("status"), sec=r["seconds_including_compile"]))
+              else:
+                  print("(this run appended no rows)")
+          PY
+          } >> "$GITHUB_STEP_SUMMARY"
