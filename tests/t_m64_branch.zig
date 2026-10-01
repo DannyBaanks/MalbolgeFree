@@ -49,7 +49,7 @@ fn runMalbolge(img: []const u8, input: []const u8, allocator: std.mem.Allocator)
     var tape: [256]u8 = undefined;
     var i: usize = 0;
     while (i < 256) : (i += 1) {
-        tape[i] = @intCast(try core.cell(@as(u128, 1000) + i));
+        tape[i] = @intCast(try core.cell(mb.TAPE_BASE + i));
     }
 
     return .{
@@ -92,6 +92,6 @@ test "M6.4 branches: tres programas con loops comparan stdout/cinta/puntero/term
             try std.testing.expectEqual(ref.tape.items[i], got.tape[i]);
         }
 
-        try std.testing.expectEqual(@as(u128, @intCast(1000 + ref.pointer)), got.final_d);
+        try std.testing.expectEqual(mb.TAPE_BASE + @as(u128, ref.pointer), got.final_d);
     }
 }

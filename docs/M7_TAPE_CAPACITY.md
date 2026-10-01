@@ -104,8 +104,33 @@ does not provide, so it lands on the same `TAPE_BASE` decision. Note that even a
 wider tape does not fix (1) on its own: the compiler's internal capacity is
 baked into its own layout and would have to grow with it.
 
+## The tape was widened anyway, and what that did and did not buy
+
+`TAPE_BASE` and the tape size were bare literals (1000, 256) duplicated across
+the core, the backend contract and three M6 differential tests. They are now
+`TAPE_BASE` / `DEFAULT_TAPE_SIZE` in the core, the size is per-instance via
+`setTapeSize(n)`, and the default stays 256 so recorded M6 evidence remains
+comparable. `tests/t_m7_tape_width.zig` (4/4) pins that a wider tape is zeroed
+across its whole length, that the size is validated, and that widening changes
+capacity but **not** semantics: identical behaviour inside the first 256 cells.
+
+What widening did NOT buy, stated plainly:
+
+- **It does not raise the compiler's 255-byte input ceiling.** That ceiling was
+  measured by simulating `compiler.bf` on an *unbounded* tape and it still
+  saturated at 258. The ceiling is baked into the compiler's own generated
+  layout, so no runtime tape size can move it.
+- **It does not implement bracket resolution.**
+
+So the two measured blockers for Uroboros both survive widening. What changed is
+that the runtime ceiling is no longer a hardcoded constant, so a future compiler
+generated with a stride-N layout has room to run.
+
 ## Reproduce
 
 ```bash
 zig test -Mroot=tests/t_m7_compiler_image_guard.zig
+zig test --dep hell=hell --dep malbolge_free=malbolge_free \
+  -Mroot=tests/t_m7_tape_width.zig \
+  -Mhell=src/hell.zig -Mmalbolge_free=src/malbolge_free.zig
 ```

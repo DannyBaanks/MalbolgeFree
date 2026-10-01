@@ -50,10 +50,23 @@ output         bytes emitidos
 steps          instrucciones BF ejecutadas
 ```
 
-La cinta es finita durante M6.1 para hacer los límites reproducibles. El primer
-backend usará 256 celdas y wrapping de byte `u8`; el comportamiento de puntero
-fuera de `[0, 255]` será error `POINTER_OUT_OF_BOUNDS`. El límite de pasos será
-parte del harness y nunca se interpretará como terminación normal.
+La cinta es finita para hacer los límites reproducibles. **El tamaño es una
+decisión de contrato, no una ley de la máquina**: vive en
+`MalbolgeCore.DEFAULT_TAPE_SIZE` (256) y se cambia por instancia con
+`setTapeSize(n)` antes de `run`. `TAPE_BASE` (1000) es fijo, así que la cinta
+conserva su ventana de direcciones documentada.
+
+El wrapping de celda es de byte `u8` en los opcodes de assisted. Fuera de
+`[0, tape_size - 1]` el intérprete de referencia devuelve
+`POINTER_OUT_OF_BOUNDS`; en el core Free el puntero puede avanzar y las celdas
+fuera de la cinta devuelven relleno perezoso, no ceros. Esa asimetría es
+deliberada y es la razón por la que el tamaño es un parámetro contractual: si se
+agranda la cinta, ambos lados deben seguir comparando el mismo rango.
+
+Ampliar la cinta es capacidad, NO semántica: `tests/t_m7_tape_width.zig` exige
+que el comportamiento dentro de las primeras 256 celdas sea idéntico con cinta
+default y cinta amplia. El límite de pasos será parte del harness y nunca se
+interpretará como terminación normal.
 
 ## Malbolge Process Contract
 
@@ -82,8 +95,9 @@ steps y terminación contra `BFIR1 VM`.
 Estado actual: **DEMONSTRATED**. `tests/t_m62_differential.zig` compara tres
 imágenes lineales (`+++.-.`, `>+++<+>.>.`, `,+.`) contra la referencia BFIR1
 en stdout, cinta completa (256 celdas), puntero final y terminación. La cinta
-vive en las celdas Free 1000..1255 (`TAPE_BASE`/`D_REWIND`/`D_LEFT`); el
-puntero BF final se expone como `RunResult.final_d - 1000`. El conteo de pasos
+vive en las celdas Free `TAPE_BASE .. TAPE_BASE + tape_size - 1`
+(`TAPE_BASE`/`D_REWIND`/`D_LEFT`); el puntero BF final se expone como
+`RunResult.final_d - TAPE_BASE`. El conteo de pasos
 se compara a nivel BF (el lowering expande cada op en varios pasos Malbolge).
 
 Control disponible: `tests/t_m6_malbolge_primitives.zig` ejecuta el artefacto

@@ -79,6 +79,12 @@ GATES = [
     ("M6 Hello World compiler oracle", zig_test("tests/t_m6_bf_hello_oracle.zig")),
     ("M7 Uroboros seed determinism", zig_test("tests/t_m7_uroboros_seed.zig")),
     ("M7 compiler image guard (no crash on malformed)", zig_test("tests/t_m7_compiler_image_guard.zig")),
+    ("M7 tape width (capacity, not semantics)", [
+        "zig", "test", "--dep", "hell=hell", "--dep", "malbolge_free=malbolge_free",
+        f"-Mroot={ROOT / 'tests' / 't_m7_tape_width.zig'}",
+        f"-Mhell={ROOT / 'src' / 'hell.zig'}",
+        f"-Mmalbolge_free={ROOT / 'src' / 'malbolge_free.zig'}",
+    ]),
     ("M6.2 Malbolge I/O primitive control", zig_test("tests/t_m6_malbolge_primitives.zig")),
     ("M6.2a Malbolge payload relay", zig_test("tests/t_m6_2a_payload_relay.zig")),
     ("A1 HeLL parser (lmao-lite)", [

@@ -76,6 +76,18 @@ pub fn tritlen(v0: u128) u8 {
 /// EOF sentinel. Never stored in memory; normalized at op use sites.
 pub const EOF_SENTINEL: u128 = std.math.maxInt(u128);
 
+/// Where the BF data tape lives inside the Free address space, and how many
+/// cells it has. These were previously the bare literals 1000 and 256, which is
+/// how the 256 figure ended up duplicated across tests, the backend contract
+/// and the honesty ledger. They are named here so those places cannot drift.
+///
+/// The size is configurable because it is a contract decision, not a law of the
+/// machine: 256 was the first backend's calibration and is kept as the default
+/// so the recorded M6 evidence stays comparable. See docs/M7_TAPE_CAPACITY.md
+/// for what the ceiling actually limits.
+pub const TAPE_BASE: u128 = 1000;
+pub const DEFAULT_TAPE_SIZE: u128 = 256;
+
 pub const GrowthPolicy = enum {
     /// Classic: width frozen at `width`.
     fixed,
@@ -172,11 +184,23 @@ pub const MalbolgeCore = struct {
     initial_tail: [12]u128,
     program_len: u128,
     lock_noencrypt: bool = false,
+    tape_size: u128 = DEFAULT_TAPE_SIZE,
     stats: struct {
         max_addr: u128 = 0,
         max_value: u128 = 0,
         growth_events: u32 = 0,
     },
+
+    /// Resize the BF data tape. Must be called before `run`; TAPE_BASE stays
+    /// fixed so the tape keeps its documented address window. Refuses a zero
+    /// size and a size that would run past the u128 address space.
+    pub fn setTapeSize(self: *MalbolgeCore, cells: u128) !void {
+        if (cells == 0) return error.InvalidTapeSize;
+        // Compare against the remaining headroom, not the sum: the sum itself
+        // would overflow before the check could run.
+        if (cells > std.math.maxInt(u128) - TAPE_BASE) return error.InvalidTapeSize;
+        self.tape_size = cells;
+    }
 
     /// Switch to the dense representation for the next `load`. Refuses when the
     /// width can produce values that do not fit the u32 element type.
@@ -551,14 +575,14 @@ pub const MalbolgeCore = struct {
                     },
 75 => { // tape_base — enter the data tape at a stable address
                         var tape_index: u128 = 0;
-                        while (tape_index < 256) : (tape_index += 1) {
-                            try self.cellWrite(1000 + tape_index, 0);
+                        while (tape_index < self.tape_size) : (tape_index += 1) {
+                            try self.cellWrite(TAPE_BASE + tape_index, 0);
                         }
                         // The Free substrate is stable: from here on, Free
                         // opcodes (69..79) are not self-encrypted. Classic
                         // opcodes keep Classic self-modification.
                         self.lock_noencrypt = true;
-                        d = 999;
+                        d = TAPE_BASE - 1;
                     },
                     76 => { // d_rewind — compensate the post-step d increment
                         d = if (d >= 2) d - 2 else 0;
