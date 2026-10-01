@@ -59,6 +59,7 @@ jobs:
         working-directory: MalbolgeFree
         run: python tests/run_all.py
 
-      - name: Control: ReleaseSafe profile test (miscompile signature)
+      - name: "Control ReleaseSafe profile test (miscompile signature)"
         working-directory: MalbolgeFree
-        run: zig test -O ReleaseSafe --dep malbolge_free=malbolge_free -Mroot=tests/t_profiles.zig -Mmalbolge_free=src/malbolge_free.zig
+        run: |
+          zig test -O ReleaseSafe --dep malbolge_free=malbolge_free -Mroot=tests/t_profiles.zig -Mmalbolge_free=src/malbolge_free.zig
