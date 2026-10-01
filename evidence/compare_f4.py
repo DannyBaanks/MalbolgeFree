@@ -12,28 +12,49 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--output", type=pathlib.Path, help="optional new report path")
 args = parser.parse_args()
 
-_oracle_path = pathlib.Path(__file__).resolve().parents[2] / "Malbolge-Translator" / "zig" / "parity_check.exe"
-_oracle = str(_oracle_path)
+TRANSLATOR = pathlib.Path(__file__).resolve().parents[2] / "Malbolge-Translator"
+ORACLE_SRC = TRANSLATOR / "zig" / "src" / "parity_check.zig"
+ORACLE_ENGINE = TRANSLATOR / "zig" / "src" / "engine.zig"
 
-# The oracle is a local build artifact of the sibling Malbolge-Translator repo and
-# is NOT tracked in git (neither is its source zig/src/parity_check.zig). A fresh
-# checkout therefore does not contain it. Report that as an explicit
-# NOT_DEMONSTRATED condition with its own exit code instead of crashing with a
-# traceback that looks like a parity failure. Checked BEFORE the zig run so a
-# missing oracle does not first burn a full compile.
-if not _oracle_path.exists():
+# The oracle is an independent Zig engine in the sibling repo (it imports
+# engine.zig, never malbolge_free.zig). Both its source and its corpus are
+# tracked there since 0c8a56b, so it builds from a fresh checkout and no
+# .exe/wine is involved. If the sibling repo is absent, F4 cannot run at all:
+# report that as NOT_DEMONSTRATED with its own exit code rather than crashing
+# with a traceback that reads like a parity failure.
+if not ORACLE_SRC.is_file():
     print(
         "F4_ORACLE_MISSING: {}\n"
-        "  The independent Zig oracle is an untracked build artifact of the\n"
-        "  Malbolge-Translator repo. CLASSIC_COMPATIBILITY = NOT_DEMONSTRATED in this\n"
-        "  environment (NOT a parity mismatch). To run F4, build or place\n"
-        "  parity_check.exe there; see ROADMAP M2/M3.".format(_oracle),
+        "  The independent oracle lives in the sibling Malbolge-Translator repo.\n"
+        "  CLASSIC_COMPATIBILITY = NOT_DEMONSTRATED here (NOT a parity mismatch).\n"
+        "  Clone it next to this repository, e.g.\n"
+        "    git clone https://github.com/DannyBaanks/Malbolge-Translator.git".format(ORACLE_SRC),
         file=sys.stderr,
     )
     raise SystemExit(3)
 
-# The oracle lives outside this repository. The runtime under test is imported
-# explicitly from src/ so no evidence copy can become authoritative by accident.
+# Guard against a silent false OK: the oracle embeds its own copy of the corpus
+# while the runtime under test embeds ours. If the two copies ever diverge, this
+# would compare different programs and could report a meaningless parity.
+_translator_corpus = TRANSLATOR / "zig" / "corpus"
+_diverge = []
+for _mal in sorted(CORPUS.glob("*.mal")):
+    _other = _translator_corpus / _mal.name
+    if not _other.is_file():
+        _diverge.append((_mal.name, "missing_in_translator"))
+    elif _other.read_bytes() != _mal.read_bytes():
+        _diverge.append((_mal.name, "bytes_differ"))
+if _diverge:
+    print(
+        "F4_CORPUS_DIVERGENCE:\n"
+        "  The runtime under test and the oracle embed different copies of the\n"
+        "  corpus, so a parity verdict would be meaningless: " + repr(_diverge),
+        file=sys.stderr,
+    )
+    raise SystemExit(4)
+
+# The oracle under test's runtime, imported explicitly from src/ so no evidence
+# copy can become authoritative by accident.
 zig_proc = subprocess.run(
     [
         "zig", "run", "--dep", "malbolge_free=malbolge_free",
@@ -48,26 +69,19 @@ zig_proc = subprocess.run(
 if zig_proc.returncode != 0:
     raise RuntimeError(zig_proc.stderr or zig_proc.stdout)
 
-try:
-    oracle_proc = subprocess.run(
-        [_oracle],
-        capture_output=True,
-        text=True,
-        timeout=60,
-    )
-except OSError:
-    # On Linux the oracle is a Windows PE; fall back to wine.
-    try:
-        oracle_proc = subprocess.run(
-            ["wine", _oracle],
-            capture_output=True,
-            text=True,
-            timeout=120,
-        )
-    except OSError as wine_err:
-        raise RuntimeError(
-            "oracle exists but neither native nor wine execution works: {}".format(wine_err)
-        )
+# Run the oracle natively. cwd must be the translator's zig/ directory because
+# @embedFile resolves the corpus relative to that module root.
+oracle_proc = subprocess.run(
+    [
+        "zig", "run", "--dep", "engine=engine",
+        "-Mroot=src/parity_check.zig",
+        "-Mengine=src/engine.zig",
+    ],
+    cwd=TRANSLATOR / "zig",
+    capture_output=True,
+    text=True,
+    timeout=600,
+)
 if oracle_proc.returncode != 0:
     raise RuntimeError(oracle_proc.stderr or oracle_proc.stdout)
 
@@ -107,7 +121,7 @@ for name in sorted(oracle):
 report = {
     "phase": "F4",
     "claim": "CLASSIC_COMPATIBILITY",
-    "oracle": "Malbolge-Translator/zig/parity_check.exe",
+    "oracle": "Malbolge-Translator/zig/src/parity_check.zig (native zig run)",
     "runtime": "src/malbolge_free.zig",
     "all_match": all_match,
     "verdicts": verdicts,

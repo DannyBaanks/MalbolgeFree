@@ -234,13 +234,28 @@ its own fixed dimension.
 | `E10_TO_E19_TOY_LADDER` | **DEMONSTRATED (toy)** — state transport + codec only; see `epoch_ladder/` |
 | `UNSHACKLED_PARITY` | **NOT_DEMONSTRABLE** by construction (the original uses `srand(time(NULL))`) |
 | `VALUE_OVERFLOW_WIDENING` (`pad_to_padwidth`) | **DESTROYED** — rotate breaks consistency across widths |
-| `CLASSIC_PARITY_ZIG` (6/6 corpus) | **DEMONSTRATED** — reverified 2026-09-12 |
+| `CLASSIC_PARITY_ZIG` (6/6 corpus) | **DEMONSTRATED** — reverified 2026-09-12, and now reproducible from a fresh checkout: the oracle is built natively with `zig run`, no `.exe` and no wine |
 
-### Parity re-audit (2026-09-12)
+### Parity re-audit (2026-09-12, oracle rebuilt 2026-10-01)
 
-`evidence/compare_f4.py` now re-runs against the canonical reference and
-reports `all_match: true` for all six programs, including `hello.mal` and
+`evidence/compare_f4.py` re-runs against the canonical reference and reports
+`all_match: true` for all six programs, including `hello.mal` and
 `reproducer.mal`. This claim is limited to the six-program corpus.
+
+The oracle used to be a Windows `.exe` produced by hand and never committed, so
+outside Danny's machine F4 could not run at all. The oracle is now
+`zig/src/parity_check.zig` in the sibling `Malbolge-Translator` repo, tracked
+along with its corpus (commit `0c8a56b`), and it is built natively:
+
+```bash
+zig run --dep engine=engine -Mroot=src/parity_check.zig -Mengine=src/engine.zig
+```
+
+run from that repo's `zig/` directory. It imports `engine.zig`, never
+`malbolge_free.zig`, so it stays an independent implementation of Classic
+rather than a copy of the runtime under test. `compare_f4.py` also verifies
+that both repos embed a byte-identical corpus and refuses to report parity if
+they ever diverge (`F4_CORPUS_DIVERGENCE`, exit 4).
 
 ## The "Purrfect" Badge
 

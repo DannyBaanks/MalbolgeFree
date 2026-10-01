@@ -188,6 +188,11 @@ def main() -> int:
         if completed.returncode == 3:
             skipped.append(name)
             print(f"SKIP (NOT_DEMONSTRATED, missing external input): {name}")
+        elif completed.returncode == 4:
+            # Corpus divergence between runtime and oracle: a parity verdict
+            # would be meaningless, so this is a hard failure, never a skip.
+            failures += 1
+            print(f"FAIL: {name} (corpus divergence, exit 4)")
         elif completed.returncode != 0:
             failures += 1
             print(f"FAIL: {name} (exit {completed.returncode})")

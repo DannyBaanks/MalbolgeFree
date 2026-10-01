@@ -24,9 +24,9 @@ jobs:
         with:
           path: MalbolgeFree
 
-      # The oracle is currently an UNTRACKED build artifact, so F4 will report
-      # NOT_DEMONSTRATED here until parity_check.{zig,exe} are committed to that
-      # repo. That is a known gap, not a parity failure.
+      # The oracle source and its corpus are tracked in that repo since
+      # 0c8a56b, and compare_f4.py builds it natively with `zig run`. No .exe,
+      # no wine, no multiarch. F4 therefore runs for real on both runners.
       - name: Checkout Malbolge-Translator (oracle)
         uses: actions/checkout@v4
         with:
