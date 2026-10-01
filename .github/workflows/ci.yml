@@ -1,0 +1,64 @@
+name: ci
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  harness:
+    name: harness (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    timeout-minutes: 30
+    steps:
+      - name: Checkout MalbolgeFree
+        uses: actions/checkout@v4
+        with:
+          path: MalbolgeFree
+
+      - name: Checkout Malbolge-Translator (oracle)
+        uses: actions/checkout@v4
+        with:
+          repository: DannyBaanks/Malbolge-Translator
+          path: Malbolge-Translator
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Zig 0.16.0 (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          curl -fsSL https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz -o /tmp/zig.tar.xz
+          tar -xf /tmp/zig.tar.xz -C /opt
+          ln -sf /opt/zig-x86_64-linux-0.16.0/zig /usr/local/bin/zig
+          zig version
+
+      - name: Setup Zig 0.16.0 (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://ziglang.org/download/0.16.0/zig-x86_64-windows-0.16.0.zip" -OutFile "$env:TEMP\zig.zip"
+          Expand-Archive -Path "$env:TEMP\zig.zip" -DestinationPath "C:\zig" -Force
+          $env:PATH = "C:\zig\zig-x86_64-windows-0.16.0;$env:PATH"
+          zig version
+
+      - name: Install wine64 (Linux only)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wine64
+
+      - name: Run full harness
+        working-directory: MalbolgeFree
+        run: python tests/run_all.py
+
+      - name: Control: ReleaseSafe profile test (miscompile signature)
+        working-directory: MalbolgeFree
+        run: zig test -O ReleaseSafe --dep malbolge_free=malbolge_free -Mroot=tests/t_profiles.zig -Mmalbolge_free=src/malbolge_free.zig

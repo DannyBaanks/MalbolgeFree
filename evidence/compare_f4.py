@@ -27,12 +27,22 @@ zig_proc = subprocess.run(
 if zig_proc.returncode != 0:
     raise RuntimeError(zig_proc.stderr or zig_proc.stdout)
 
-oracle_proc = subprocess.run(
-    [str(pathlib.Path(__file__).resolve().parents[2] / "Malbolge-Translator" / "zig" / "parity_check.exe")],
-    capture_output=True,
-    text=True,
-    timeout=60,
-)
+_oracle = str(pathlib.Path(__file__).resolve().parents[2] / "Malbolge-Translator" / "zig" / "parity_check.exe")
+try:
+    oracle_proc = subprocess.run(
+        [_oracle],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+except OSError:
+    # On Linux the oracle is a Windows PE; fall back to wine.
+    oracle_proc = subprocess.run(
+        ["wine", _oracle],
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
 if oracle_proc.returncode != 0:
     raise RuntimeError(oracle_proc.stderr or oracle_proc.stdout)
 
