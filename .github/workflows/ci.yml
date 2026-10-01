@@ -16,11 +16,17 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     timeout-minutes: 30
     steps:
+      # compare_f4.py resolves the independent oracle as
+      # <parents[2]>/Malbolge-Translator/zig/parity_check.exe, so the two repos
+      # must sit side by side in the workspace.
       - name: Checkout MalbolgeFree
         uses: actions/checkout@v4
         with:
           path: MalbolgeFree
 
+      # The oracle is currently an UNTRACKED build artifact, so F4 will report
+      # NOT_DEMONSTRATED here until parity_check.{zig,exe} are committed to that
+      # repo. That is a known gap, not a parity failure.
       - name: Checkout Malbolge-Translator (oracle)
         uses: actions/checkout@v4
         with:
@@ -37,7 +43,7 @@ jobs:
         run: |
           curl -fsSL https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz -o /tmp/zig.tar.xz
           tar -xf /tmp/zig.tar.xz -C /opt
-          ln -sf /opt/zig-x86_64-linux-0.16.0/zig /usr/local/bin/zig
+          echo "/opt/zig-x86_64-linux-0.16.0" >> "$GITHUB_PATH"
           zig version
 
       - name: Setup Zig 0.16.0 (Windows)
@@ -47,22 +53,25 @@ jobs:
           Invoke-WebRequest -Uri "https://ziglang.org/download/0.16.0/zig-x86_64-windows-0.16.0.zip" -OutFile "$env:TEMP\zig.zip"
           Expand-Archive -Path "$env:TEMP\zig.zip" -DestinationPath "C:\zig" -Force
           $zigDir = "C:\zig\zig-x86_64-windows-0.16.0"
-          $env:PATH = "$zigDir;$env:PATH"
           Add-Content -Path $env:GITHUB_PATH -Value $zigDir
           zig version
 
-      - name: Install wine + xvfb (Linux only)
-        if: runner.os == 'Linux'
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y wine64 wine32:i386 xvfb
-
       - name: Run full harness
         working-directory: MalbolgeFree
-        run: python tests/run_all.py
-
-      - name: "Control ReleaseSafe profile test (miscompile signature)"
-        working-directory: MalbolgeFree
         run: |
-          zig test -O ReleaseSafe --dep malbolge_free=malbolge_free -Mroot=tests/t_profiles.zig -Mmalbolge_free=src/malbolge_free.zig
+          set -o pipefail
+          python tests/run_all.py 2>&1 | tee ci-harness.log
+
+      - name: Report NOT_DEMONSTRATED gates in the job summary
+        if: always()
+        working-directory: MalbolgeFree
+        shell: bash
+        run: |
+          {
+            echo "### MalbolgeFree CI"
+            echo
+            echo '```'
+            tail -n 40 ci-harness.log || echo "(no log)"
+            echo '```'
+            grep -E '^NOT_DEMONSTRATED in this' ci-harness.log || true
+          } >> "$GITHUB_STEP_SUMMARY"

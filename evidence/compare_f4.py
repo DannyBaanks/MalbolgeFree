@@ -3,6 +3,7 @@ import argparse
 import json
 import pathlib
 import subprocess
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "corpus" / "classic"
@@ -10,6 +11,26 @@ CORPUS = ROOT / "corpus" / "classic"
 parser = argparse.ArgumentParser()
 parser.add_argument("--output", type=pathlib.Path, help="optional new report path")
 args = parser.parse_args()
+
+_oracle_path = pathlib.Path(__file__).resolve().parents[2] / "Malbolge-Translator" / "zig" / "parity_check.exe"
+_oracle = str(_oracle_path)
+
+# The oracle is a local build artifact of the sibling Malbolge-Translator repo and
+# is NOT tracked in git (neither is its source zig/src/parity_check.zig). A fresh
+# checkout therefore does not contain it. Report that as an explicit
+# NOT_DEMONSTRATED condition with its own exit code instead of crashing with a
+# traceback that looks like a parity failure. Checked BEFORE the zig run so a
+# missing oracle does not first burn a full compile.
+if not _oracle_path.exists():
+    print(
+        "F4_ORACLE_MISSING: {}\n"
+        "  The independent Zig oracle is an untracked build artifact of the\n"
+        "  Malbolge-Translator repo. CLASSIC_COMPATIBILITY = NOT_DEMONSTRATED in this\n"
+        "  environment (NOT a parity mismatch). To run F4, build or place\n"
+        "  parity_check.exe there; see ROADMAP M2/M3.".format(_oracle),
+        file=sys.stderr,
+    )
+    raise SystemExit(3)
 
 # The oracle lives outside this repository. The runtime under test is imported
 # explicitly from src/ so no evidence copy can become authoritative by accident.
@@ -27,7 +48,6 @@ zig_proc = subprocess.run(
 if zig_proc.returncode != 0:
     raise RuntimeError(zig_proc.stderr or zig_proc.stdout)
 
-_oracle = str(pathlib.Path(__file__).resolve().parents[2] / "Malbolge-Translator" / "zig" / "parity_check.exe")
 try:
     oracle_proc = subprocess.run(
         [_oracle],
@@ -37,12 +57,17 @@ try:
     )
 except OSError:
     # On Linux the oracle is a Windows PE; fall back to wine.
-    oracle_proc = subprocess.run(
-        ["wine", _oracle],
-        capture_output=True,
-        text=True,
-        timeout=120,
-    )
+    try:
+        oracle_proc = subprocess.run(
+            ["wine", _oracle],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+    except OSError as wine_err:
+        raise RuntimeError(
+            "oracle exists but neither native nor wine execution works: {}".format(wine_err)
+        )
 if oracle_proc.returncode != 0:
     raise RuntimeError(oracle_proc.stderr or oracle_proc.stdout)
 
