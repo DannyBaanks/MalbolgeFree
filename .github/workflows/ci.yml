@@ -49,11 +49,12 @@ jobs:
           $env:PATH = "C:\zig\zig-x86_64-windows-0.16.0;$env:PATH"
           zig version
 
-      - name: Install wine64 (Linux only)
+      - name: Install wine (Linux only)
         if: runner.os == 'Linux'
         run: |
+          sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y wine64
+          sudo apt-get install -y wine64 wine32:i386
 
       - name: Run full harness
         working-directory: MalbolgeFree
