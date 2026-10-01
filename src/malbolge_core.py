@@ -54,26 +54,39 @@ class MalbolgeCore:
     mem_limit : int | None
         Address space size; addresses wrap modulo mem_limit. None = unbounded,
         no wrap (lazy memory). Classic uses 3**10.
-    growth_policy : 'fixed' | 'pad_to_padwidth'
+    growth_policy : 'fixed' | 'pad_to_padwidth' | 'epochal'
         'fixed': crazy/rotate always use exactly `width` trits.
         'pad_to_padwidth': before rotate, pad operand to current padwidth
         (det_growth_policy can raise padwidth).
+        'epochal': width follows the address frontier. Before each step, if `c`
+        or `d` has reached 3**padwidth, padwidth grows by one and crazy/rotate
+        use the new padwidth. Requires mem_limit=None (no wrap), otherwise the
+        frontier could never be reached. History is never rewritten.
     """
 
     def __init__(self, width: int = 10, mem_limit: int | None = 3 ** 10,
                  growth_policy: str = "fixed"):
         assert width >= 1
         assert mem_limit is None or mem_limit >= 3
+        assert growth_policy in ("fixed", "pad_to_padwidth", "epochal"), growth_policy
+        if growth_policy == "epochal":
+            # A wrapping address space can never reach the frontier, so the
+            # policy would be dead code. Refuse instead of pretending.
+            if mem_limit is not None:
+                raise ValueError("epochal requires mem_limit=None (no wrap)")
         self.width = width
         self.mem_limit = mem_limit
         self.growth_policy = growth_policy
-        self.padwidth = width          # grows under pad_to_padwidth
+        self.padwidth = width          # grows under pad_to_padwidth and epochal
         self.mem: dict[int, int] = {}  # lazy; cell i absent => lazy-fill on read
         self.program_len = 0
+        self.initial_tail: list[int] = []
         # instrumentation
         self.stats = {
             "steps": 0, "max_addr_touched": 0, "max_value": 0,
             "width_growth_events": [],
+            "encrypted_cells": 0, "assisted_opcodes": 0,
+            "final_c": None, "final_d": None,
         }
 
     # -- loader --------------------------------------------------------------
@@ -87,30 +100,57 @@ class MalbolgeCore:
             self.mem[i] = v
         assert len(chars) >= 2, "need at least 2 cells for crazy-fill seed"
         self.program_len = len(chars)
+        # Freeze one full 12-cell period of the crazy-fill tail, computed with the
+        # *initial* width before execution can encrypt source cells. Reads past
+        # the range repeat this immutable period, which is what makes the eager
+        # Classic fill reproducible without materialising every cell.
+        self.initial_tail = []
+        for k in range(12):
+            t = self.program_len + k
+            v = crazy(self.mem[t - 1], self.mem[t - 2], self.width)
+            self.mem[t] = v
+            self.initial_tail.append(v)
 
     def _cell(self, i: int) -> int:
         """Lazy materialization. Equivalent to eager Classic crazy-fill:
         cell[i] = crazy(cell[i-1], cell[i-2]) for i >= program_len.
-        Iterative to support huge lazy walks."""
+        Past the frozen 12-cell period the tail repeats, so a read at an
+        arbitrary address is O(1) instead of an O(i) walk."""
         if self.mem_limit is not None:
             i %= self.mem_limit
-        if i < self.program_len:
-            return self.mem[i]          # loaded program cell, always present
         if i in self.mem:
             return self.mem[i]
-        # build the chain i - 1, i - 2, ... down to a known cell
+        if i < self.program_len:
+            raise AssertionError(f"program cell {i} missing")
+        if i >= self.program_len + 12:
+            return self.initial_tail[(i - self.program_len) % 12]
+        # inside the frozen window but not materialised yet: build the short chain
         chain = []
         j = i
         while j >= self.program_len and j not in self.mem:
             chain.append(j)
             j -= 1
-        # j is now either < program_len or materialized; and j-1 also
-        # resolvable because chain is contiguous
         while chain:
             t = chain.pop()
             v = crazy(self.mem[t - 1], self.mem[t - 2], self.width)
             self.mem[t] = v
         return self.mem[i]
+
+    def _frontier_trigger(self, c: int, d: int):
+        """Epochal: grow by one when a pointer reaches the current frontier.
+
+        Fires at most one step per widening, before the step touches memory at
+        the boundary address. Already-written cells always win over the frozen
+        tail, so widening never rewrites history.
+        """
+        if self.growth_policy != "epochal":
+            return
+        boundary = 3 ** self.padwidth
+        if c >= boundary or d >= boundary:
+            ev = {"from": self.padwidth, "to": self.padwidth + 1,
+                  "step": self.stats["steps"], "c": c, "d": d}
+            self.stats["width_growth_events"].append(ev)
+            self.padwidth += 1
 
     def _cell_write(self, i: int, v: int):
         if self.mem_limit is not None:
@@ -142,6 +182,9 @@ class MalbolgeCore:
 
         while self.stats["steps"] < max_steps:
             self.stats["steps"] += 1
+            # Epochal widening happens BEFORE the step touches memory, so the
+            # boundary address is read at the new width.
+            self._frontier_trigger(c, d)
             cc = (c % limit) if limit is not None else c
             cell = self._cell(cc)
             op = (cell + cc) % 94
@@ -156,8 +199,13 @@ class MalbolgeCore:
             elif op == 39:              # rot
                 dd = d % limit if limit is not None else d
                 v = self._cell(dd)
-                w = self.padwidth if self.growth_policy == "pad_to_padwidth" else self.width
-                nv = rotate(v, max(w, tritlen(v)))
+                if self.growth_policy == "epochal":
+                    w = self.padwidth
+                elif self.growth_policy == "pad_to_padwidth":
+                    w = max(self.padwidth, tritlen(v))
+                else:
+                    w = self.width
+                nv = rotate(v, w)
                 self._cell_write(dd, nv)
                 a = nv
                 self._maybe_grow(a)
@@ -168,9 +216,14 @@ class MalbolgeCore:
             elif op == 62:              # crazy
                 dd = d % limit if limit is not None else d
                 v = self._cell(dd)
-                w = self.width if self.growth_policy == "fixed" \
-                    else max(self.padwidth, tritlen(v), tritlen(a if a >= 0 else 0))
-                nv = crazy(a % (3 ** w), v, w)
+                if self.growth_policy == "epochal":
+                    w = self.padwidth
+                elif self.growth_policy == "fixed":
+                    w = self.width
+                else:
+                    w = max(self.padwidth, tritlen(v), tritlen(a if a >= 0 else 0))
+                aa = (3 ** w) - 1 if a < 0 else a % (3 ** w)
+                nv = crazy(aa, v, w)
                 self._cell_write(dd, nv)
                 a = nv
             elif op == 68:              # nop
@@ -184,9 +237,13 @@ class MalbolgeCore:
             mc = self._cell(cc)
             if 33 <= mc <= 126:
                 self._cell_write(cc, _ENC[mc])
+                self.stats["encrypted_cells"] += 1
 
             c = (c + 1) % limit if limit is not None else c + 1
             d = (d + 1) % limit if limit is not None else d + 1
+
+        self.stats["final_c"] = c
+        self.stats["final_d"] = d
 
         return {
             "status": status,
@@ -194,5 +251,6 @@ class MalbolgeCore:
             "steps": self.stats["steps"],
             "max_addr_touched": self.stats["max_addr_touched"],
             "max_value": self.stats["max_value"],
-            " padwidth": getattr(self, "padwidth", None),
+            "padwidth": getattr(self, "padwidth", None),
+            "growth_events": len(self.stats["width_growth_events"]),
         }

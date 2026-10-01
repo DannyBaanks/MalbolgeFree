@@ -21,6 +21,14 @@ infinity claims this project does not make.)
 | C9 CLASSIC + UNSHACKLED -> FREE | **DEMONSTRATED** in both readings |
 | C10 TURING_COMPLETENESS | **NO_NEW_CLAIM** |
 
+`EPOCHAL_PYTHON_PARITY` = **DEMONSTRATED** (2026-10-01). `src/malbolge_core.py` now
+implements the `epochal` policy (frontier trigger before the step touches memory,
+`padwidth` in crazy/rotate, frozen 12-cell tail) and `evidence/compare_epochal.py`
+diffs it against the Zig core: status, steps, `padwidth`, widening count, final
+`c`/`d`, encrypted cells and stdout SHA-256 all agree on witnesses with 3, 3 and 1
+widenings. Negative control: disabling the Python trigger fails all 3 cases. Scope:
+cross-checked up to 60k steps, not on the 129M-step `w=19` ladder.
+
 M6 progress: the executable BF reference now has configurable tape bounds,
 explicit EOF and pointer errors, and per-instruction traces. This is
 infrastructure only; no BF interpreter has yet been executed inside Malbolge

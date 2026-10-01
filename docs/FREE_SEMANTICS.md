@@ -94,6 +94,8 @@ C7  FRONTIER_WIDTH_WIDENING        = DEMONSTRATED — the tested 10 -> 11
                                       step 177148 (evidence/f9_repeated_frontier.json)
 C9  CLASSIC+UNSHACKLED=>FREE       = DEMONSTRATED (parametric reading)
 C10 TURING_COMPLETENESS            = NO_NEW_CLAIM
+EPOCHAL_PYTHON_PARITY              = DEMONSTRATED (2026-10-01; Zig vs Python core
+                                      on epochal witnesses up to 60k steps)
 ```
 
 (C7/C8 keep their numbers from the original claims table; only the names and

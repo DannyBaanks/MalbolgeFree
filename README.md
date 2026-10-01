@@ -158,9 +158,14 @@ measurements exactly where both exist (rung 17: `43046722`, `padwidth=17`,
 `growth=7`), so the representation changed the cost, not the measurement.
 
 The old estimates for `17`/`18`/`19` (~2.1 / 8.4 / 16.9 GiB) were hash-map
-figures and no longer apply. `19` no longer needs a 32 GiB machine. The Python
-oracle still does not implement `epochal`, so this ladder is checked on one
-engine (Zig) only.
+figures and no longer apply. `19` no longer needs a 32 GiB machine.
+
+The ladder above is measured with the Zig engine, but the `epochal` policy is no
+longer single-engine: `src/malbolge_core.py` implements it and
+`evidence/compare_epochal.py` cross-checks both implementations on widening
+position, final width and output. That parity is exercised on witnesses that
+cross several frontiers (including `w=10 -> 11`), not on the full 129M-step
+ladder, which stays a Zig measurement.
 
 ### Dense representation (why 19 became reachable)
 
@@ -225,7 +230,7 @@ its own fixed dimension.
 | C7 `FRONTIER_WIDTH_WIDENING` | **DEMONSTRATED** — `10 -> 11` |
 | C8 `REPEATED_WIDTH_WIDENING` | **DEMONSTRATED** — committed witness `10 -> 11 -> 12` on the real VM; rungs up to `19` measured in `evidence/M5_LADDER_SCALE/` (17-19 via the dense representation) |
 | `UNBOUNDED_WIDTH_GROWTH` | **NOT_DEMONSTRATED** — the ladder is finite by construction and now measured to `19`; the dense path is additionally bounded at `w = 20` by the `u32` element type |
-| `EPOCHAL_PYTHON_PARITY` | **NOT_DEMONSTRATED** — the Python oracle has no `epochal` policy |
+| `EPOCHAL_PYTHON_PARITY` | **DEMONSTRATED** (2026-10-01) — `src/malbolge_core.py` implements `epochal`; `evidence/compare_epochal.py` diffs it against the Zig core on status, steps, `padwidth`, widening count, final `c`/`d`, encrypted cells and stdout SHA-256 |
 | `E10_TO_E19_TOY_LADDER` | **DEMONSTRATED (toy)** — state transport + codec only; see `epoch_ladder/` |
 | `UNSHACKLED_PARITY` | **NOT_DEMONSTRABLE** by construction (the original uses `srand(time(NULL))`) |
 | `VALUE_OVERFLOW_WIDENING` (`pad_to_padwidth`) | **DESTROYED** — rotate breaks consistency across widths |

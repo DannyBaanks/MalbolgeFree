@@ -61,6 +61,7 @@ GATES = [
     ("product CLI verify", [sys.executable, str(ROOT / "malbolge_cli.py"), "verify"]),
     ("F4 Classic parity", [sys.executable, str(ROOT / "evidence" / "compare_f4.py")]),
     ("M2 Classic trace differential", [sys.executable, str(ROOT / "evidence" / "compare_m2.py")]),
+    ("EPOCHAL Python parity differential", [sys.executable, str(ROOT / "evidence" / "compare_epochal.py")]),
     ("M1 numeric and EOF", zig_test("tests/t_m1_contract.zig")),
     ("negative contracts", zig_test("tests/t_negative.zig")),
     ("execution profiles", zig_test("tests/t_profiles.zig")),
