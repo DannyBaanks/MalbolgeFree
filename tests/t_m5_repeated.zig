@@ -20,13 +20,16 @@ test "epochal crosses two frontiers" {
         steps += 1;
         const cell = try vm.cell(c);
         const op = (cell + c) % 94;
-        switch (op) {
-            5 => {},
-            23 => a = 255,
-            62 => {},
-            68 => {},
-            else => return error.UnexpectedWitnessOpcode,
-        }
+        // NOTE (2026-10-01): if-chain on purpose, not switch: `switch` on a
+        // computed u128 misdispatches (and can corrupt the scrutinee value)
+        // in Zig 0.16.0 Debug. Same root cause as src/malbolge_free.zig
+        // isClassicSourceOpcode. See evidence pack mf_fix_20261001.
+        if (op == 5) {
+        } else if (op == 23) {
+            a = 255;
+        } else if (op == 62) {
+        } else if (op == 68) {
+        } else return error.UnexpectedWitnessOpcode;
 
         const old_w = vm.padwidth;
         vm.frontierTrigger(c, d);

@@ -238,10 +238,14 @@ pub const MalbolgeCore = struct {
     }
 
     fn isClassicSourceOpcode(ch: u8, position: u128) bool {
-        return switch ((@as(u128, ch) + position) % 94) {
-            4, 5, 23, 39, 40, 62, 68, 81 => true,
-            else => false,
-        };
+        // NOTE (2026-10-01): written as an if-chain on purpose. The equivalent
+        // multi/single-prong `switch` on the inline u128 expression misdispatches
+        // in Zig 0.16.0 Debug (3500/47000 disagreements vs this form; 0 in
+        // ReleaseSafe). See evidence pack mf_fix_20261001. Do not "simplify" back
+        // to a switch without re-running the exhaustive differential.
+        const v: u128 = (@as(u128, ch) + position) % 94;
+        if (v == 4 or v == 5 or v == 23 or v == 39 or v == 40 or v == 62 or v == 68 or v == 81) return true;
+        return false;
     }
 
     fn touch(self: *MalbolgeCore, addr: u128) void {
