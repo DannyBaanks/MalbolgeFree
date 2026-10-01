@@ -157,5 +157,6 @@ lmao-lite A3 layout    = PASS (11/11 tests)
 lmao-lite A4 emission  = PASS (10/10 tests)
 lmao-lite A6 cat       = PASS (7/7 tests)
 lmao-lite A7 backend   = PASS (10/10 tests)
-M7 Quinepiler          = NOT_DEMONSTRATED (seed only)
+M7 Quinepiler          = NOT_DEMONSTRATED (seed only + capacity measured,
+                          see docs/M7_TAPE_CAPACITY.md)
 ```

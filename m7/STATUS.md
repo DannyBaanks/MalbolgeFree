@@ -37,11 +37,24 @@ auto-compilar su propio fuente** dentro del backend de 256 celdas. El gate
 literal de Uroboros `VM(I1, compiler.bf) = I2` (self-hosting) es
 **NOT_DEMONSTRATED por límite del contrato del VM**, no por el compilador.
 
+> **CORRECCION 2026-10-01.** La razon de arriba estaba mal medida. El puntero de
+> `compiler.bf` NO crece con su propio tamano: con entrada vacia toca 4 celdas, y
+> con anidamiento ~25. Lo que satura es la **longitud de la ENTRADA**: el puntero
+> escala ~1:1 con los bytes ingeridos y se detiene en 258. El bloqueo real es que
+> el compilador no puede ingerir mas de ~255 bytes, y su fuente son 1519. Ademas
+> hay un problema peor, ausente aqui: con brackets el compilador emite una imagen
+> estructuralmente valida pero semanticamente incorrecta, y esa imagen provocaba
+> un **doble free** en `bf_ir_image.decode`. Medido, corregido y protegido en
+> `tests/t_m7_compiler_image_guard.zig`. Ver `docs/M7_TAPE_CAPACITY.md`.
+
 ## Pendiente
 
 1. **Resolución de brackets** (nested) — el paso restante de `BF → BFIR1`
    completo. Necesita layout con huecos (stride-N) para disponer de scratch al
    escanear (en layout contiguo no hay celda libre adyacente a la cinta).
+   MEDIDO: el compilador clasifica `[`/`]` pero emite `has_target=0` siempre, así
+   que toda entrada con brackets produce una imagen plausible-pero-incorrecta.
+   Ver `docs/M7_TAPE_CAPACITY.md`.
 2. Verificación en 3 runtimes (intérprete directo, BFIR1 reference VM, backend
    Malbolge Free).
 3. Decisión de alcance sobre self-hosting: requiere ampliar `TAPE_BASE`

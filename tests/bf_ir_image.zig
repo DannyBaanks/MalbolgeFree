@@ -25,19 +25,14 @@ pub fn encode(program: *const ir.Program, allocator: std.mem.Allocator) ![]u8 {
     return image;
 }
 
-pub fn decode(bytes: []const u8, allocator: std.mem.Allocator) !ir.Program {
-    if (bytes.len < Header.len + 4 or !std.mem.eql(u8, bytes[0..Header.len], Header)) {
-        return error.InvalidHeader;
-    }
-    const count = std.mem.readInt(u32, bytes[Header.len..][0..4], .little);
-    const payload = Header.len + 4;
-    if (count > (bytes.len - payload) / RecordSize or payload + @as(usize, count) * RecordSize != bytes.len) {
-        return error.InvalidLength;
-    }
-
+/// Fill the instruction list. Kept separate from `decode` so that ownership of
+/// the buffer transfers cleanly: this function's `errdefer` covers only the
+/// fill phase, and once it returns successfully the caller owns the list.
+fn fill(count: usize, bytes: []const u8, allocator: std.mem.Allocator) !std.array_list.Managed(ir.Instruction) {
     var code = std.array_list.Managed(ir.Instruction).init(allocator);
     errdefer code.deinit();
     try code.ensureTotalCapacity(@intCast(count));
+    const payload = Header.len + 4;
     var offset = payload;
     var index: usize = 0;
     while (index < count) : (index += 1) {
@@ -55,9 +50,32 @@ pub fn decode(bytes: []const u8, allocator: std.mem.Allocator) !ir.Program {
         });
         offset += RecordSize;
     }
+    return code;
+}
+
+pub fn decode(bytes: []const u8, allocator: std.mem.Allocator) !ir.Program {
+    if (bytes.len < Header.len + 4 or !std.mem.eql(u8, bytes[0..Header.len], Header)) {
+        return error.InvalidHeader;
+    }
+    const count = std.mem.readInt(u32, bytes[Header.len..][0..4], .little);
+    const payload = Header.len + 4;
+    if (count > (bytes.len - payload) / RecordSize or payload + @as(usize, count) * RecordSize != bytes.len) {
+        return error.InvalidLength;
+    }
+
+    const code = try fill(count, bytes, allocator);
     var program = ir.Program{ .code = code };
-    errdefer program.deinit();
-    try ir.validate(&program);
+    // Exactly one cleanup lives here. An earlier version had BOTH
+    // `errdefer code.deinit()` and `errdefer program.deinit()` guarding the same
+    // buffer, so every `ir.validate` failure was a DOUBLE FREE (segfault in
+    // Allocator.free). That path is reachable from real input: the m7 compiler
+    // emits bracket instructions with a null target, which is exactly what
+    // validate rejects. Fill errors are freed inside `fill`; validate errors are
+    // freed here; success transfers ownership to the caller.
+    ir.validate(&program) catch |err| {
+        program.deinit();
+        return err;
+    };
     return program;
 }
 
