@@ -159,6 +159,13 @@ GATES = [
         f"-Mhell={ROOT / 'src' / 'hell.zig'}",
         f"-Mmalbolge_free={ROOT / 'src' / 'malbolge_free.zig'}",
     ]),
+    ("M0 EOF and numeric precision", zig_test("tests/t_m0_eof_precision.zig")),
+    ("M0 free-pure vertical slice (8 opcodes only)", [
+        "zig", "test", "--dep", "hell=hell", "--dep", "malbolge_free=malbolge_free",
+        f"-Mroot={ROOT / 'tests' / 't_free_pure_vertical_slice.zig'}",
+        f"-Mhell={ROOT / 'src' / 'hell.zig'}",
+        f"-Mmalbolge_free={ROOT / 'src' / 'malbolge_free.zig'}",
+    ]),
     ("dense representation differential", zig_test("tests/t_dense_differential.zig")),
     ("epochal invariants", zig_test("tests/t_epochal.zig")),
     ("frontier 10 to 12", zig_run("tests/t_frontier_moment.zig")),

@@ -1,0 +1,20 @@
+; Free-pure vertical slice fixture.
+;
+; Found by exhaustive enumeration (depth<=5 over {R_MOVD,MOVD,OPR,NOP} prefixes),
+; not by hand and not by luck: the search is deterministic.
+;
+; Why this one: it is the smallest shape whose OUTPUT depends on the input byte,
+; which is what "state-dependent control" has to mean observably. With input
+; 0x00 it prints 'I' (0x49); with input 0xff it prints 'M' (0x4d).
+;
+; Only the eight Classic opcodes appear, so it is legal under positional decode
+; in the free_pure profile, and automodification stays active.
+.CODE
+  IN
+  MOVD
+  OPR 39
+  JMP
+  NOP
+  OUT 65
+  NOP
+  HALT

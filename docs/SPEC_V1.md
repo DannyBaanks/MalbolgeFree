@@ -62,12 +62,26 @@ trits:
 rotate(v,w) = floor(v/3) + (v mod 3) * 3^(w-1)
 ```
 
-`pow3(w)` debe ser exacto para todo ancho soportado. El runtime actual usa
-`u128` y no define correctamente anchos que requieran mas precision.
+`pow3(w)` debe ser exacto para todo ancho soportado.
 
 Limite publico actual: `1 <= w <= 80` con `u128`. `3^80` es exacto y `3^81`
 queda fuera del dominio definido. BigInt es una decision futura; no se puede
 presentar crecimiento arbitrario como soportado.
+
+**Riesgos de precision fijados por prueba (no corregidos).**
+`tests/t_m0_eof_precision.zig` fija el comportamiento real, que en dos puntos no
+es el ideal:
+
+1. `pow3(n)` con `n >= 81` **devuelve `u128::max` en vez de fallar**. Un llamador
+   puede recibir un modulo plausible pero incorrecto sin ningun error. Fijado con
+   test; cambiarlo alteraria la firma publica, asi que queda como limitacion
+   aceptada, no como garantia.
+2. El guard `1 <= width <= 80` de `init()` es un `std.debug.assert`, y
+   `ReleaseFast` lo compila fuera. Un ancho fuera de dominio solo se detecta en
+   builds de depuracion.
+
+La via densa (`enableDenseSource`) si rechaza explicitamente `w >= 21`, porque
+`3^21` no cabe en el elemento `u32`; ese techo es real y verificable.
 
 ## 4. Decodificacion Y Ejecucion
 
@@ -132,9 +146,21 @@ El runtime actual usa `u128::maxInt(u128)` internamente y lo normaliza en las
 operaciones. El comportamiento observable de EOF debe quedar fijado con casos
 de prueba para `in`, `crazy` y `out`.
 
-Estado: **DEMONSTRATED** para EOF sin input: `in` seguido de `out` produce el
-byte `0xff`. La semantica de EOF combinada con `crazy` queda cubierta por la
-normalizacion `3^w - 1`; faltan casos adicionales de traza para M2.
+Estado: **CERRADO** (2026-10-01). `tests/t_m0_eof_precision.zig` fija con trazas
+ejecutadas, no con prosa:
+
+| caso | resultado observado |
+|---|---|
+| `in` en EOF -> `out` | emite exactamente `0xff`, termina `HALTED` |
+| `in` en EOF repetido | el sentinel es pegajoso: N lectures dan N `0xff` |
+| byte real vs EOF | el mismo programa distingue: `A` -> `0x41`, EOF -> `0xff` |
+| `in` en EOF -> `crazy` | normaliza a `3^w - 1`; valor verificado contra `crazy(3^w-1, mem[d], w)` calculado en el test |
+| sentinel en la traza | `a_before = 0`, `a_after = u128::max` justo tras `in` |
+| `in` en EOF -> `rot` | `rot` lee `mem[d]`, no el acumulador: EOF no se filtra ahi |
+
+Nota de calculo: como `c` y `d` avanzan juntos desde 0, en el paso `crazy`
+`c == d == 2` y la celda leida sigue siendo el caracter fuente intacto. Eso hace
+el valor esperado **computable**, no una constante magica.
 
 ## 7. Resolucion M1 De La Contradiccion
 
@@ -160,9 +186,10 @@ contra el oraculo externo de Malbolge-Translator.
 - [x] Instrucciones y post-instruccion escritas.
 - [x] Modos y limitaciones declarados.
 - [x] Contradiccion entre copias detectada.
-- [ ] Decisiones de precision numerica cerradas. (Nota: la via densa fija un
-      techo en `w = 20` porque `3^21` no cabe en `u32`; la via hash no lo tiene.)
-- [ ] EOF fijado con casos normativos.
+- [x] Decisiones de precision numerica cerradas, con dos riesgos aceptados y
+      fijados por prueba (saturacion silenciosa de `pow3`; guard de ancho solo en
+      depuracion). La via densa fija un techo en `w = 20`.
+- [x] EOF fijado con casos normativos ejecutados (`tests/t_m0_eof_precision.zig`).
 - [x] Un unico runtime marcado como canonico.
 
 **Veredicto M0:** `PARTIAL / SEMANTICS_DRAFTED`.
