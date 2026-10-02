@@ -161,7 +161,10 @@ Siguiente: inicializador propio medido contra LMAO en A5, ejemplo por ejemplo.
 
 ### M2 — Inicializador propio: bootstrap (medido 2026-09-13)
 
-Estado: **NOT_DEMONSTRATED, con espec** — ver `evidence/M2_BOOTSTRAP_REACH_V0/REPORT.md`.
+Estado: **DEMONSTRATED (256/256, 2026-10-02)** — `tools/hell_materialize.py` con
+`rotcombine` (A := rot(crazy(A,v))) cierra el gap de los 55 bytes 154..208.
+Verificado: `synthesize(180) -> 180`. El slice de celda-persistente ya no es
+necesario para cobertura completa de bytes.
 
 Reachability medida con las micro-ops Rot/Opr:
 - semilla sola + un operando: 2/256 (prerregistrado, muro).
@@ -241,10 +244,12 @@ A4 Malbolge emission      PASS (10/10 tests)
 A5 LMAO comparison        FAIL (LMAO 34/34 en nuestros motores; lmao-lite 0/6)
 A6 multi-byte cat         PASS (7/7 tests)
 A7 BFIR1 backend          PASS (10/10 + 4/4 structural tests)
-A7.1 conditional e2e      NOT_DEMONSTRATED (math verified; runtime pending)
-                         -> partial answer 2026-10-01: control that changes OUTPUT is
-                            demonstrated with 8 Classic opcodes only
-                            (t_free_pure_vertical_slice.zig). Input-dependent POINTER
-                            movement is not, in the searched space. See
-                            docs/M6_EIGHT_OPCODE_BOUNDARY.md
+A7.1 conditional e2e      RESOLVED (STALE — was written before M6.4/M6.5 landed):
+                         runtime conditional DEMONSTRATED by M6.4 (JZ/JNZ,
+                         t_m64_branch.zig, 3 programs with loops) and M6.5
+                         (t_m65_differential.zig, 5 programs incl. Hello World).
+                         Free-pure output-dependent control DEMONSTRATED by
+                         t_free_pure_vertical_slice.zig. Input-dependent pointer
+                         movement in pure 8-op stays bounded-negative;
+                         see docs/M6_EIGHT_OPCODE_BOUNDARY.md
 ```

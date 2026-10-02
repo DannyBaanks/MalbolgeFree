@@ -19,7 +19,7 @@ infinity claims this project does not make.)
 | C7 FRONTIER_WIDTH_WIDENING | **DEMONSTRATED** — `tests/t_frontier_moment.zig` prints `WIDEN step=59050 c=59049 d=59049 old_w=10 new_w=11`; the same witness continues through the C8 event. |
 | C8 REPEATED_WIDTH_WIDENING | **DEMONSTRATED** for two frontiers: `10→11` at step 59050 and `11→12` at step 177148. Evidence: `f9_repeated_frontier.json`, `tests/t_m5_full_vm.zig`. Rungs up to 16 measured on the real VM (2026-09-16, `M5_LADDER_SCALE/results.json`); rungs 17/18/19 measured 2026-10-01 with the dense representation (`--dense`, label `linux-14gib-dense`, peak RSS 1.92 GiB). Step counts identical to the hash predictions. Do not extrapolate beyond 19. |
 | C9 CLASSIC + UNSHACKLED -> FREE | **DEMONSTRATED** in both readings |
-| C10 TURING_COMPLETENESS | **NO_NEW_CLAIM** |
+| C10 TURING_COMPLETENESS | **INHERITED** — `fixed` == Classic (F4 6/6) and Classic is TC (Scheffer 1999). See `docs/TURING_COMPLETENESS_INHERITED.md`. A NEW proof stays NOT_DEMONSTRATED |
 
 `EPOCHAL_PYTHON_PARITY` = **DEMONSTRATED** (2026-10-01). `src/malbolge_core.py` now
 implements the `epochal` policy (frontier trigger before the step touches memory,

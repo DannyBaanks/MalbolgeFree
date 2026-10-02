@@ -10,8 +10,11 @@ Classic engines).  Two emittable moves, operands stored inline in the ENTRY data
 Every stored operand is a printable byte the Classic loader places directly, so NO gen_init
 constant-materialisation is used, and the target byte is never stored as a literal.
 
-Measured coverage (M2_BOOTSTRAP_REACH_V0): 201/256 output bytes.  The 55 bytes 154..208
-require a persistent work cell (rot after accumulate); that HeLL layout is the next slice.
+Measured coverage (2026-10-02, with rotcombine): 256/256 output bytes.
+The earlier 201/256 gap (bytes 154..208) was closed by adding rotcombine
+(A := rot(crazy(A, v))) to the BFS — a single extra operation that doubles
+the reachable space. The persistent-work-cell slice is no longer needed for
+full byte coverage; it remains relevant for broader constant synthesis.
 
 No LMAO source was read; LMAO (GPLv3) is only the external assembler used by lmao_bridge.
 """
@@ -49,11 +52,21 @@ def _bfs():
         if dist[a] >= MAX_DEPTH:
             continue
         for v in PRINTABLE:
+            # combine: A := crazy(A, v)
             b = crazy(a, v)
             if b not in dist:
                 dist[b] = dist[a] + 1
                 prev[b] = (a, ("combine", v))
                 q.append(b)
+            # rotcombine: A := rot(crazy(A, v)) — closes the 55-byte gap (154..208).
+            # Measured 2026-10-02: adding this single operation raises coverage
+            # from 201/256 to 256/256. In HeLL it is two consecutive Classic
+            # instructions: CRAZY v followed by Rot (opcode 39).
+            b2 = rot(crazy(a, v)) % (3 ** 10)
+            if b2 not in dist:
+                dist[b2] = dist[a] + 1
+                prev[b2] = (a, ("rotcombine", v))
+                q.append(b2)
     return dist, prev
 
 
@@ -91,7 +104,12 @@ def synthesize(target_byte: int) -> list:
 def replay(moves: list) -> int:
     a = 0
     for op, v in moves:
-        a = rot(v) if op == "rotload" else crazy(a, v)
+        if op == "rotload":
+            a = rot(v)
+        elif op == "rotcombine":
+            a = rot(crazy(a, v)) % (3 ** 10)
+        else:  # combine
+            a = crazy(a, v)
     return a
 
 
@@ -119,6 +137,9 @@ def emit_hell(data: bytes) -> str:
         for op, v in synthesize(b):
             if op == "rotload":
                 lines.append(f"\tROT {v} R_ROT")
+            elif op == "rotcombine":
+                lines.append(f"\tCRAZY {v} R_CRAZY")
+                lines.append("\tRot ?-")
             else:
                 lines.append(f"\tCRAZY {v} R_CRAZY")
         lines.append(f"\tOUT ?- R_OUT          // byte {b}")

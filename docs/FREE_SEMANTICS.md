@@ -93,7 +93,9 @@ C7  FRONTIER_WIDTH_WIDENING        = DEMONSTRATED — the tested 10 -> 11
                                       10 -> 11 at step 59050 and 11 -> 12 at
                                       step 177148 (evidence/f9_repeated_frontier.json)
 C9  CLASSIC+UNSHACKLED=>FREE       = DEMONSTRATED (parametric reading)
-C10 TURING_COMPLETENESS            = NO_NEW_CLAIM
+C10 TURING_COMPLETENESS            = INHERITED (fixed==Classic, Classic is TC
+                                      per Scheffer 1999; see docs/TURING_COMPLETENESS_INHERITED.md.
+                                      NEW_CLAIM stays NOT_DEMONSTRATED)
 EPOCHAL_PYTHON_PARITY              = DEMONSTRATED (2026-10-01; Zig vs Python core
                                       on epochal witnesses up to 60k steps)
 ```
