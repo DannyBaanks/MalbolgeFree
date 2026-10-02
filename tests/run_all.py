@@ -172,6 +172,7 @@ GATES = [
         f"-Mhell={ROOT / 'src' / 'hell.zig'}",
         f"-Mmalbolge_free={ROOT / 'src' / 'malbolge_free.zig'}",
     ]),
+    ("product CLI run/inspect/trace", [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_cli_product.py", "-v"]),
     ("M0 EOF and numeric precision", zig_test("tests/t_m0_eof_precision.zig")),
     ("M0 free-pure vertical slice (8 opcodes only)", [
         "zig", "test", "--dep", "hell=hell", "--dep", "malbolge_free=malbolge_free",

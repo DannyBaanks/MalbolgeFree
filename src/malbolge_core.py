@@ -171,7 +171,8 @@ class MalbolgeCore:
             self.padwidth = need
 
     # -- stepper -------------------------------------------------------------
-    def run(self, max_steps: int = 2_000_000, stdin_data: bytes = b"") -> dict:
+    def run(self, max_steps: int = 2_000_000, stdin_data: bytes = b"",
+              _sink: list | None = None) -> dict:
         import sys
         sys.setrecursionlimit(max(10000, self.program_len + 1000))
         a, c, d = 0, 0, 0
@@ -180,6 +181,11 @@ class MalbolgeCore:
         limit = self.mem_limit  # None => unbounded
         status = "MAX_STEPS"
 
+        # NOTE (M7 CLI): _sink is an internal event collector used only by
+        # trace_run(). When None (every existing caller, all 43 gates) the loop
+        # below is semantically identical to before: appending to a list cannot
+        # change machine state. Equivalence is asserted, not assumed, by
+        # tests/t_trace_equivalence.py.
         while self.stats["steps"] < max_steps:
             self.stats["steps"] += 1
             # Epochal widening happens BEFORE the step touches memory, so the
@@ -188,6 +194,7 @@ class MalbolgeCore:
             cc = (c % limit) if limit is not None else c
             cell = self._cell(cc)
             op = (cell + cc) % 94
+            a_before, c_before, d_before, enc_addr = a, c, d, None
 
             if op == 4:                 # jmp
                 c = self._cell(d % limit if limit is not None else d)
@@ -230,6 +237,14 @@ class MalbolgeCore:
                 pass
             elif op == 81:              # hlt
                 status = "HALTED"
+                if _sink is not None:
+                    _sink.append({
+                        "step": self.stats["steps"],
+                        "c_before": c_before, "d_before": d_before,
+                        "op": op, "a_before": a_before, "a_after": a,
+                        "c_after": c, "d_after": d,
+                        "encrypted_addr": None,
+                    })
                 break
 
             # self-encryption after execution
@@ -238,9 +253,18 @@ class MalbolgeCore:
             if 33 <= mc <= 126:
                 self._cell_write(cc, _ENC[mc])
                 self.stats["encrypted_cells"] += 1
+                enc_addr = cc
 
             c = (c + 1) % limit if limit is not None else c + 1
             d = (d + 1) % limit if limit is not None else d + 1
+            if _sink is not None:
+                _sink.append({
+                    "step": self.stats["steps"],
+                    "c_before": c_before, "d_before": d_before,
+                    "op": op, "a_before": a_before, "a_after": a,
+                    "c_after": c, "d_after": d,
+                    "encrypted_addr": enc_addr,
+                })
 
         self.stats["final_c"] = c
         self.stats["final_d"] = d
@@ -254,3 +278,19 @@ class MalbolgeCore:
             "padwidth": getattr(self, "padwidth", None),
             "growth_events": len(self.stats["width_growth_events"]),
         }
+
+    def trace_run(self, max_steps: int = 2_000_000, stdin_data: bytes = b"",
+                  limit: int | None = None) -> tuple[dict, list]:
+        """Run collecting a per-step trace. New additive API for the M7 CLI.
+
+        Returns (summary, events) where summary is IDENTICAL in shape and value
+        to run() on the same inputs (asserted by tests/t_trace_equivalence.py),
+        and each event carries step/c_before/d_before/op/a_before/a_after/
+        c_after/d_after/encrypted_addr. `limit` caps the stored events; the run
+        itself always continues to max_steps so the summary is unaffected.
+        """
+        events: list = []
+        res = self.run(max_steps, stdin_data, _sink=events)
+        if limit is not None:
+            events = events[:limit]
+        return res, events

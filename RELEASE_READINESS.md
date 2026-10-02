@@ -1,7 +1,9 @@
 # Malbolge Free — Release Readiness Checklist
 
-**Status**: CORE COMPLETE — C8 repeated widening demonstrated (ladder measured to
-`w=19`, 2026-10-01); M6 remains open
+**Status**: RELEASE CANDIDATE 2026-10-02 — harness 47+/47 local, CI verde en
+ubuntu+windows; C8 ladder medido hasta `w=19`; paridad Python↔Zig en epochal;
+CLI de producto con `run`/`inspect`/`trace`. Limitaciones explicitas abajo.
+M6 (TC) y Uroboros siguen NOT_DEMONSTRATED y NO se presentan como capacidades.
 
 ---
 

@@ -175,12 +175,12 @@ guía.
 | Milestone | Estado |
 |---|---|
 | M0 Contrato congelado | PASS: EOF y precision fijados con pruebas (`t_m0_eof_precision.zig`, 10/10); 2 riesgos de precision documentados como limitacion aceptada |
-| M1 Runtime canónico | PARCIAL: `src/` canonico; harnesses migrados; falta cerrar todos los modos |
+| M1 Runtime canónico | PASS: `src/` canonico; copias stale `tests/`+`evidence/` eliminadas (2026-10-02, sin referencias); un solo runtime con perfiles explicitos |
 | M2 Harness reproducible | PASS: `py tests/run_all.py` ejecuta todos los gates M2 |
 | M3 Paridad Classic | PASS: corpus 6/6 contra oraculo independiente |
 | M4 Extensión conservadora | PASS: degeneración, preservación, determinismo y no-replay observables |
 | M4b Slice vertical free-pure | PASS: fixture con salida dependiente del input usando solo los 8 opcodes Classic, `assisted=0`, `lock_noencrypt=false`, cifrado activo; prefijo identico a Classic y frontera cruzada sin ISA aux (`t_free_pure_vertical_slice.zig`, 3/3) |
 | M5 Segunda frontera | PASS: `10->11->12` demostrado; evidencia F9; escalera hasta `19` medida (2026-10-01, densa) |
 | M6 Turing completeness válida | PARCIAL: claim corregido; smoke test pasa, reducción semántica pendiente. Frontera medida: control por output SÍ con 8 opcodes; movimiento de puntero por dato NO en el espacio buscado (`docs/M6_EIGHT_OPCODE_BOUNDARY.md`). El claim sigue NOT_DEMONSTRATED |
-| M7 Producto operable | PARCIAL |
-| M8 Release formal 1.0 | PENDIENTE |
+| M7 Producto operable | PASS: CLI estable `run`/`inspect`/`trace`/`verify`/`assemble`/`disassemble` con exit codes contractuales y guia `GUIA.md` con salidas reales; `trace_run` equivale a `run` (60k pasos); producto usa el core Python (sin toolchain), diferencial Zig↔Python demostrado |
+| M8 Release formal 1.0 | EN CURSO: docs sincronizados, hashes generados, CI en ambos OS; release con limitaciones explicitas |
