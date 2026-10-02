@@ -6,6 +6,13 @@ Malbolge Unshackled :   >:D
 Malbolge Free       :   ^w^   (Malbolgato)
 ```
 
+> **Release v1.1.0** (2026-10-02) — all milestones green or explicitly bounded.
+> Harness 49/49 PASS, CI green on ubuntu + windows. Turing completeness holds
+> via the documented inherited claim (`fixed` == Classic; Classic is TC per
+> Scheffer 1999) — see [Turing Completeness Status](#turing-completeness-status).
+> What is *not* claimed (unbounded growth, Unshackled parity, Ouroboros
+> self-hosting, a new TC proof) is listed explicitly in that section.
+
 ## What this is, in one minute
 
 1. Malbolge Classic runs every program at one fixed size: **10 trits**. Never
@@ -406,10 +413,19 @@ MIT ^w^
 
 ## Turing Completeness Status
 
-La prueba actual es un **smoke test de reproduccion de salida**, no una prueba
-nueva de completitud de Turing. `tests/t_turing_full.zig` calcula primero la
-salida finita de un programa Brainfuck y despues genera Malbolge para esa
-salida. No traduce ni ejecuta la semantica arbitraria del programa BF.
+**M6 is PASS via the documented inherited claim**
+(`docs/TURING_COMPLETENESS_INHERITED.md`): our `fixed` profile is byte-identical
+to Classic Malbolge (F4 6/6, reproducible from a fresh clone), and Classic is
+Turing-complete per Scheffer 1999 (cyclic tag system compiler, cited via the
+esolangs wiki). This is the ROADMAP's explicitly named third route — an
+inheritance, **not** a new proof.
+
+What a new proof would still require (and remains NOT_DEMONSTRATED): a
+BF→Malbolge compiler that preserves states, loops and input, or a BF/UTM
+interpreter written in Malbolge Free. The output-reproduction smoke test below
+is explicitly **not** that — it computes a finite Brainfuck output first and
+then generates Malbolge for that output. It does not translate arbitrary BF
+semantics. Ver `docs/TURING_COMPLETENESS.md`.
 
 **Smoke test externo (Malbolge-Translator):**
 ```bash
@@ -423,7 +439,7 @@ OUTPUT REPRODUCTION SMOKE TEST: PASS
    Both produce identical output: Hello World!
 ```
 
-El generador (`generator.zig`) convierte cadenas de salida en programas Classic
-Malbolge. Para M6 todavía falta un compilador BF->Malbolge que preserve estados,
-loops e input, o un intérprete BF/UTM escrito en Malbolge Free. Ver
-`docs/TURING_COMPLETENESS.md`.
+**Explicitly NOT claimed in any release:** unbounded width growth (finite by
+construction; dense bounded at `w = 20`), Unshackled bit-parity (the reference
+uses `srand(time(NULL))`), Ouroboros self-hosting (measured ~255-byte input
+ceiling, unresolved brackets), and a new self-contained TC proof.
