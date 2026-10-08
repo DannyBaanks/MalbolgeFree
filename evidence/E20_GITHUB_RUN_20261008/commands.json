@@ -1,0 +1,183 @@
+[
+  {
+    "name": "t_m5_full_vm.zig-False",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_m5_full_vm.zig",
+      "-Mmalbolge_free=/home/runner/work/MalbolgeFree/MalbolgeFree/src/malbolge_free.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 5.729642671999997,
+    "log_sha256": "dc3ebcad7b4ad5d4c00ff1d9fb241b83e68a8ed34d13c175e0f1e95357fcc326"
+  },
+  {
+    "name": "t_m5_full_vm.zig-True",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_m5_full_vm.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/e20-evidence/instrumented_core.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 1.718394006000004,
+    "log_sha256": "3457e677d200713720e4257106f13c6eb7ef644e5756796760510d5acd410bf9"
+  },
+  {
+    "name": "t_dense_differential.zig-False",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_dense_differential.zig",
+      "-Mmalbolge_free=/home/runner/work/MalbolgeFree/MalbolgeFree/src/malbolge_free.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 0.8795439829999978,
+    "log_sha256": "6702972f86abce7f0ee0867ea3fee1a00ce6183c51c92a8cc47f2546e6ab31e0"
+  },
+  {
+    "name": "t_dense_differential.zig-True",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_dense_differential.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/e20-evidence/instrumented_core.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 0.9013136059999951,
+    "log_sha256": "5adb2abc0b5b2edfa5d16dc269b441f6a5bdf989ca1e5dcae69c6b32f2707fe4"
+  },
+  {
+    "name": "build12-False",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/e20-evidence/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/MalbolgeFree/MalbolgeFree/src/malbolge_free.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/e20-evidence/cfg12.zig",
+      "-femit-bin=/home/runner/work/_temp/e20-evidence/vm12-False"
+    ],
+    "exit_code": 0,
+    "seconds": 19.391264801,
+    "log_sha256": "0c43816a8486c9ad907404b3ff163bca5cc96e749486c3f57d90f8664770e442"
+  },
+  {
+    "name": "small-original",
+    "command": [
+      "/home/runner/work/_temp/e20-evidence/vm12-False"
+    ],
+    "exit_code": 0,
+    "seconds": 0.01807839300001035,
+    "log_sha256": "583903397cfc98f8485fae15d19dfba4e6f2bc389de4c226cb9b8bed29f99236"
+  },
+  {
+    "name": "build12-True",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/e20-evidence/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/e20-evidence/instrumented_core.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/e20-evidence/cfg12.zig",
+      "-femit-bin=/home/runner/work/_temp/e20-evidence/vm12-True"
+    ],
+    "exit_code": 0,
+    "seconds": 16.495926917999995,
+    "log_sha256": "aea8784c8c16ba75630945e7327e75ed2a902d0fd037d128fd970b082c0487ee"
+  },
+  {
+    "name": "small-observed",
+    "command": [
+      "/home/runner/work/_temp/e20-evidence/vm12-True"
+    ],
+    "exit_code": 0,
+    "seconds": 0.017816984999996066,
+    "log_sha256": "2febc29c2f3d863b1a6e03356d573c7aff9f12a7fde861151968ba1a0dff179b"
+  },
+  {
+    "name": "small-repeat",
+    "command": [
+      "/home/runner/work/_temp/e20-evidence/vm12-True"
+    ],
+    "exit_code": 0,
+    "seconds": 0.017738444000002573,
+    "log_sha256": "2febc29c2f3d863b1a6e03356d573c7aff9f12a7fde861151968ba1a0dff179b"
+  },
+  {
+    "name": "build18-True",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/e20-evidence/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/e20-evidence/instrumented_core.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/e20-evidence/cfg18.zig",
+      "-femit-bin=/home/runner/work/_temp/e20-evidence/vm18-True"
+    ],
+    "exit_code": 0,
+    "seconds": 16.640697005000007,
+    "log_sha256": "e4fe69f6988d22e48b1706cd52659f61f57552fb203a631b970dfcbf5a491fac"
+  },
+  {
+    "name": "calibration18",
+    "command": [
+      "/home/runner/work/_temp/e20-evidence/vm18-True"
+    ],
+    "exit_code": 0,
+    "seconds": 11.755127283999997,
+    "log_sha256": "71843111277d9219e053cf3728459d7753912ee9a7e9f5d4db964550fc7a15f1"
+  },
+  {
+    "name": "build20-True",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/e20-evidence/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/e20-evidence/instrumented_core.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/e20-evidence/cfg20.zig",
+      "-femit-bin=/home/runner/work/_temp/e20-evidence/vm20-True"
+    ],
+    "exit_code": 0,
+    "seconds": 16.42521876900001,
+    "log_sha256": "ab893b4d23d0ad3791a8265a15a82cc0892e17620753d2649cd0ef2f30739bbc"
+  },
+  {
+    "name": "e20",
+    "command": [
+      "/home/runner/work/_temp/e20-evidence/vm20-True"
+    ],
+    "exit_code": 0,
+    "seconds": 109.88262381799998,
+    "log_sha256": "3dc21391f9bddc8f574f56655f1be3bc14c70a4c7a33a4d55a90680a475f521d"
+  }
+]

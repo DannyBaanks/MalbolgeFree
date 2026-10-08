@@ -1,5 +1,15 @@
 # Malbolge Free
 
+> **Evidence update — 2026-10-08:** one continuous real-VM epochal run from
+> width 10 reached **20** on GitHub Ubuntu: 1,162,261,468 steps, ten widenings,
+> 109.87 s including source generation/load/hash, peak RSS 5.77 GiB.
+> [Preserved E20 evidence](evidence/E20_GITHUB_RUN_20261008/04_VERDICT.md)
+> supersedes the earlier finite-ladder ceiling of 19 below; historical records
+> remain unchanged. Dense is still bounded at 20, unbounded growth is not
+> demonstrated. Fixed20 is **not** generally Nagoya-compatible: the original
+> interpreter and both Free cores disagree on EOF echo
+> ([counterexample](evidence/E20_CONTROLLED_20261008/03_NAGOYA_COMPARE.md)).
+
 ```
 Malbolge Classic    :   >:(
 Malbolge Unshackled :   >:D

@@ -1,0 +1,15 @@
+{
+  "memory": {
+    "MemTotal": 16766414848,
+    "MemAvailable": 15725748224,
+    "SwapTotal": 3221221376,
+    "SwapFree": 3221221376
+  },
+  "disk_free_bytes": 91725692928,
+  "source_bytes": 1162262468,
+  "dense_bytes": 4649049920,
+  "calibrated_peak_with_25_percent_margin": 7772682186,
+  "budget_bytes": 9435448934,
+  "decision": "GO",
+  "note": "RSS extrapolation is not a mathematical upper bound; OS address-space ceiling applied."
+}

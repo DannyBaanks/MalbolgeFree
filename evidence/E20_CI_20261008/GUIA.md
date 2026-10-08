@@ -2,8 +2,20 @@
 python3 evidence/E20_CI_20261008/verify_ci.py /ruta/al/artifact
 ```
 
-Ese comando verifica el resultado descargado de GitHub. NO PROBADO todavía
-contra E20 al crear esta guía: se actualizará cuando termine la corrida.
+Ese comando verifica el resultado descargado de GitHub. Ejecutado realmente:
+
+```bash
+python3 evidence/E20_CI_20261008/verify_ci.py /tmp/e20-github-artifacts-37847283479/e20-37847283479-1
+```
+
+Salida real:
+
+```json
+{"EPOCHAL_19_TO_20": "DEMONSTRATED_SCOPED", "UNBOUNDED_WIDTH_GROWTH": "NOT_DEMONSTRATED", "MALBOLGE20_IDENTICAL_TO_FREE_EPOCHAL": "NOT_CLAIMED"}
+```
+
+Corrida: https://github.com/DannyBaanks/MalbolgeFree/actions/runs/37847283479
+La evidencia descargada también está preservada en `evidence/E20_GITHUB_RUN_20261008/`.
 
 Regla de oro: no iniciar E20 si el gate dice NO_GO. No confundir una
 salida exitosa del job con haber demostrado E20: leer `verdict.json`.

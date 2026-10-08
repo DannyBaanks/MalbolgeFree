@@ -1,0 +1,101 @@
+{
+  "original": {
+    "fields": {
+      "target": "12",
+      "status": "MAX_STEPS",
+      "steps": "177148",
+      "padwidth": "12",
+      "growth": "2",
+      "final_c": "177148",
+      "cells": "178160",
+      "capacity": "0",
+      "stdout_len": "58420",
+      "repr": "dense"
+    },
+    "hashes": {
+      "source": "d4ecc19dde9699e314edb2bdbc8430c1e8e55b7f5131754434d6993739edabc3",
+      "stdout": "77dab73b4eb55ffba7930a8db7041003a385a506d291c1550b1396b463b94766",
+      "final_d": "177148",
+      "encrypted": "141328",
+      "assisted": "0"
+    },
+    "widen_events": [],
+    "peak_rss_bytes": 1716224
+  },
+  "observed": {
+    "fields": {
+      "target": "12",
+      "status": "MAX_STEPS",
+      "steps": "177148",
+      "padwidth": "12",
+      "growth": "2",
+      "final_c": "177148",
+      "cells": "178160",
+      "capacity": "0",
+      "stdout_len": "58420",
+      "repr": "dense"
+    },
+    "hashes": {
+      "source": "d4ecc19dde9699e314edb2bdbc8430c1e8e55b7f5131754434d6993739edabc3",
+      "stdout": "77dab73b4eb55ffba7930a8db7041003a385a506d291c1550b1396b463b94766",
+      "final_d": "177148",
+      "encrypted": "141328",
+      "assisted": "0"
+    },
+    "widen_events": [
+      {
+        "step": "59050",
+        "c": "59049",
+        "d": "59049",
+        "old_w": "10",
+        "new_w": "11"
+      },
+      {
+        "step": "177148",
+        "c": "177147",
+        "d": "177147",
+        "old_w": "11",
+        "new_w": "12"
+      }
+    ],
+    "peak_rss_bytes": 1736704
+  },
+  "repeat": {
+    "fields": {
+      "target": "12",
+      "status": "MAX_STEPS",
+      "steps": "177148",
+      "padwidth": "12",
+      "growth": "2",
+      "final_c": "177148",
+      "cells": "178160",
+      "capacity": "0",
+      "stdout_len": "58420",
+      "repr": "dense"
+    },
+    "hashes": {
+      "source": "d4ecc19dde9699e314edb2bdbc8430c1e8e55b7f5131754434d6993739edabc3",
+      "stdout": "77dab73b4eb55ffba7930a8db7041003a385a506d291c1550b1396b463b94766",
+      "final_d": "177148",
+      "encrypted": "141328",
+      "assisted": "0"
+    },
+    "widen_events": [
+      {
+        "step": "59050",
+        "c": "59049",
+        "d": "59049",
+        "old_w": "10",
+        "new_w": "11"
+      },
+      {
+        "step": "177148",
+        "c": "177147",
+        "d": "177147",
+        "old_w": "11",
+        "new_w": "12"
+      }
+    ],
+    "peak_rss_bytes": 1736704
+  }
+}

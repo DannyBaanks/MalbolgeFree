@@ -1,5 +1,28 @@
 # HONESTY LEDGER
 
+## Evidence update — 2026-10-08: epochal reaches 20, fixed20 EOF differs
+
+`EPOCHAL_19_TO_20 = DEMONSTRATED_SCOPED`: GitHub-hosted Ubuntu run
+37847283479, measured runtime/harness commit ac94be2. One VM initialized
+free_pure/epochal at 10 with no wrap called the real vm.run loop once for
+1,162,261,468 steps. Ten sparse events include 19→20 at step 1,162,261,468,
+c=d=1,162,261,467. Final width20, growth10, c=d=1,162,261,468,
+1,162,262,480 cells, 383,299,003 output bytes (SHA-256 preserved).
+Elapsed executable time 109.87 s, peak RSS 6,197,026,816 bytes (5.77 GiB).
+The gate calibrated rung 18, reserved a 25% margin, and limited address space
+to 60% of measured MemAvailable. Core source is unchanged; an exact generated
+copy adds only WIDEN observation around frontierTrigger. Original/observed
+small-run fields and source/stdout hashes match; instrumented repeat agrees.
+Tests run on both copies. Full E20 remains a Zig single-engine measurement.
+
+Evidence: [E20 verdict](../evidence/E20_GITHUB_RUN_20261008/04_VERDICT.md),
+downloaded raw artifact, original manifests and local hash verification.
+The earlier local resource block remains a valid separate negative record.
+`FIXED20_NAGOYA_PARITY = FAIL`: accepted INPUT/OUTPUT/HALT source `ubO`
+at EOF emits a9 in original Nagoya and ff in Free Zig/Python. Official hello20
+and ASCII-A echo have stdout parity. No global equivalence, no reference
+state/step parity, no unbounded width claim. Earlier entries are historical.
+
 What we got, how we got it, and where we know we cheated.
 
 ## VARIABLE WIDTH IS NOT INFINITY
