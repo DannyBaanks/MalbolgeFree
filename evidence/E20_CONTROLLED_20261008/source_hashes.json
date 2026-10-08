@@ -1,0 +1,14 @@
+{
+  "src/malbolge_free.zig": "decb108de14fe36f446741e61533dfbf6d3087522c30adb87956631a86f175a4",
+  "src/malbolge_core.py": "3372521736ffca8a9fa3543e590a2161a5838d1bbf657a8e64e1c19e4dae1a73",
+  "evidence/M5_LADDER_SCALE/ladder_scale.zig": "2e5383f014522baab7ec72bbc8a0c838e514776b793e38c8b2ebddc09fc7518f",
+  "evidence/M5_LADDER_SCALE/run_ladder_scale.py": "4e28af803c7707f3a32f3bf36fe851e5e35ce4f9d0670f30632a12774d41ee87",
+  "evidence/M5_LADDER_SCALE/results.json": "358fc3017715220a4206716b97781b90aefd832cf1933900ff4c32763905ac8a",
+  "tests/t_m5_full_vm.zig": "2100f0105b983ed98c3e70ea2e35af50057e0a9281b70570cdd380c481c82076",
+  "tests/t_dense_differential.zig": "f30f3bf14454b7b459178d5d5fa21d19644b4922d64378b4dc8bad63777c02d5",
+  "tests/t_epochal.zig": "fe19253d657c165fb1c6df869e374123cb08c14f43d6de44c98d65470883ed33",
+  "tests/t_m4_conservative.zig": "4ffae5f6e7cc73b6142329ae6380fc1f737161ad32a2062d547d8c70a9a588a0",
+  "tests/frontier_witness.txt": "3370003cfa18b02e21f095173328d1fa7587222dae6e280e78413e3903013a57",
+  "evidence/compare_epochal.py": "be860244ab6137e1495e53921afce6b9aa332ff5dbd4c6c708a4297915006e8c",
+  "downloaded_master_archive": "ce707542b4106a4a4a478469a1889c0799242077b4959e35a598ab1ce0792c6e"
+}

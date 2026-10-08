@@ -1,0 +1,14 @@
+{
+  "calibration_target": 15,
+  "warm_peak_rss_bytes": 37572608,
+  "scale_factor": 242.9999494038223,
+  "linear_peak_estimate_bytes": 9130141842,
+  "peak_with_25_percent_margin_bytes": 11412677303,
+  "warm_wall_seconds": 0.27,
+  "linear_time_seconds": 65.60998633903203,
+  "time_with_double_margin_and_compile_seconds": 145.21997267806407,
+  "note": "Extrapolation only, not a measured E20 peak or bound. Compiler included in small command tree peak. Allocation behavior may be nonlinear.",
+  "hash_estimate_gib": 67.1,
+  "hash_estimate_not_dense": true,
+  "decision": "NO_GO"
+}

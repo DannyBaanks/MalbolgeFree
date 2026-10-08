@@ -1,0 +1,4 @@
+{"command": ["zig", "version"], "exit_code": 0, "output": "0.16.0\n"}
+{"command": ["gcc", "--version"], "exit_code": 0, "output": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"}
+{"command": ["python3", "--version"], "exit_code": 0, "output": "Python 3.12.3\n"}
+{"command": ["/usr/bin/time", "--version"], "exit_code": 0, "output": "time (GNU Time) UNKNOWN\nCopyright (C) 2018 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by David Keppel, David MacKenzie, and Assaf Gordon.\n"}

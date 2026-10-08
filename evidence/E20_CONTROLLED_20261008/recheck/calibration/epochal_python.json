@@ -1,0 +1,82 @@
+{
+  "phase": "EPOCHAL",
+  "claim": "EPOCHAL_PYTHON_PARITY",
+  "zig_runtime": "src/malbolge_free.zig",
+  "python_runtime": "src/malbolge_core.py",
+  "cases": 3,
+  "rows": [
+    {
+      "case": "epochal_w3_multi",
+      "width": 3,
+      "witness_len": 300,
+      "zig": {
+        "status": "MAX_STEPS",
+        "steps": "300",
+        "padwidth": "6",
+        "growth": "3",
+        "final_c": "300",
+        "final_d": "300",
+        "sha256": "196efcdbd3d001be5f6cb2fb1f4c88195f8b964b7c4bd433b5c09b111cce0143"
+      },
+      "python": {
+        "status": "MAX_STEPS",
+        "steps": 300,
+        "padwidth": 6,
+        "growth": 3,
+        "sha256": "196efcdbd3d001be5f6cb2fb1f4c88195f8b964b7c4bd433b5c09b111cce0143"
+      },
+      "mismatches": {}
+    },
+    {
+      "case": "epochal_w4_multi",
+      "width": 4,
+      "witness_len": 1200,
+      "zig": {
+        "status": "MAX_STEPS",
+        "steps": "1200",
+        "padwidth": "7",
+        "growth": "3",
+        "final_c": "1200",
+        "final_d": "1200",
+        "sha256": "c11c0f896b8515f2ca5e53ce37d1366542702694609f84cb7bd7dbd518d7cc74"
+      },
+      "python": {
+        "status": "MAX_STEPS",
+        "steps": 1200,
+        "padwidth": 7,
+        "growth": 3,
+        "sha256": "c11c0f896b8515f2ca5e53ce37d1366542702694609f84cb7bd7dbd518d7cc74"
+      },
+      "mismatches": {}
+    },
+    {
+      "case": "epochal_w10_single",
+      "width": 10,
+      "witness_len": 60000,
+      "zig": {
+        "status": "MAX_STEPS",
+        "steps": "60000",
+        "padwidth": "11",
+        "growth": "1",
+        "final_c": "60000",
+        "final_d": "60000",
+        "sha256": "7731dec093317b038aaf8a1978d72a169806bec163da732dc6c0aea61fcbd5f5"
+      },
+      "python": {
+        "status": "MAX_STEPS",
+        "steps": 60000,
+        "padwidth": 11,
+        "growth": 1,
+        "sha256": "7731dec093317b038aaf8a1978d72a169806bec163da732dc6c0aea61fcbd5f5"
+      },
+      "mismatches": {}
+    }
+  ],
+  "extras": [
+    "DETERMINISM name=epochal_w4_multi match=true",
+    "DEGENERATION name=epochal_below_frontier match=true padwidth=4 growth_events=0",
+    "GUARD name=epochal_requires_no_wrap note=python-constructor-raises"
+  ],
+  "python_guard_rejects_wrap": true,
+  "verdict": "PASS"
+}

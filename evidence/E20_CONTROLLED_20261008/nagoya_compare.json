@@ -1,0 +1,105 @@
+{
+  "commands": [
+    {
+      "name": "nagoya_compile",
+      "command": [
+        "gcc",
+        "-O2",
+        "-std=gnu99",
+        "/tmp/malbolgefree-e20-20261008/evidence/E20_CONTROLLED_20261008/nagoya/malbolge20.c",
+        "-lm",
+        "-o",
+        "/tmp/e20-nagoya-oracle"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.11900973320007324,
+      "log_sha256": "165effaeb168f780bf01d4f889e67ec2b07bd7d7b01e5c42d5440b140cd4a776",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_hex": ""
+    },
+    {
+      "name": "nagoya_hello20",
+      "command": [
+        "/tmp/e20-nagoya-oracle",
+        "/tmp/malbolgefree-e20-20261008/evidence/E20_CONTROLLED_20261008/nagoya/hello20.mb"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.03515481948852539,
+      "log_sha256": "33efdff4cdceadbcacb7f80c5c12bdf44a591db4e60bb93c9701b06a98354490",
+      "stdout_sha256": "872e4e50ce9990d8b041330c47c9ddd11bec6b503ae9386a99da8584e9bb12c4",
+      "stdout_hex": "48656c6c6f576f726c64"
+    },
+    {
+      "name": "nagoya_eof_echo",
+      "command": [
+        "/tmp/e20-nagoya-oracle",
+        "/tmp/malbolgefree-e20-20261008/evidence/E20_CONTROLLED_20261008/eof_echo.mb"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.030408143997192383,
+      "log_sha256": "717b81b9a62150406e58db42cf41897f7b96940db8f4555be113dc9be3184a49",
+      "stdout_sha256": "9e8e8c37a53bac77a653d590b783b2508e8ed2fed040a278bf4f4703bbd5d82d",
+      "stdout_hex": "a9"
+    },
+    {
+      "name": "nagoya_byte_echo",
+      "command": [
+        "/tmp/e20-nagoya-oracle",
+        "/tmp/malbolgefree-e20-20261008/evidence/E20_CONTROLLED_20261008/eof_echo.mb"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.03147578239440918,
+      "log_sha256": "ead4c7928ab8d980cdf1bc7f9a60769acb809348a23e6d0f7c83945d5722629f",
+      "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+      "stdout_hex": "41"
+    },
+    {
+      "name": "zig_fixed20",
+      "command": [
+        "zig",
+        "run",
+        "--dep",
+        "malbolge_free",
+        "-Mroot=/tmp/malbolgefree-e20-20261008/evidence/E20_CONTROLLED_20261008/fixed20.zig",
+        "-Mmalbolge_free=src/malbolge_free.zig"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.5010747909545898,
+      "log_sha256": "7f040ab32352c615b4e034a1b29c356bc16c077c82da21e2dcf6cfb48b596f81",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_hex": ""
+    }
+  ],
+  "python_fixed20": [
+    {
+      "name": "hello20",
+      "status": "HALTED",
+      "steps": 46418,
+      "max_addr_touched": 531501,
+      "max_value": 3486784400,
+      "padwidth": 20,
+      "growth_events": 0,
+      "stdout_hex": "48656c6c6f576f726c64"
+    },
+    {
+      "name": "eof_echo",
+      "status": "HALTED",
+      "steps": 3,
+      "max_addr_touched": 1,
+      "max_value": 111,
+      "padwidth": 20,
+      "growth_events": 0,
+      "stdout_hex": "ff"
+    },
+    {
+      "name": "byte_echo",
+      "status": "HALTED",
+      "steps": 3,
+      "max_addr_touched": 1,
+      "max_value": 111,
+      "padwidth": 20,
+      "growth_events": 0,
+      "stdout_hex": "41"
+    }
+  ]
+}

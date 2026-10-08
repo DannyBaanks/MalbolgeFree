@@ -1,0 +1,9 @@
+DETERMINISM name=epochal_w4_multi match=true
+DEGENERATION name=epochal_below_frontier match=true padwidth=4 growth_events=0
+GUARD name=epochal_requires_no_wrap note=python-constructor-raises
+EPOCHAL_CASES=3
+PYTHON_GUARD_REJECTS_WRAP=True
+  epochal_w3_multi: zig steps=300 padwidth=6 growth=3 | py steps=300 padwidth=6 growth=3 | match=yes
+  epochal_w4_multi: zig steps=1200 padwidth=7 growth=3 | py steps=1200 padwidth=7 growth=3 | match=yes
+  epochal_w10_single: zig steps=60000 padwidth=11 growth=1 | py steps=60000 padwidth=11 growth=1 | match=yes
+EPOCHAL_PYTHON_PARITY=PASS

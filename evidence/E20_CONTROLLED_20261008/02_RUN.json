@@ -1,0 +1,124 @@
+{
+  "e20_executed": false,
+  "e20_status": "BLOCKED_RESOURCE_GATE",
+  "commands": [
+    {
+      "name": "t_epochal.zig",
+      "command": [
+        "zig",
+        "test",
+        "--dep",
+        "malbolge_free=malbolge_free",
+        "-Mroot=tests/t_epochal.zig",
+        "-Mmalbolge_free=src/malbolge_free.zig"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.868356227874756,
+      "log_sha256": "22315a9987b765bceb53d182cda2a5ca694738cb53399922c7c535a9217473d0"
+    },
+    {
+      "name": "t_m5_full_vm.zig",
+      "command": [
+        "zig",
+        "test",
+        "--dep",
+        "malbolge_free=malbolge_free",
+        "-Mroot=tests/t_m5_full_vm.zig",
+        "-Mmalbolge_free=src/malbolge_free.zig"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.2202801704406738,
+      "log_sha256": "924c43a5c56cbd8168bdc9af3d9668452cf55d797c134d2f03f731e29fb4a73f"
+    },
+    {
+      "name": "t_dense_differential.zig",
+      "command": [
+        "zig",
+        "test",
+        "--dep",
+        "malbolge_free=malbolge_free",
+        "-Mroot=tests/t_dense_differential.zig",
+        "-Mmalbolge_free=src/malbolge_free.zig"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.526836633682251,
+      "log_sha256": "a6edf16178bcc74027aecb169e6e6f1a65f7b78f1c1145f4cd57777df35bfd69"
+    },
+    {
+      "name": "t_m4_conservative.zig",
+      "command": [
+        "zig",
+        "test",
+        "--dep",
+        "malbolge_free=malbolge_free",
+        "-Mroot=tests/t_m4_conservative.zig",
+        "-Mmalbolge_free=src/malbolge_free.zig"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.3216218948364258,
+      "log_sha256": "d2e293329002d032077ddef278c1def678eea393a39b42e4cad1da6d0bc3ed57"
+    },
+    {
+      "name": "epochal_python",
+      "command": [
+        "python3",
+        "evidence/compare_epochal.py",
+        "--output",
+        "/tmp/malbolgefree-e20-20261008/evidence/E20_CONTROLLED_20261008/epochal_python.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.5843381881713867,
+      "log_sha256": "8f5dfb537fee164f4d8fc6c4d7e5d51aa99085e6beef3113710c311d12cbb062"
+    },
+    {
+      "name": "hash_estimate20",
+      "command": [
+        "python3",
+        "evidence/M5_LADDER_SCALE/run_ladder_scale.py",
+        "--estimate",
+        "20"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.02960348129272461,
+      "log_sha256": "bb6a89486c9cc26f774573445fbadb348fea649ce4ee450a78000021aa09c8de"
+    },
+    {
+      "name": "calibration15_1",
+      "command": [
+        "zig",
+        "run",
+        "-O",
+        "ReleaseFast",
+        "--dep",
+        "malbolge_free",
+        "--dep",
+        "ladder_cfg",
+        "-Mroot=evidence/M5_LADDER_SCALE/ladder_scale.zig",
+        "-Mmalbolge_free=src/malbolge_free.zig",
+        "-Mladder_cfg=/tmp/malbolgefree-e20-20261008/evidence/E20_CONTROLLED_20261008/calibration_cfg.zig"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 13.820415258407593,
+      "log_sha256": "3986beb410c559207f19cff333a934c62f98101268c0914be120b6daf27d46ea"
+    },
+    {
+      "name": "calibration15_2",
+      "command": [
+        "zig",
+        "run",
+        "-O",
+        "ReleaseFast",
+        "--dep",
+        "malbolge_free",
+        "--dep",
+        "ladder_cfg",
+        "-Mroot=evidence/M5_LADDER_SCALE/ladder_scale.zig",
+        "-Mmalbolge_free=src/malbolge_free.zig",
+        "-Mladder_cfg=/tmp/malbolgefree-e20-20261008/evidence/E20_CONTROLLED_20261008/calibration_cfg.zig"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.27440905570983887,
+      "log_sha256": "83b2a6d04bd2025496dfb7841ade562734d88fc7e6ed3e34f0fe96231a80b3b1"
+    }
+  ]
+}

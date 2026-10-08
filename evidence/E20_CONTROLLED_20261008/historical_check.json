@@ -1,0 +1,99 @@
+{
+  "files_identical_to_base": {
+    "src/malbolge_free.zig": true,
+    "src/malbolge_core.py": true,
+    "evidence/M5_LADDER_SCALE/ladder_scale.zig": true,
+    "evidence/M5_LADDER_SCALE/run_ladder_scale.py": true,
+    "evidence/M5_LADDER_SCALE/results.json": true,
+    "tests/t_m5_full_vm.zig": true,
+    "tests/t_dense_differential.zig": true,
+    "tests/t_epochal.zig": true,
+    "tests/t_m4_conservative.zig": true,
+    "tests/frontier_witness.txt": true,
+    "evidence/compare_epochal.py": true
+  },
+  "historical_rows": [
+    {
+      "target_w": 17,
+      "verdict": "PASS",
+      "exit_code": 0,
+      "seconds_including_compile": 16.0,
+      "estimated_bytes": 2257640250,
+      "label": "linux-14gib-dense",
+      "os": "Linux",
+      "processor": "x86_64",
+      "ram_total_gib": 14.8,
+      "fields": {
+        "target": "17",
+        "status": "MAX_STEPS",
+        "steps": "43046722",
+        "padwidth": "17",
+        "growth": "7",
+        "final_c": "43046722",
+        "cells": "43047734",
+        "capacity": "0",
+        "stdout_len": "14196264",
+        "repr": "dense"
+      },
+      "tail": [
+        "representation=dense (u32 array, 172190936 bytes for 43047734 cells)",
+        "RESULT target=17 status=MAX_STEPS steps=43046722 padwidth=17 growth=7 final_c=43046722 cells=43047734 capacity=0 stdout_len=14196264 repr=dense"
+      ]
+    },
+    {
+      "target_w": 18,
+      "verdict": "PASS",
+      "exit_code": 0,
+      "seconds_including_compile": 22.4,
+      "estimated_bytes": 8987511228,
+      "label": "linux-14gib-dense",
+      "os": "Linux",
+      "processor": "x86_64",
+      "ram_total_gib": 14.8,
+      "fields": {
+        "target": "18",
+        "status": "MAX_STEPS",
+        "steps": "129140164",
+        "padwidth": "18",
+        "growth": "8",
+        "final_c": "129140164",
+        "cells": "129141176",
+        "capacity": "0",
+        "stdout_len": "42588775",
+        "repr": "dense"
+      },
+      "tail": [
+        "representation=dense (u32 array, 516564704 bytes for 129141176 cells)",
+        "RESULT target=18 status=MAX_STEPS steps=129140164 padwidth=18 growth=8 final_c=129140164 cells=129141176 capacity=0 stdout_len=42588775 repr=dense"
+      ]
+    },
+    {
+      "target_w": 19,
+      "verdict": "PASS",
+      "exit_code": 0,
+      "seconds_including_compile": 38.5,
+      "estimated_bytes": 18104161602,
+      "label": "linux-14gib-dense",
+      "os": "Linux",
+      "processor": "x86_64",
+      "ram_total_gib": 14.8,
+      "fields": {
+        "target": "19",
+        "status": "MAX_STEPS",
+        "steps": "387420490",
+        "padwidth": "19",
+        "growth": "9",
+        "final_c": "387420490",
+        "cells": "387421502",
+        "capacity": "0",
+        "stdout_len": "127766332",
+        "repr": "dense"
+      },
+      "tail": [
+        "representation=dense (u32 array, 1549686008 bytes for 387421502 cells)",
+        "RESULT target=19 status=MAX_STEPS steps=387420490 padwidth=19 growth=9 final_c=387420490 cells=387421502 capacity=0 stdout_len=127766332 repr=dense"
+      ]
+    }
+  ],
+  "note": "Preservation and internal consistency only; not reexecuted"
+}

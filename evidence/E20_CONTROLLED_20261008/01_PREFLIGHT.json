@@ -1,0 +1,26 @@
+{
+  "timestamp_utc": "2026-10-08T21:20:07Z",
+  "platform": "Linux x86_64",
+  "zig": "0.16.0",
+  "memory_bytes": {
+    "MemTotal": 15944626176,
+    "MemAvailable": 5071921152,
+    "SwapTotal": 4294963200,
+    "SwapFree": 56102912
+  },
+  "tmp_free_bytes": 34898100224,
+  "boundary": 1162261467,
+  "planned_steps": 1162261468,
+  "source_bytes": 1162262468,
+  "dense_bytes": 4649049920,
+  "source_plus_dense_bytes": 5811312388,
+  "source_plus_dense_is_not_peak": true,
+  "decision": "BLOCKED_RESOURCE_GATE",
+  "reason": "MemAvailable below 10 GiB and source+dense alone exceeds 60% budget",
+  "peak_budget_bytes": 3043152691,
+  "limits_for_small_runs": {
+    "address_space_bytes": 2147483648,
+    "cpu_seconds": 180,
+    "wall_seconds": 240
+  }
+}

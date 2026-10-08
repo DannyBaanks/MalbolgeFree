@@ -1,0 +1,28 @@
+1/4 t_dense_differential.test.dense representation is observationally identical to the hash map...OK
+2/4 t_dense_differential.test.traces match step by step (a, c, d, cell, encryption)...OK
+3/4 t_dense_differential.test.dense refuses widths whose values overflow the u32 element type...OK
+4/4 t_dense_differential.test.free_pure epochal ladder agrees across representations...OK
+All 4 tests passed.
+	Command being timed: "zig test --dep malbolge_free=malbolge_free -Mroot=tests/t_dense_differential.zig -Mmalbolge_free=src/malbolge_free.zig"
+	User time (seconds): 0.18
+	System time (seconds): 0.01
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.20
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 36592
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 4483
+	Voluntary context switches: 4
+	Involuntary context switches: 3
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
