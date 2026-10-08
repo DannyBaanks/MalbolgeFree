@@ -1,5 +1,20 @@
 # HONESTY LEDGER
 
+## RAM scaling update — 2026-10-08
+
+GitHub run 37848647590 at f472b42 measured real epochal rungs 14..20 in
+separate fresh VMs, each booting at 10. Peak RSS grows approximately by 3:
+18=0.642 GiB, 19=1.925 GiB, 20=5.771 GiB. The second full 20 execution exactly
+matches the earlier E20 aggregate fields, events, source and stdout hashes.
+The collector stopped before width 21 allocation for both resource-budget and
+dense-u32-ceiling reasons. No u64/u128 dense runtime was introduced.
+[Preserved raw evidence and projections](../evidence/RAM_SCALE_RUN_20261008/04_VERDICT.md).
+Seven gate/parser tests passed locally and on CI; downloaded hashes and
+the absence of next-rung allocation/configuration were verified locally.
+16/32/64/128 GiB projections are minimum-storage gate ceilings, not measured
+capabilities. Infinite growth, larger-width implementation parity and a
+universal RAM-to-width theorem remain NOT_DEMONSTRATED.
+
 ## Evidence update — 2026-10-08: epochal reaches 20, fixed20 EOF differs
 
 `EPOCHAL_19_TO_20 = DEMONSTRATED_SCOPED`: GitHub-hosted Ubuntu run

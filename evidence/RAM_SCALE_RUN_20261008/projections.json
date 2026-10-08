@@ -1,0 +1,38 @@
+[
+  {
+    "total_ram_gib": 16,
+    "assumed_available_gib": 16,
+    "budget_bytes": 10307921510,
+    "current_storage_gate_max": 20,
+    "hypothetical_wider_dense_storage_gate_max": 20,
+    "status": "PROJECTION_ONLY_NOT_A_CAPABILITY_DEMONSTRATION",
+    "note": "Optimistic available=total; source+array/storage minimum with25% margin. Runtime/output overhead can reduce this maximum."
+  },
+  {
+    "total_ram_gib": 32,
+    "assumed_available_gib": 32,
+    "budget_bytes": 20615843020,
+    "current_storage_gate_max": 20,
+    "hypothetical_wider_dense_storage_gate_max": 20,
+    "status": "PROJECTION_ONLY_NOT_A_CAPABILITY_DEMONSTRATION",
+    "note": "Optimistic available=total; source+array/storage minimum with25% margin. Runtime/output overhead can reduce this maximum."
+  },
+  {
+    "total_ram_gib": 64,
+    "assumed_available_gib": 64,
+    "budget_bytes": 41231686041,
+    "current_storage_gate_max": 20,
+    "hypothetical_wider_dense_storage_gate_max": 21,
+    "status": "PROJECTION_ONLY_NOT_A_CAPABILITY_DEMONSTRATION",
+    "note": "Optimistic available=total; source+array/storage minimum with25% margin. Runtime/output overhead can reduce this maximum."
+  },
+  {
+    "total_ram_gib": 128,
+    "assumed_available_gib": 128,
+    "budget_bytes": 82463372083,
+    "current_storage_gate_max": 20,
+    "hypothetical_wider_dense_storage_gate_max": 21,
+    "status": "PROJECTION_ONLY_NOT_A_CAPABILITY_DEMONSTRATION",
+    "note": "Optimistic available=total; source+array/storage minimum with25% margin. Runtime/output overhead can reduce this maximum."
+  }
+]

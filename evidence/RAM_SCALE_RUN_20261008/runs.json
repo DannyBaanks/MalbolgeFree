@@ -1,0 +1,653 @@
+[
+  {
+    "width": 14,
+    "fields": {
+      "target": "14",
+      "status": "MAX_STEPS",
+      "steps": "1594324",
+      "padwidth": "14",
+      "growth": "4",
+      "final_c": "1594324",
+      "cells": "1595336",
+      "capacity": "0",
+      "stdout_len": "525791",
+      "repr": "dense"
+    },
+    "hashes": {
+      "source": "059e9288a465d5999b451938402314d6f87a7b4c317ff7d2fee886eb05aa9f06",
+      "stdout": "06bc5506d6143b1f25f7ec5046bec74d7db3624d64629eb31ce8d06e1336c5c4",
+      "final_d": "1594324",
+      "encrypted": "1272060",
+      "assisted": "0"
+    },
+    "widen_events": [
+      {
+        "step": "59050",
+        "c": "59049",
+        "d": "59049",
+        "old_w": "10",
+        "new_w": "11"
+      },
+      {
+        "step": "177148",
+        "c": "177147",
+        "d": "177147",
+        "old_w": "11",
+        "new_w": "12"
+      },
+      {
+        "step": "531442",
+        "c": "531441",
+        "d": "531441",
+        "old_w": "12",
+        "new_w": "13"
+      },
+      {
+        "step": "1594324",
+        "c": "1594323",
+        "d": "1594323",
+        "old_w": "13",
+        "new_w": "14"
+      }
+    ],
+    "peak_rss_bytes": 9252864,
+    "executable_elapsed_seconds": 0.13639092900000094,
+    "gate": {
+      "width": 14,
+      "steps": 1594324,
+      "source_bytes": 1595324,
+      "cells": 1595336,
+      "hypothetical_cell_bytes": 4,
+      "hypothetical_source_array_min_bytes": 7976668,
+      "current_representation": "dense_u32",
+      "current_source_storage_min_bytes": 7976668,
+      "hash_capacity": 2097152,
+      "dense_u32_supported": true,
+      "available_bytes": 15679680512,
+      "disk_free_bytes": 91852304384,
+      "budget_bytes": 9407808307,
+      "predicted_peak_with_25_percent_margin": 134217728,
+      "decision": "GO",
+      "reasons": []
+    }
+  },
+  {
+    "width": 15,
+    "fields": {
+      "target": "15",
+      "status": "MAX_STEPS",
+      "steps": "4782970",
+      "padwidth": "15",
+      "growth": "5",
+      "final_c": "4782970",
+      "cells": "4783982",
+      "capacity": "0",
+      "stdout_len": "1577368",
+      "repr": "dense"
+    },
+    "hashes": {
+      "source": "57a256c58d8ee2ce8275cfa33e0606217494910d2a30256f0b852f4c8e4e520a",
+      "stdout": "535773f0fa8d2b9c96a681a6e6df766abf5e11d513f813b27bb56f6e088a9cc3",
+      "final_d": "4782970",
+      "encrypted": "3816188",
+      "assisted": "0"
+    },
+    "widen_events": [
+      {
+        "step": "59050",
+        "c": "59049",
+        "d": "59049",
+        "old_w": "10",
+        "new_w": "11"
+      },
+      {
+        "step": "177148",
+        "c": "177147",
+        "d": "177147",
+        "old_w": "11",
+        "new_w": "12"
+      },
+      {
+        "step": "531442",
+        "c": "531441",
+        "d": "531441",
+        "old_w": "12",
+        "new_w": "13"
+      },
+      {
+        "step": "1594324",
+        "c": "1594323",
+        "d": "1594323",
+        "old_w": "13",
+        "new_w": "14"
+      },
+      {
+        "step": "4782970",
+        "c": "4782969",
+        "d": "4782969",
+        "old_w": "14",
+        "new_w": "15"
+      }
+    ],
+    "peak_rss_bytes": 26169344,
+    "executable_elapsed_seconds": 0.4051349869999967,
+    "gate": {
+      "width": 15,
+      "steps": 4782970,
+      "source_bytes": 4783970,
+      "cells": 4783982,
+      "hypothetical_cell_bytes": 4,
+      "hypothetical_source_array_min_bytes": 23919898,
+      "current_representation": "dense_u32",
+      "current_source_storage_min_bytes": 23919898,
+      "hash_capacity": 8388608,
+      "dense_u32_supported": true,
+      "available_bytes": 15676338176,
+      "disk_free_bytes": 91801542656,
+      "budget_bytes": 9405802905,
+      "predicted_peak_with_25_percent_margin": 134217728,
+      "decision": "GO",
+      "reasons": []
+    }
+  },
+  {
+    "width": 16,
+    "fields": {
+      "target": "16",
+      "status": "MAX_STEPS",
+      "steps": "14348908",
+      "padwidth": "16",
+      "growth": "6",
+      "final_c": "14348908",
+      "cells": "14349920",
+      "capacity": "0",
+      "stdout_len": "4732088",
+      "repr": "dense"
+    },
+    "hashes": {
+      "source": "3aca10fb8a545647de97d4a7cfc61d071cfcc0e19e7a675869a852a461a10566",
+      "stdout": "430b616ea45d528c5a727d84d813eb9cef2e2a24a31cfa4f0fa6d7a5cd07b8da",
+      "final_d": "14348908",
+      "encrypted": "11448588",
+      "assisted": "0"
+    },
+    "widen_events": [
+      {
+        "step": "59050",
+        "c": "59049",
+        "d": "59049",
+        "old_w": "10",
+        "new_w": "11"
+      },
+      {
+        "step": "177148",
+        "c": "177147",
+        "d": "177147",
+        "old_w": "11",
+        "new_w": "12"
+      },
+      {
+        "step": "531442",
+        "c": "531441",
+        "d": "531441",
+        "old_w": "12",
+        "new_w": "13"
+      },
+      {
+        "step": "1594324",
+        "c": "1594323",
+        "d": "1594323",
+        "old_w": "13",
+        "new_w": "14"
+      },
+      {
+        "step": "4782970",
+        "c": "4782969",
+        "d": "4782969",
+        "old_w": "14",
+        "new_w": "15"
+      },
+      {
+        "step": "14348908",
+        "c": "14348907",
+        "d": "14348907",
+        "old_w": "15",
+        "new_w": "16"
+      }
+    ],
+    "peak_rss_bytes": 77160448,
+    "executable_elapsed_seconds": 1.258258402999985,
+    "gate": {
+      "width": 16,
+      "steps": 14348908,
+      "source_bytes": 14349908,
+      "cells": 14349920,
+      "hypothetical_cell_bytes": 4,
+      "hypothetical_source_array_min_bytes": 71749588,
+      "current_representation": "dense_u32",
+      "current_source_storage_min_bytes": 71749588,
+      "hash_capacity": 33554432,
+      "dense_u32_supported": true,
+      "available_bytes": 15661035520,
+      "disk_free_bytes": 91797549056,
+      "budget_bytes": 9396621312,
+      "predicted_peak_with_25_percent_margin": 134217728,
+      "decision": "GO",
+      "reasons": []
+    }
+  },
+  {
+    "width": 17,
+    "fields": {
+      "target": "17",
+      "status": "MAX_STEPS",
+      "steps": "43046722",
+      "padwidth": "17",
+      "growth": "7",
+      "final_c": "43046722",
+      "cells": "43047734",
+      "capacity": "0",
+      "stdout_len": "14196264",
+      "repr": "dense"
+    },
+    "hashes": {
+      "source": "5be9840cea5428cc35e87e0e1a805375c37b34933d6d79f5f0da259c8f81bc58",
+      "stdout": "d6b2b04ab73200764ba1d000e4db6e5f0687ada5cb29634c43310ac8e42f9b2f",
+      "final_d": "43046722",
+      "encrypted": "34345763",
+      "assisted": "0"
+    },
+    "widen_events": [
+      {
+        "step": "59050",
+        "c": "59049",
+        "d": "59049",
+        "old_w": "10",
+        "new_w": "11"
+      },
+      {
+        "step": "177148",
+        "c": "177147",
+        "d": "177147",
+        "old_w": "11",
+        "new_w": "12"
+      },
+      {
+        "step": "531442",
+        "c": "531441",
+        "d": "531441",
+        "old_w": "12",
+        "new_w": "13"
+      },
+      {
+        "step": "1594324",
+        "c": "1594323",
+        "d": "1594323",
+        "old_w": "13",
+        "new_w": "14"
+      },
+      {
+        "step": "4782970",
+        "c": "4782969",
+        "d": "4782969",
+        "old_w": "14",
+        "new_w": "15"
+      },
+      {
+        "step": "14348908",
+        "c": "14348907",
+        "d": "14348907",
+        "old_w": "15",
+        "new_w": "16"
+      },
+      {
+        "step": "43046722",
+        "c": "43046721",
+        "d": "43046721",
+        "old_w": "16",
+        "new_w": "17"
+      }
+    ],
+    "peak_rss_bytes": 230129664,
+    "executable_elapsed_seconds": 3.926445739000002,
+    "gate": {
+      "width": 17,
+      "steps": 43046722,
+      "source_bytes": 43047722,
+      "cells": 43047734,
+      "hypothetical_cell_bytes": 4,
+      "hypothetical_source_array_min_bytes": 215238658,
+      "current_representation": "dense_u32",
+      "current_source_storage_min_bytes": 215238658,
+      "hash_capacity": 67108864,
+      "dense_u32_supported": true,
+      "available_bytes": 15672766464,
+      "disk_free_bytes": 91793555456,
+      "budget_bytes": 9403659878,
+      "predicted_peak_with_25_percent_margin": 289351680,
+      "decision": "GO",
+      "reasons": []
+    }
+  },
+  {
+    "width": 18,
+    "fields": {
+      "target": "18",
+      "status": "MAX_STEPS",
+      "steps": "129140164",
+      "padwidth": "18",
+      "growth": "8",
+      "final_c": "129140164",
+      "cells": "129141176",
+      "capacity": "0",
+      "stdout_len": "42588775",
+      "repr": "dense"
+    },
+    "hashes": {
+      "source": "050db490c4266fcea1b0fc36898c8fb343f65002d147ca1b1b3ec8f5473523a9",
+      "stdout": "a9309707439df6472ffbc1589584ed0d0c80dc5cf734674cfc7713e51333d1a6",
+      "final_d": "129140164",
+      "encrypted": "103037333",
+      "assisted": "0"
+    },
+    "widen_events": [
+      {
+        "step": "59050",
+        "c": "59049",
+        "d": "59049",
+        "old_w": "10",
+        "new_w": "11"
+      },
+      {
+        "step": "177148",
+        "c": "177147",
+        "d": "177147",
+        "old_w": "11",
+        "new_w": "12"
+      },
+      {
+        "step": "531442",
+        "c": "531441",
+        "d": "531441",
+        "old_w": "12",
+        "new_w": "13"
+      },
+      {
+        "step": "1594324",
+        "c": "1594323",
+        "d": "1594323",
+        "old_w": "13",
+        "new_w": "14"
+      },
+      {
+        "step": "4782970",
+        "c": "4782969",
+        "d": "4782969",
+        "old_w": "14",
+        "new_w": "15"
+      },
+      {
+        "step": "14348908",
+        "c": "14348907",
+        "d": "14348907",
+        "old_w": "15",
+        "new_w": "16"
+      },
+      {
+        "step": "43046722",
+        "c": "43046721",
+        "d": "43046721",
+        "old_w": "16",
+        "new_w": "17"
+      },
+      {
+        "step": "129140164",
+        "c": "129140163",
+        "d": "129140163",
+        "old_w": "17",
+        "new_w": "18"
+      }
+    ],
+    "peak_rss_bytes": 689205248,
+    "executable_elapsed_seconds": 11.612211957,
+    "gate": {
+      "width": 18,
+      "steps": 129140164,
+      "source_bytes": 129141164,
+      "cells": 129141176,
+      "hypothetical_cell_bytes": 4,
+      "hypothetical_source_array_min_bytes": 645705868,
+      "current_representation": "dense_u32",
+      "current_source_storage_min_bytes": 645705868,
+      "hash_capacity": 268435456,
+      "dense_u32_supported": true,
+      "available_bytes": 15679553536,
+      "disk_free_bytes": 91789565952,
+      "budget_bytes": 9407732121,
+      "predicted_peak_with_25_percent_margin": 862986240,
+      "decision": "GO",
+      "reasons": []
+    }
+  },
+  {
+    "width": 19,
+    "fields": {
+      "target": "19",
+      "status": "MAX_STEPS",
+      "steps": "387420490",
+      "padwidth": "19",
+      "growth": "9",
+      "final_c": "387420490",
+      "cells": "387421502",
+      "capacity": "0",
+      "stdout_len": "127766332",
+      "repr": "dense"
+    },
+    "hashes": {
+      "source": "54b18d09d211831332d8ac29c4f02014a0277fba5acfd3f510d30c7dfe7e2480",
+      "stdout": "19018d4bf93652e59c9aafe2c60f5760fb2719b75906133b9d3a236cfdc50085",
+      "final_d": "387420490",
+      "encrypted": "309112062",
+      "assisted": "0"
+    },
+    "widen_events": [
+      {
+        "step": "59050",
+        "c": "59049",
+        "d": "59049",
+        "old_w": "10",
+        "new_w": "11"
+      },
+      {
+        "step": "177148",
+        "c": "177147",
+        "d": "177147",
+        "old_w": "11",
+        "new_w": "12"
+      },
+      {
+        "step": "531442",
+        "c": "531441",
+        "d": "531441",
+        "old_w": "12",
+        "new_w": "13"
+      },
+      {
+        "step": "1594324",
+        "c": "1594323",
+        "d": "1594323",
+        "old_w": "13",
+        "new_w": "14"
+      },
+      {
+        "step": "4782970",
+        "c": "4782969",
+        "d": "4782969",
+        "old_w": "14",
+        "new_w": "15"
+      },
+      {
+        "step": "14348908",
+        "c": "14348907",
+        "d": "14348907",
+        "old_w": "15",
+        "new_w": "16"
+      },
+      {
+        "step": "43046722",
+        "c": "43046721",
+        "d": "43046721",
+        "old_w": "16",
+        "new_w": "17"
+      },
+      {
+        "step": "129140164",
+        "c": "129140163",
+        "d": "129140163",
+        "old_w": "17",
+        "new_w": "18"
+      },
+      {
+        "step": "387420490",
+        "c": "387420489",
+        "d": "387420489",
+        "old_w": "18",
+        "new_w": "19"
+      }
+    ],
+    "peak_rss_bytes": 2067525632,
+    "executable_elapsed_seconds": 35.60427042500001,
+    "gate": {
+      "width": 19,
+      "steps": 387420490,
+      "source_bytes": 387421490,
+      "cells": 387421502,
+      "hypothetical_cell_bytes": 4,
+      "hypothetical_source_array_min_bytes": 1937107498,
+      "current_representation": "dense_u32",
+      "current_source_storage_min_bytes": 1937107498,
+      "hash_capacity": 536870912,
+      "dense_u32_supported": true,
+      "available_bytes": 15729225728,
+      "disk_free_bytes": 91785568256,
+      "budget_bytes": 9437535436,
+      "predicted_peak_with_25_percent_margin": 2584519680,
+      "decision": "GO",
+      "reasons": []
+    }
+  },
+  {
+    "width": 20,
+    "fields": {
+      "target": "20",
+      "status": "MAX_STEPS",
+      "steps": "1162261468",
+      "padwidth": "20",
+      "growth": "10",
+      "final_c": "1162261468",
+      "cells": "1162262480",
+      "capacity": "0",
+      "stdout_len": "383299003",
+      "repr": "dense"
+    },
+    "hashes": {
+      "source": "b9788933f5892f3a855e93d746e74cb1561fd00882182ac2b4e704f41af91aac",
+      "stdout": "84b36064019d339f445bfa627609f38d897bde7db5f0398393851bf2ba3df770",
+      "final_d": "1162261468",
+      "encrypted": "927336249",
+      "assisted": "0"
+    },
+    "widen_events": [
+      {
+        "step": "59050",
+        "c": "59049",
+        "d": "59049",
+        "old_w": "10",
+        "new_w": "11"
+      },
+      {
+        "step": "177148",
+        "c": "177147",
+        "d": "177147",
+        "old_w": "11",
+        "new_w": "12"
+      },
+      {
+        "step": "531442",
+        "c": "531441",
+        "d": "531441",
+        "old_w": "12",
+        "new_w": "13"
+      },
+      {
+        "step": "1594324",
+        "c": "1594323",
+        "d": "1594323",
+        "old_w": "13",
+        "new_w": "14"
+      },
+      {
+        "step": "4782970",
+        "c": "4782969",
+        "d": "4782969",
+        "old_w": "14",
+        "new_w": "15"
+      },
+      {
+        "step": "14348908",
+        "c": "14348907",
+        "d": "14348907",
+        "old_w": "15",
+        "new_w": "16"
+      },
+      {
+        "step": "43046722",
+        "c": "43046721",
+        "d": "43046721",
+        "old_w": "16",
+        "new_w": "17"
+      },
+      {
+        "step": "129140164",
+        "c": "129140163",
+        "d": "129140163",
+        "old_w": "17",
+        "new_w": "18"
+      },
+      {
+        "step": "387420490",
+        "c": "387420489",
+        "d": "387420489",
+        "old_w": "18",
+        "new_w": "19"
+      },
+      {
+        "step": "1162261468",
+        "c": "1162261467",
+        "d": "1162261467",
+        "old_w": "19",
+        "new_w": "20"
+      }
+    ],
+    "peak_rss_bytes": 6196449280,
+    "executable_elapsed_seconds": 110.13388846099997,
+    "gate": {
+      "width": 20,
+      "steps": 1162261468,
+      "source_bytes": 1162262468,
+      "cells": 1162262480,
+      "hypothetical_cell_bytes": 4,
+      "hypothetical_source_array_min_bytes": 5811312388,
+      "current_representation": "dense_u32",
+      "current_source_storage_min_bytes": 5811312388,
+      "hash_capacity": 2147483648,
+      "dense_u32_supported": true,
+      "available_bytes": 15746203648,
+      "disk_free_bytes": 91781574656,
+      "budget_bytes": 9447722188,
+      "predicted_peak_with_25_percent_margin": 7753221120,
+      "decision": "GO",
+      "reasons": []
+    }
+  }
+]

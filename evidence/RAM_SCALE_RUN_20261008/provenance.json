@@ -1,0 +1,19 @@
+{
+  "commit": "f472b42953a6cece12d4615a41219586eaffe2b7",
+  "timestamp_utc": "2026-10-08T21:42:43Z",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "harness_sha256": "96ab4543d81f6494b24ef8b719459a027440d15b907d0e658d7f2765cc4617a3",
+  "seed": {
+    "timestamp_utc": "2026-10-08T21:30:57Z",
+    "commit": "ac94be2b92345e2d872f05e265f853b4d3afac3e",
+    "zig": "0.16.0",
+    "hashes": {
+      "src/malbolge_free.zig": "decb108de14fe36f446741e61533dfbf6d3087522c30adb87956631a86f175a4",
+      "evidence/M5_LADDER_SCALE/ladder_scale.zig": "2e5383f014522baab7ec72bbc8a0c838e514776b793e38c8b2ebddc09fc7518f",
+      "evidence/E20_CI_20261008/run_ci.py": "9dd87c18c1ce04249be642680359ead4d9be946a63a50864d7850df9b4d41207"
+    },
+    "instrumented_core_sha256": "628d00881043d8d74a0aa7f569c54154bf7486786bd871dc2c673a79246775d2",
+    "probe_sha256": "d045f2b5261eaa6c038c8278901321df831a4d9afb84aad30bb60391f4e83c27"
+  },
+  "zig": "0.16.0"
+}

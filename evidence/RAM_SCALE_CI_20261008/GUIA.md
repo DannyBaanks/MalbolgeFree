@@ -2,8 +2,20 @@
 python3 evidence/RAM_SCALE_CI_20261008/verify_scale.py /ruta/al/artifact
 ```
 
-Verifica la evidencia descargada sin repetir la corrida. NO PROBADO todavía
-contra el artifact de este barrido: se actualizará después de GitHub.
+Verifica la evidencia descargada sin repetir la corrida. Ejecutado realmente:
+
+```bash
+python3 evidence/RAM_SCALE_CI_20261008/verify_scale.py /tmp/ram-scale-artifacts-37848647590/ram-scale-37848647590-1
+```
+
+Salida real:
+
+```json
+{"status": "STOPPED_BEFORE_NEXT_ALLOCATION", "measured_widths": [14, 15, 16, 17, 18, 19, 20], "next_rung_executed": false, "next_width": 21, "reasons": ["PREDICTED_PEAK_ABOVE_BUDGET", "CURRENT_STORAGE_MIN_ABOVE_BUDGET", "DENSE_U32_WIDTH_CEILING"], "scope": "Finite linear ladder witness, single Zig implementation. No global RAM-to-language-width theorem."}
+```
+
+Corrida: https://github.com/DannyBaanks/MalbolgeFree/actions/runs/37848647590
+Evidencia y tabla: `evidence/RAM_SCALE_RUN_20261008/04_VERDICT.md`.
 
 Regla de oro: NO_GO detiene el siguiente peldaño antes de asignar memoria;
 no intentar consumir toda la RAM ni interpretar las proyecciones como PASS.

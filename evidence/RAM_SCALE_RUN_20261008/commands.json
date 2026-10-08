@@ -1,0 +1,247 @@
+[
+  {
+    "name": "build14",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/ram-scale/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/ram-scale/instrumented_core.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/ram-scale/cfg14.zig",
+      "-femit-bin=/home/runner/work/_temp/ram-scale/vm14"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 19.374663860999988,
+    "log_sha256": "d66517222a20bb3ee60080872f59f9f5351738ec043d5e96c14718f0693b513c",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "rung14",
+    "command": [
+      "/home/runner/work/_temp/ram-scale/vm14"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.13639092900000094,
+    "log_sha256": "ccec4254272d8113986a05bfc226af3ff8dd6561be9dd86d8d39b8186c95c3b5",
+    "address_space_limit_bytes": 9407808307,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build15",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/ram-scale/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/ram-scale/instrumented_core.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/ram-scale/cfg15.zig",
+      "-femit-bin=/home/runner/work/_temp/ram-scale/vm15"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.404133142000006,
+    "log_sha256": "a792c992246c9eea27a98bb6aed0217f654c11c1861ab4996edefc77b127fc05",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "rung15",
+    "command": [
+      "/home/runner/work/_temp/ram-scale/vm15"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.4051349869999967,
+    "log_sha256": "9bb140cb328815df9651555b6ef37ac1747a5d5161b65377f65921837ced21cc",
+    "address_space_limit_bytes": 9405802905,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build16",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/ram-scale/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/ram-scale/instrumented_core.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/ram-scale/cfg16.zig",
+      "-femit-bin=/home/runner/work/_temp/ram-scale/vm16"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.350028147000017,
+    "log_sha256": "46051d7bf9fe84b2def99cdca3c39e1f8f50adec7bc84b96583309743a1ae5de",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "rung16",
+    "command": [
+      "/home/runner/work/_temp/ram-scale/vm16"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.258258402999985,
+    "log_sha256": "49bd520bf987764fba624e3b13ff096c0580c937c6c14b6b47a231e1ad495e28",
+    "address_space_limit_bytes": 9396621312,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build17",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/ram-scale/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/ram-scale/instrumented_core.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/ram-scale/cfg17.zig",
+      "-femit-bin=/home/runner/work/_temp/ram-scale/vm17"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.386501668999983,
+    "log_sha256": "f9b31c6feb1f59e3f20437ea714bffaad61a24094d261ce6534babeb54e7a020",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "rung17",
+    "command": [
+      "/home/runner/work/_temp/ram-scale/vm17"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 3.926445739000002,
+    "log_sha256": "00b0cdf330af01450a4c95d4b9b760e106651164fc7c66104c469c0aa58f5cb5",
+    "address_space_limit_bytes": 9403659878,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build18",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/ram-scale/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/ram-scale/instrumented_core.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/ram-scale/cfg18.zig",
+      "-femit-bin=/home/runner/work/_temp/ram-scale/vm18"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.443670141000013,
+    "log_sha256": "e71718feb77332a8775c5d55c55a5d923341aad34e3ec067dd814e494947438c",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "rung18",
+    "command": [
+      "/home/runner/work/_temp/ram-scale/vm18"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 11.612211957,
+    "log_sha256": "88f20b3f6d07bd21384f3a48c6fbb676295e1f072609c04bba61a65ba4683095",
+    "address_space_limit_bytes": 9407732121,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build19",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/ram-scale/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/ram-scale/instrumented_core.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/ram-scale/cfg19.zig",
+      "-femit-bin=/home/runner/work/_temp/ram-scale/vm19"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.566657074000005,
+    "log_sha256": "966c3c83cbc04fec62ca9b51386966ef7e185ecd6e2c0a205a6691c3c967ccfb",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "rung19",
+    "command": [
+      "/home/runner/work/_temp/ram-scale/vm19"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 35.60427042500001,
+    "log_sha256": "e47e297f7d48d74bd358ac5ae0fadd3282c42b99c19deb2dc3a4952a0bdae86d",
+    "address_space_limit_bytes": 9437535436,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build20",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/home/runner/work/_temp/ram-scale/probe.zig",
+      "-Mmalbolge_free=/home/runner/work/_temp/ram-scale/instrumented_core.zig",
+      "-Mladder_cfg=/home/runner/work/_temp/ram-scale/cfg20.zig",
+      "-femit-bin=/home/runner/work/_temp/ram-scale/vm20"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.252435668000004,
+    "log_sha256": "0dcfcf1eb72badf0edc234eef13345145c26072834b58055fff1b00394e348a4",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "rung20",
+    "command": [
+      "/home/runner/work/_temp/ram-scale/vm20"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 110.13388846099997,
+    "log_sha256": "6c76e78238919e1730b54c25c3693f6673b64061979b8bef383d1720171a5958",
+    "address_space_limit_bytes": 9447722188,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  }
+]

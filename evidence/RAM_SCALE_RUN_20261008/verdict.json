@@ -1,0 +1,20 @@
+{
+  "status": "STOPPED_BEFORE_NEXT_ALLOCATION",
+  "measured_widths": [
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "next_rung_executed": false,
+  "next_width": 21,
+  "reasons": [
+    "PREDICTED_PEAK_ABOVE_BUDGET",
+    "CURRENT_STORAGE_MIN_ABOVE_BUDGET",
+    "DENSE_U32_WIDTH_CEILING"
+  ],
+  "scope": "Finite linear ladder witness, single Zig implementation. No global RAM-to-language-width theorem."
+}

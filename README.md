@@ -10,6 +10,12 @@
 > interpreter and both Free cores disagree on EOF echo
 > ([counterexample](evidence/E20_CONTROLLED_20261008/03_NAGOYA_COMPARE.md)).
 
+> **RAM sweep — 2026-10-08:** measured every rung 14..20 sequentially on
+> GitHub Ubuntu and stopped before allocating 21. Peak RSS at 18/19/20:
+> 0.642 / 1.925 / 5.771 GiB; executable times 11.61 / 35.60 / 110.13 s.
+> [Measurements and explicitly hypothetical larger-RAM projections](evidence/RAM_SCALE_RUN_20261008/04_VERDICT.md).
+> This is a workload-specific scaling study, not a universal RAM-to-width claim.
+
 ```
 Malbolge Classic    :   >:(
 Malbolge Unshackled :   >:D
