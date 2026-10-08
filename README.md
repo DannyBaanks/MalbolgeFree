@@ -1,20 +1,12 @@
 # Malbolge Free
 
-> **Evidence update — 2026-10-08:** one continuous real-VM epochal run from
-> width 10 reached **20** on GitHub Ubuntu: 1,162,261,468 steps, ten widenings,
-> 109.87 s including source generation/load/hash, peak RSS 5.77 GiB.
-> [Preserved E20 evidence](evidence/E20_GITHUB_RUN_20261008/04_VERDICT.md)
-> supersedes the earlier finite-ladder ceiling of 19 below; historical records
-> remain unchanged. Dense is still bounded at 20, unbounded growth is not
-> demonstrated. Fixed20 is **not** generally Nagoya-compatible: the original
-> interpreter and both Free cores disagree on EOF echo
-> ([counterexample](evidence/E20_CONTROLLED_20261008/03_NAGOYA_COMPARE.md)).
-
-> **RAM sweep — 2026-10-08:** measured every rung 14..20 sequentially on
-> GitHub Ubuntu and stopped before allocating 21. Peak RSS at 18/19/20:
-> 0.642 / 1.925 / 5.771 GiB; executable times 11.61 / 35.60 / 110.13 s.
-> [Measurements and explicitly hypothetical larger-RAM projections](evidence/RAM_SCALE_RUN_20261008/04_VERDICT.md).
-> This is a workload-specific scaling study, not a universal RAM-to-width claim.
+> **Measured update — 2026-10-08:** the real epochal VM reached **width 20**
+> from boot width 10, and a separate parametric sweep measured **targets 1–20**
+> with every VM booting at 1. Peak RAM at 20 was about **5.77 GiB**.
+> [Results, tables, resource limits and verification](#measured-e20-and-ram-scaling-2026-10-08).
+> The dense `u32` representation still stops at 20. Tiny-width runs explicitly
+> accept ASCII outside the initial word range; fixed20 also has a demonstrated
+> EOF disagreement with the original Nagoya interpreter.
 
 ```
 Malbolge Classic    :   >:(
@@ -22,7 +14,7 @@ Malbolge Unshackled :   >:D
 Malbolge Free       :   ^w^   (Malbolgato)
 ```
 
-> **Release v1.1.0** (2026-10-02) — all milestones green or explicitly bounded.
+> **Historical release v1.1.0** (2026-10-02) — all milestones green or explicitly bounded.
 > Harness 49/49 PASS, CI green on ubuntu + windows. Turing completeness holds
 > via the documented inherited claim (`fixed` == Classic; Classic is TC per
 > Scheffer 1999) — see [Turing Completeness Status](#turing-completeness-status).
@@ -86,10 +78,11 @@ next step needs more room.
 A: No. What ran at 10 stays exactly as it ran at 10.
 
 **Q: Have we shown `w` can grow forever?**
-A: No. We have shown a finite ladder: `10 -> 11 -> 12` in the committed
-witness, and every rung up to `19` measured on the real VM loop. Each rung
-costs three times the steps and memory of the previous one, so this is a
-measured ladder, not a proof of unbounded growth.
+A: No. The real VM has reached `20` from boot width `10`. A separate
+parametric sweep starts at `1` and measures every target through `20`, with
+explicit tiny-width word-range exceptions. For this linear witness, steps
+and large-rung storage grow approximately threefold per rung. Width `21`
+was not executed; the dense `u32` representation ends at `20`.
 
 ## The machine
 
@@ -102,9 +95,182 @@ In the code, the current value of `w` is stored in a field called `padwidth`
 |---|---|---|---|
 | `fixed` | no | classic frozen width | Classic parity semantics |
 | `pad_to_padwidth` | yes — by value overflow | pads operands when big values appear | **DESTROYED** by rotate (see below) |
-| `epochal` | yes — by address frontier | widens `w` when `c`/`d` reach `3^w` | **DEMONSTRATED** — ladder `10 -> 19` measured on the real VM |
+| `epochal` | yes — by address frontier | widens `w` when `c`/`d` reach `3^w` | **DEMONSTRATED (scoped)** — `10 -> 20`; separate parametric `1 -> 20` sweep below |
 
-## Demonstrated (re-verified 2026-09-16)
+## Measured E20 and RAM scaling (2026-10-08)
+
+These are finite, workload-specific measurements on GitHub Ubuntu runners.
+Each benchmark starts a fresh VM; its epochal execution crosses every
+frontier up to the target. A target reached with `MAX_STEPS` means the
+configured execution budget ended, rather than a program `HALT`.
+The original runtime source was unchanged. An observation-only core copy
+records actual widening events; small original/observed differential checks
+and repeated runs validate that instrumentation.
+
+### Continuous boot10 run: 10 → 20
+
+One uninterrupted `vm.run`, boot width 10, `epochal`, `free_pure`, no address
+wrap and dense `u32` storage reached width 20 after **1,162,261,468 steps**
+and **10 widenings**. Final `c` and `d` were both 1,162,261,468. It materialized
+1,162,262,480 cells and produced 383,299,003 output bytes, with zero assisted
+opcodes. Peak RSS was **6,197,026,816 bytes (5.77 GiB)**; executable wall time
+was **109.87 s**.
+
+The final transition was recorded before reading the boundary instruction:
+
+```text
+WIDEN step=1162261468 c=1162261467 d=1162261467 old_w=19 new_w=20
+```
+
+[CI run](https://github.com/DannyBaanks/MalbolgeFree/actions/runs/37847283479) ·
+[verdict and raw evidence](evidence/E20_GITHUB_RUN_20261008/04_VERDICT.md) ·
+[Spanish operating guide](evidence/E20_CI_20261008/GUIA.md).
+
+### RAM sweep: fresh boot10 VMs, targets 14–20
+
+A second experiment measured each rung separately. Its target 20 fields,
+frontier events and source/output hashes match the continuous run above.
+This is reproducibility in the Zig implementation; full E20 Python parity
+was not tested.
+
+| Target | Steps | Peak RSS (GiB) | Executable time (s) |
+|---:|---:|---:|---:|
+| 14 | 1,594,324 | 0.0086 | 0.136 |
+| 15 | 4,782,970 | 0.0244 | 0.405 |
+| 16 | 14,348,908 | 0.0719 | 1.258 |
+| 17 | 43,046,722 | 0.2143 | 3.926 |
+| 18 | 129,140,164 | 0.6419 | 11.612 |
+| 19 | 387,420,490 | 1.9255 | 35.604 |
+| 20 | 1,162,261,468 | 5.7709 | 110.134 |
+
+The collector checks resources **before building or allocating the next
+rung**: at least 10 GiB available RAM and 8 GiB free disk, a budget of 60%
+of available RAM, and a peak estimate with 25% margin. Address-space and
+execution-time limits provide additional bounds.
+
+It stopped before allocating target 21. Available RAM was about 14.66 GiB;
+the budget was 8.80 GiB and extrapolated peak was 21.64 GiB. Separately,
+dense `u32` cannot represent width 21 values, and the existing hash-storage
+estimate exceeded the budget. No target 21 build or execution was performed.
+
+[CI run](https://github.com/DannyBaanks/MalbolgeFree/actions/runs/37848647590) ·
+[exact measurements CSV](evidence/RAM_SCALE_RUN_20261008/MEASUREMENTS.csv) ·
+[resource gates and verdict](evidence/RAM_SCALE_RUN_20261008/04_VERDICT.md) ·
+[Spanish operating guide](evidence/RAM_SCALE_CI_20261008/GUIA.md).
+
+### Parametric boot1 sweep: targets 1–20
+
+Twenty fresh VMs each started at width 1. The target 20 run crossed **19
+frontiers**, executed **1,162,261,468 steps**, used **6,195,867,648 bytes
+(5.77 GiB)** peak RSS and took **68.80 s**. Every resource gate allowed its
+rung. This experiment ends at 20 by design; it did not search beyond 20 or
+measure the RAM ceiling.
+
+| Target | Widenings from 1 | Steps | Peak RSS (GiB) | Executable time (s) |
+|---:|---:|---:|---:|---:|
+| 1 | 0 | 2 | 0.000633 | 0.0020 |
+| 2 | 1 | 4 | 0.000633 | 0.0020 |
+| 3 | 2 | 10 | 0.000633 | 0.0019 |
+| 4 | 3 | 28 | 0.000633 | 0.0019 |
+| 5 | 4 | 82 | 0.000633 | 0.0020 |
+| 6 | 5 | 244 | 0.000629 | 0.0024 |
+| 7 | 6 | 730 | 0.000629 | 0.0025 |
+| 8 | 7 | 2,188 | 0.000629 | 0.0024 |
+| 9 | 8 | 6,562 | 0.000626 | 0.0026 |
+| 10 | 9 | 19,684 | 0.000751 | 0.0031 |
+| 11 | 10 | 59,050 | 0.000996 | 0.0050 |
+| 12 | 11 | 177,148 | 0.001606 | 0.0106 |
+| 13 | 12 | 531,442 | 0.003311 | 0.0290 |
+| 14 | 13 | 1,594,324 | 0.008656 | 0.0839 |
+| 15 | 14 | 4,782,970 | 0.024433 | 0.2563 |
+| 16 | 15 | 14,348,908 | 0.071941 | 0.7873 |
+| 17 | 16 | 43,046,722 | 0.214756 | 2.3798 |
+| 18 | 17 | 129,140,164 | 0.643707 | 7.5303 |
+| 19 | 18 | 387,420,490 | 1.924576 | 22.6560 |
+| 20 | 19 | 1,162,261,468 | 5.770351 | 68.7993 |
+
+**Classification: `PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD`.** The loader accepts
+printable ASCII values of at least 33, while a width 1 word has range 0–2.
+All initial source cells therefore exceed the boot word range. These runs
+measure the current parametric core, without claiming closed-word semantics
+at tiny widths or shrinking an existing VM.
+
+Targets 1–5 agree across original Zig, observed Zig, repeated observed Zig
+and the Python core on the checked execution fields and output hashes.
+The bounded target 5 trace records out-of-range fetched cells at active
+widths 1, 2, 3 and 32 out-of-range encryption results at width 4. EOF is treated
+as a deliberate sentinel, separately from ordinary memory-cell range checks.
+A small harness assumption that encryption must be nonzero was corrected;
+target 1 legitimately encrypts zero cells, and the initial failure is preserved.
+
+The boot1 and boot10 target 20 sources have the same SHA-256, but their output
+hashes differ. Their width histories produce different trajectories; keep
+`boot_width` when comparing or combining measurements. The shorter elapsed
+time here is **not** a controlled performance comparison between the two
+experiments.
+
+[CI run](https://github.com/DannyBaanks/MalbolgeFree/actions/runs/37850925619) ·
+[exact measurements CSV](evidence/START1_SCALE_RUN_20261008/measurements.csv) ·
+[verdict and raw evidence](evidence/START1_SCALE_RUN_20261008/04_VERDICT.md) ·
+[Spanish operating guide](evidence/START1_SCALE_CI_20261008/GUIA.md).
+
+### Larger RAM: projections, not measurements
+
+The earlier boot10 witness's storage model gives these conservative gates,
+assuming all physical RAM is available, a 60% budget and a 25% storage margin:
+
+| Ideal RAM (GiB) | Budget (GiB) | Current storage gate ceiling | Hypothetical wider dense gate ceiling |
+|---:|---:|---:|---:|
+| 16 | 9.6 | 20 | 20 |
+| 32 | 19.2 | 20 | 20 |
+| 64 | 38.4 | 20 | 21 |
+| 128 | 76.8 | 20 | 21 |
+
+The wider dense representation has **not been implemented or tested**.
+Source plus a hypothetical `u64` array alone would require at least 29.23 GiB
+at 21, 87.68 GiB at 22 and 263.03 GiB at 23, before output/runtime overhead.
+Target 22 therefore fails this conservative 128 GiB gate. This linear witness
+would require about 561.77 TiB at 30; 128 GiB does not approach 60.
+
+These estimates describe this witness's materialized memory. A tiny
+fixed-width program can touch little memory, so there is no universal
+RAM-to-Malbolge-width law. See the [projection assumptions](evidence/RAM_SCALE_RUN_20261008/04_VERDICT.md#larger-machines-storage-projections-only).
+
+### Fixed20 versus original Nagoya
+
+Growing from 10 to 20 does not establish equivalence with a machine booted at
+fixed20. In the separate fixed20 comparison, the original Nagoya sample and
+ASCII `A` echo agreed with both Free cores, but EOF echo `ubO` differed:
+Nagoya emitted hex `a9`, Free Zig/Python emitted `ff`. General fixed20 Nagoya
+compatibility therefore fails on the tested corpus. The runtime was not
+rewritten to hide the difference.
+
+[Counterexample, reference provenance and raw outputs](evidence/E20_CONTROLLED_20261008/03_NAGOYA_COMPARE.md).
+
+### Verify the preserved evidence without rerunning billions of steps
+
+```bash
+python3 evidence/E20_CI_20261008/verify_ci.py evidence/E20_GITHUB_RUN_20261008
+python3 evidence/RAM_SCALE_CI_20261008/verify_scale.py evidence/RAM_SCALE_RUN_20261008
+python3 evidence/START1_SCALE_CI_20261008/verify_start1.py evidence/START1_SCALE_RUN_20261008
+```
+
+Each receipt preserves raw command logs, environment snapshots, result
+fields, source/output hashes and instrumentation provenance. Timings include
+source generation, load, VM execution and hashing, excluding compilation;
+small rows also include process launch overhead. Large generated source and
+stdout are represented by their generator, lengths and SHA-256, rather than
+committed as gigabytes of data. Verifiers check the recorded evidence; they
+do not independently execute the full computation again.
+
+Still **NOT_DEMONSTRATED**: unbounded growth, width 21 execution, full E20
+Python parity, closed-word tiny-width semantics, dynamic shrinking, general
+historical-language equivalence, or a universal RAM-to-width relation.
+
+## Historical measurements (2026-09-16 to 2026-10-01)
+
+The measurements below retain their original dates and values. The new E20
+results above supersede their earlier maximum measured width of 19.
 
 **FRONTIER WIDTH WIDENING** (`epochal` policy, unbounded memory): a witness
 program built from `in`/`out`/`crazy`/`nop` ops only
@@ -152,7 +318,8 @@ of the same kind crosses two frontiers, `10 -> 11` at step 59050 and
 `vm.run` loop (not a hand-stepped loop) and checks both rungs; the record is
 `evidence/f9_repeated_frontier.json`.
 
-How far it climbs is limited by memory, not by the rule: to reach `w` the
+This historical measurement was limited by available memory; the current
+dense representation also has a width 20 element-type ceiling: to reach `w` the
 pointer must walk to `3^(w-1)`, and every executed cell is stored.
 `evidence/M5_LADDER_SCALE/` generates longer witnesses and runs them on the
 real VM. Measured on a 15 GiB laptop (2026-09-16), each rung from a fresh
@@ -165,7 +332,7 @@ real VM. Measured on a 15 GiB laptop (2026-09-16), each rung from a fresh
 | 15 | 4,782,970 | 5 | 4,783,982 |
 | 16 | 14,348,908 | 6 | 14,349,920 |
 
-**The ladder now reaches 19** (2026-10-01), after the dense representation
+**Historical milestone: the ladder reached 19** (2026-10-01), after the dense representation
 described below removed the memory wall that stopped it at 16:
 
 | climbs to | steps | widenings | cells stored | seconds | array |
@@ -251,8 +418,10 @@ its own fixed dimension.
 | Claim | Status |
 |---|---|
 | C7 `FRONTIER_WIDTH_WIDENING` | **DEMONSTRATED** — `10 -> 11` |
-| C8 `REPEATED_WIDTH_WIDENING` | **DEMONSTRATED** — committed witness `10 -> 11 -> 12` on the real VM; rungs up to `19` measured in `evidence/M5_LADDER_SCALE/` (17-19 via the dense representation) |
-| `UNBOUNDED_WIDTH_GROWTH` | **NOT_DEMONSTRATED** — the ladder is finite by construction and now measured to `19`; the dense path is additionally bounded at `w = 20` by the `u32` element type |
+| C8 `REPEATED_WIDTH_WIDENING` | **DEMONSTRATED** — committed witness `10 -> 11 -> 12` on the real VM; boot10 rungs through `20` measured, plus the explicitly parametric boot1 sweep; see the E20 receipts above |
+| `UNBOUNDED_WIDTH_GROWTH` | **NOT_DEMONSTRATED** — the ladder is finite by construction and now measured to `20`; the dense path is additionally bounded at `w = 20` by the `u32` element type |
+| `PARAMETRIC_BOOT1_TO_20` | **DEMONSTRATED (scoped)** — fresh boot1 targets 1–20, with ASCII outside the boot word range explicitly labelled; no closed-word tiny-width or shrinking claim |
+| `FIXED20_NAGOYA_PARITY` | **FAIL (scoped counterexample)** — original Nagoya emits `a9` on EOF echo, Free Zig/Python emit `ff` |
 | `EPOCHAL_PYTHON_PARITY` | **DEMONSTRATED** (2026-10-01) — `src/malbolge_core.py` implements `epochal`; `evidence/compare_epochal.py` diffs it against the Zig core on status, steps, `padwidth`, widening count, final `c`/`d`, encrypted cells and stdout SHA-256 |
 | `E10_TO_E19_TOY_LADDER` | **DEMONSTRATED (toy)** — state transport + codec only; see `epoch_ladder/` |
 | `UNSHACKLED_PARITY` | **NOT_DEMONSTRABLE** by construction (the original uses `srand(time(NULL))`) |
@@ -459,16 +628,3 @@ OUTPUT REPRODUCTION SMOKE TEST: PASS
 construction; dense bounded at `w = 20`), Unshackled bit-parity (the reference
 uses `srand(time(NULL))`), Ouroboros self-hosting (measured ~255-byte input
 ceiling, unresolved brackets), and a new self-contained TC proof.
-
-
-### Parametric boot1 sweep (2026-10-08)
-
-Twenty fresh VMs booting at width1 reached targets1..20 on GitHub runner.
-Target20:19 frontier widenings,1,162,261,468 steps,5.770 GiB peak RSS,
-68.7993s executable wall time. Source is ASCII outside boot word range0..2:
-PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD, not closed-word tiny Malbolge or dynamic
-shrinking. Small1..5 original/observed/repeat/Python controls agree; source
-range audit records explicit exceptions. Boot1 target20 stdout differs from
-boot10, despite identical source. No runtime changes or claim about21.
-See [raw evidence and verdict](evidence/START1_SCALE_RUN_20261008/04_VERDICT.md), [CSV](evidence/START1_SCALE_RUN_20261008/measurements.csv),
-and [CI run](https://github.com/DannyBaanks/MalbolgeFree/actions/runs/37850925619).
