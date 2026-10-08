@@ -41,3 +41,5 @@ installed, no runtime changed, no remote larger runner rented, no OOM.
 The receipt-only commit uses [skip ci] to avoid repeating the measured sweep.
 Historical artifacts remain unchanged. This is a finite workload experiment,
 not a universal relation between physical RAM and Malbolge word width.
+
+Receipt format correction: derived CSV line endings normalized from CRLF to LF; measurement values and original CI artifact bytes unchanged.
