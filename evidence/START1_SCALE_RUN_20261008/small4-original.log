@@ -1,0 +1,31 @@
+representation=dense (u32 array, 4160 bytes for 1040 cells)
+LABEL boot_width=1 source_ascii_min=33 boot_word_max=2 source_cells_outside_boot_word=1028 classification=PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD
+AUDIT width=1 fetches=3 fetched_cells_outside_word=3 encrypted_cells=0 encryption_results_outside_word=0
+AUDIT width=2 fetches=6 fetched_cells_outside_word=6 encrypted_cells=0 encryption_results_outside_word=0
+AUDIT width=3 fetches=18 fetched_cells_outside_word=18 encrypted_cells=0 encryption_results_outside_word=0
+AUDIT width=4 fetches=1 fetched_cells_outside_word=0 encrypted_cells=1 encryption_results_outside_word=1
+RESULT target=4 status=MAX_STEPS steps=28 padwidth=4 growth=3 final_c=28 cells=1040 capacity=0 stdout_len=0 repr=dense
+HASH source=322681353321d6d4a7268958be231814af8067d45e3dedf966fdad37eb2b671d stdout=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 final_d=28 encrypted=1 assisted=0
+	Command being timed: "/home/runner/work/_temp/start1-scale/vm4-False"
+	User time (seconds): 0.00
+	System time (seconds): 0.00
+	Percent of CPU this job got: 89%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 664
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 104
+	Voluntary context switches: 1
+	Involuntary context switches: 0
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

@@ -1,0 +1,29 @@
+{
+  "status": "PARAMETRIC_1_TO_20_MEASURED_SCOPED",
+  "boot_width": 1,
+  "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD",
+  "measured_targets": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "closed_word_machine_claim": "NOT_CLAIMED",
+  "dynamic_shrinking": "NOT_CLAIMED"
+}

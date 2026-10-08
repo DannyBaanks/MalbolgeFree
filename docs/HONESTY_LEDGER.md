@@ -113,3 +113,16 @@ seeds" as an outstanding bound, not a bug.
   host constants.
 - The `('&%` witness runs fully and reports the crossing without instrumentation
   white RNA.
+
+
+### Parametric boot1 sweep (2026-10-08)
+
+Twenty fresh VMs booting at width1 reached targets1..20 on GitHub runner.
+Target20:19 frontier widenings,1,162,261,468 steps,5.770 GiB peak RSS,
+68.7993s executable wall time. Source is ASCII outside boot word range0..2:
+PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD, not closed-word tiny Malbolge or dynamic
+shrinking. Small1..5 original/observed/repeat/Python controls agree; source
+range audit records explicit exceptions. Boot1 target20 stdout differs from
+boot10, despite identical source. No runtime changes or claim about21.
+See [raw evidence and verdict](../evidence/START1_SCALE_RUN_20261008/04_VERDICT.md), [CSV](../evidence/START1_SCALE_RUN_20261008/measurements.csv),
+and [CI run](https://github.com/DannyBaanks/MalbolgeFree/actions/runs/37850925619).

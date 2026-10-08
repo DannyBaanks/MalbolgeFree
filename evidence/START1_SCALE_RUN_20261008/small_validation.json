@@ -1,0 +1,1030 @@
+[
+  {
+    "target": 1,
+    "original": {
+      "target": 1,
+      "fields": {
+        "target": "1",
+        "status": "MAX_STEPS",
+        "steps": "2",
+        "padwidth": "1",
+        "growth": "0",
+        "final_c": "2",
+        "cells": "1014",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "8d7e9bb741f0e7ce9912959e1f0c6285dd7cb67068aac50306b642d0ff837eda",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "2",
+        "encrypted": "0",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1002",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "2",
+          "fetched_cells_outside_word": "2",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "observed": {
+      "target": 1,
+      "fields": {
+        "target": "1",
+        "status": "MAX_STEPS",
+        "steps": "2",
+        "padwidth": "1",
+        "growth": "0",
+        "final_c": "2",
+        "cells": "1014",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "8d7e9bb741f0e7ce9912959e1f0c6285dd7cb67068aac50306b642d0ff837eda",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "2",
+        "encrypted": "0",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1002",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "2",
+          "fetched_cells_outside_word": "2",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "repeat": {
+      "target": 1,
+      "fields": {
+        "target": "1",
+        "status": "MAX_STEPS",
+        "steps": "2",
+        "padwidth": "1",
+        "growth": "0",
+        "final_c": "2",
+        "cells": "1014",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "8d7e9bb741f0e7ce9912959e1f0c6285dd7cb67068aac50306b642d0ff837eda",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "2",
+        "encrypted": "0",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1002",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "2",
+          "fetched_cells_outside_word": "2",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "python": {
+      "status": "MAX_STEPS",
+      "steps": 2,
+      "padwidth": 1,
+      "growth": 0,
+      "final_c": 2,
+      "final_d": 2,
+      "encrypted": 0,
+      "source": "8d7e9bb741f0e7ce9912959e1f0c6285dd7cb67068aac50306b642d0ff837eda",
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "target": 2,
+    "original": {
+      "target": 2,
+      "fields": {
+        "target": "2",
+        "status": "MAX_STEPS",
+        "steps": "4",
+        "padwidth": "2",
+        "growth": "1",
+        "final_c": "4",
+        "cells": "1016",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "80ecf9cae5331f54e84421e5cb7b58b15adea26ffcb1cd0bd0644efc6b12de45",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "4",
+        "encrypted": "0",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1004",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "1",
+          "fetched_cells_outside_word": "1",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "observed": {
+      "target": 2,
+      "fields": {
+        "target": "2",
+        "status": "MAX_STEPS",
+        "steps": "4",
+        "padwidth": "2",
+        "growth": "1",
+        "final_c": "4",
+        "cells": "1016",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "80ecf9cae5331f54e84421e5cb7b58b15adea26ffcb1cd0bd0644efc6b12de45",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "4",
+        "encrypted": "0",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1004",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [
+        {
+          "step": "4",
+          "c": "3",
+          "d": "3",
+          "old_w": "1",
+          "new_w": "2"
+        }
+      ],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "1",
+          "fetched_cells_outside_word": "1",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "repeat": {
+      "target": 2,
+      "fields": {
+        "target": "2",
+        "status": "MAX_STEPS",
+        "steps": "4",
+        "padwidth": "2",
+        "growth": "1",
+        "final_c": "4",
+        "cells": "1016",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "80ecf9cae5331f54e84421e5cb7b58b15adea26ffcb1cd0bd0644efc6b12de45",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "4",
+        "encrypted": "0",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1004",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [
+        {
+          "step": "4",
+          "c": "3",
+          "d": "3",
+          "old_w": "1",
+          "new_w": "2"
+        }
+      ],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "1",
+          "fetched_cells_outside_word": "1",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "python": {
+      "status": "MAX_STEPS",
+      "steps": 4,
+      "padwidth": 2,
+      "growth": 1,
+      "final_c": 4,
+      "final_d": 4,
+      "encrypted": 0,
+      "source": "80ecf9cae5331f54e84421e5cb7b58b15adea26ffcb1cd0bd0644efc6b12de45",
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "target": 3,
+    "original": {
+      "target": 3,
+      "fields": {
+        "target": "3",
+        "status": "MAX_STEPS",
+        "steps": "10",
+        "padwidth": "3",
+        "growth": "2",
+        "final_c": "10",
+        "cells": "1022",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "0e8493ca745dfa37a3481845da1950a4c3c1ce4d0950e71aa1a63ebdd8439684",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "10",
+        "encrypted": "0",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1010",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "6",
+          "fetched_cells_outside_word": "6",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "3",
+          "fetches": "1",
+          "fetched_cells_outside_word": "1",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "observed": {
+      "target": 3,
+      "fields": {
+        "target": "3",
+        "status": "MAX_STEPS",
+        "steps": "10",
+        "padwidth": "3",
+        "growth": "2",
+        "final_c": "10",
+        "cells": "1022",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "0e8493ca745dfa37a3481845da1950a4c3c1ce4d0950e71aa1a63ebdd8439684",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "10",
+        "encrypted": "0",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1010",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [
+        {
+          "step": "4",
+          "c": "3",
+          "d": "3",
+          "old_w": "1",
+          "new_w": "2"
+        },
+        {
+          "step": "10",
+          "c": "9",
+          "d": "9",
+          "old_w": "2",
+          "new_w": "3"
+        }
+      ],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "6",
+          "fetched_cells_outside_word": "6",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "3",
+          "fetches": "1",
+          "fetched_cells_outside_word": "1",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "repeat": {
+      "target": 3,
+      "fields": {
+        "target": "3",
+        "status": "MAX_STEPS",
+        "steps": "10",
+        "padwidth": "3",
+        "growth": "2",
+        "final_c": "10",
+        "cells": "1022",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "0e8493ca745dfa37a3481845da1950a4c3c1ce4d0950e71aa1a63ebdd8439684",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "10",
+        "encrypted": "0",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1010",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [
+        {
+          "step": "4",
+          "c": "3",
+          "d": "3",
+          "old_w": "1",
+          "new_w": "2"
+        },
+        {
+          "step": "10",
+          "c": "9",
+          "d": "9",
+          "old_w": "2",
+          "new_w": "3"
+        }
+      ],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "6",
+          "fetched_cells_outside_word": "6",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "3",
+          "fetches": "1",
+          "fetched_cells_outside_word": "1",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "python": {
+      "status": "MAX_STEPS",
+      "steps": 10,
+      "padwidth": 3,
+      "growth": 2,
+      "final_c": 10,
+      "final_d": 10,
+      "encrypted": 0,
+      "source": "0e8493ca745dfa37a3481845da1950a4c3c1ce4d0950e71aa1a63ebdd8439684",
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "target": 4,
+    "original": {
+      "target": 4,
+      "fields": {
+        "target": "4",
+        "status": "MAX_STEPS",
+        "steps": "28",
+        "padwidth": "4",
+        "growth": "3",
+        "final_c": "28",
+        "cells": "1040",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "322681353321d6d4a7268958be231814af8067d45e3dedf966fdad37eb2b671d",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "28",
+        "encrypted": "1",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1028",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "6",
+          "fetched_cells_outside_word": "6",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "3",
+          "fetches": "18",
+          "fetched_cells_outside_word": "18",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "4",
+          "fetches": "1",
+          "fetched_cells_outside_word": "0",
+          "encrypted_cells": "1",
+          "encryption_results_outside_word": "1"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "observed": {
+      "target": 4,
+      "fields": {
+        "target": "4",
+        "status": "MAX_STEPS",
+        "steps": "28",
+        "padwidth": "4",
+        "growth": "3",
+        "final_c": "28",
+        "cells": "1040",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "322681353321d6d4a7268958be231814af8067d45e3dedf966fdad37eb2b671d",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "28",
+        "encrypted": "1",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1028",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [
+        {
+          "step": "4",
+          "c": "3",
+          "d": "3",
+          "old_w": "1",
+          "new_w": "2"
+        },
+        {
+          "step": "10",
+          "c": "9",
+          "d": "9",
+          "old_w": "2",
+          "new_w": "3"
+        },
+        {
+          "step": "28",
+          "c": "27",
+          "d": "27",
+          "old_w": "3",
+          "new_w": "4"
+        }
+      ],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "6",
+          "fetched_cells_outside_word": "6",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "3",
+          "fetches": "18",
+          "fetched_cells_outside_word": "18",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "4",
+          "fetches": "1",
+          "fetched_cells_outside_word": "0",
+          "encrypted_cells": "1",
+          "encryption_results_outside_word": "1"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "repeat": {
+      "target": 4,
+      "fields": {
+        "target": "4",
+        "status": "MAX_STEPS",
+        "steps": "28",
+        "padwidth": "4",
+        "growth": "3",
+        "final_c": "28",
+        "cells": "1040",
+        "capacity": "0",
+        "stdout_len": "0",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "322681353321d6d4a7268958be231814af8067d45e3dedf966fdad37eb2b671d",
+        "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "final_d": "28",
+        "encrypted": "1",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1028",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [
+        {
+          "step": "4",
+          "c": "3",
+          "d": "3",
+          "old_w": "1",
+          "new_w": "2"
+        },
+        {
+          "step": "10",
+          "c": "9",
+          "d": "9",
+          "old_w": "2",
+          "new_w": "3"
+        },
+        {
+          "step": "28",
+          "c": "27",
+          "d": "27",
+          "old_w": "3",
+          "new_w": "4"
+        }
+      ],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "6",
+          "fetched_cells_outside_word": "6",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "3",
+          "fetches": "18",
+          "fetched_cells_outside_word": "18",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "4",
+          "fetches": "1",
+          "fetched_cells_outside_word": "0",
+          "encrypted_cells": "1",
+          "encryption_results_outside_word": "1"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "python": {
+      "status": "MAX_STEPS",
+      "steps": 28,
+      "padwidth": 4,
+      "growth": 3,
+      "final_c": 28,
+      "final_d": 28,
+      "encrypted": 1,
+      "source": "322681353321d6d4a7268958be231814af8067d45e3dedf966fdad37eb2b671d",
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "target": 5,
+    "original": {
+      "target": 5,
+      "fields": {
+        "target": "5",
+        "status": "MAX_STEPS",
+        "steps": "82",
+        "padwidth": "5",
+        "growth": "4",
+        "final_c": "82",
+        "cells": "1094",
+        "capacity": "0",
+        "stdout_len": "31",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "86cd906ade5eea89076a0016ab1745584e6d98553d640b7dc83c4cde6b286040",
+        "stdout": "4a79f73b9a597fae1ef54004c9785a72cae0f42843bc0d6848bc601641d8c913",
+        "final_d": "82",
+        "encrypted": "54",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1082",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "6",
+          "fetched_cells_outside_word": "6",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "3",
+          "fetches": "18",
+          "fetched_cells_outside_word": "18",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "4",
+          "fetches": "54",
+          "fetched_cells_outside_word": "0",
+          "encrypted_cells": "53",
+          "encryption_results_outside_word": "32"
+        },
+        {
+          "width": "5",
+          "fetches": "1",
+          "fetched_cells_outside_word": "0",
+          "encrypted_cells": "1",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 675840
+    },
+    "observed": {
+      "target": 5,
+      "fields": {
+        "target": "5",
+        "status": "MAX_STEPS",
+        "steps": "82",
+        "padwidth": "5",
+        "growth": "4",
+        "final_c": "82",
+        "cells": "1094",
+        "capacity": "0",
+        "stdout_len": "31",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "86cd906ade5eea89076a0016ab1745584e6d98553d640b7dc83c4cde6b286040",
+        "stdout": "4a79f73b9a597fae1ef54004c9785a72cae0f42843bc0d6848bc601641d8c913",
+        "final_d": "82",
+        "encrypted": "54",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1082",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [
+        {
+          "step": "4",
+          "c": "3",
+          "d": "3",
+          "old_w": "1",
+          "new_w": "2"
+        },
+        {
+          "step": "10",
+          "c": "9",
+          "d": "9",
+          "old_w": "2",
+          "new_w": "3"
+        },
+        {
+          "step": "28",
+          "c": "27",
+          "d": "27",
+          "old_w": "3",
+          "new_w": "4"
+        },
+        {
+          "step": "82",
+          "c": "81",
+          "d": "81",
+          "old_w": "4",
+          "new_w": "5"
+        }
+      ],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "6",
+          "fetched_cells_outside_word": "6",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "3",
+          "fetches": "18",
+          "fetched_cells_outside_word": "18",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "4",
+          "fetches": "54",
+          "fetched_cells_outside_word": "0",
+          "encrypted_cells": "53",
+          "encryption_results_outside_word": "32"
+        },
+        {
+          "width": "5",
+          "fetches": "1",
+          "fetched_cells_outside_word": "0",
+          "encrypted_cells": "1",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "repeat": {
+      "target": 5,
+      "fields": {
+        "target": "5",
+        "status": "MAX_STEPS",
+        "steps": "82",
+        "padwidth": "5",
+        "growth": "4",
+        "final_c": "82",
+        "cells": "1094",
+        "capacity": "0",
+        "stdout_len": "31",
+        "repr": "dense"
+      },
+      "hashes": {
+        "source": "86cd906ade5eea89076a0016ab1745584e6d98553d640b7dc83c4cde6b286040",
+        "stdout": "4a79f73b9a597fae1ef54004c9785a72cae0f42843bc0d6848bc601641d8c913",
+        "final_d": "82",
+        "encrypted": "54",
+        "assisted": "0"
+      },
+      "label": {
+        "boot_width": "1",
+        "source_ascii_min": "33",
+        "boot_word_max": "2",
+        "source_cells_outside_boot_word": "1082",
+        "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD"
+      },
+      "widen_events": [
+        {
+          "step": "4",
+          "c": "3",
+          "d": "3",
+          "old_w": "1",
+          "new_w": "2"
+        },
+        {
+          "step": "10",
+          "c": "9",
+          "d": "9",
+          "old_w": "2",
+          "new_w": "3"
+        },
+        {
+          "step": "28",
+          "c": "27",
+          "d": "27",
+          "old_w": "3",
+          "new_w": "4"
+        },
+        {
+          "step": "82",
+          "c": "81",
+          "d": "81",
+          "old_w": "4",
+          "new_w": "5"
+        }
+      ],
+      "small_trace_audit": [
+        {
+          "width": "1",
+          "fetches": "3",
+          "fetched_cells_outside_word": "3",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "2",
+          "fetches": "6",
+          "fetched_cells_outside_word": "6",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "3",
+          "fetches": "18",
+          "fetched_cells_outside_word": "18",
+          "encrypted_cells": "0",
+          "encryption_results_outside_word": "0"
+        },
+        {
+          "width": "4",
+          "fetches": "54",
+          "fetched_cells_outside_word": "0",
+          "encrypted_cells": "53",
+          "encryption_results_outside_word": "32"
+        },
+        {
+          "width": "5",
+          "fetches": "1",
+          "fetched_cells_outside_word": "0",
+          "encrypted_cells": "1",
+          "encryption_results_outside_word": "0"
+        }
+      ],
+      "peak_rss_bytes": 679936
+    },
+    "python": {
+      "status": "MAX_STEPS",
+      "steps": 82,
+      "padwidth": 5,
+      "growth": 4,
+      "final_c": 82,
+      "final_d": 82,
+      "encrypted": 54,
+      "source": "86cd906ade5eea89076a0016ab1745584e6d98553d640b7dc83c4cde6b286040",
+      "stdout": "4a79f73b9a597fae1ef54004c9785a72cae0f42843bc0d6848bc601641d8c913"
+    }
+  }
+]

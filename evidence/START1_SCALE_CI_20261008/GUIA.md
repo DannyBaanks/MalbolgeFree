@@ -24,8 +24,16 @@ También se ejecutó realmente:
 python3 evidence/START1_SCALE_CI_20261008/verify_start1.py /tmp/start1-small-validated-v2-20261008
 ```
 
-Devolvió el mismo JSON, exit0. Verificación contra el artifact completo:
-NO PROBADO todavía al crear esta guía; se actualizará tras GitHub.
+Devolvió el mismo JSON, exit0. Verificación completa ejecutada, exit0:
+
+```bash
+python3 evidence/START1_SCALE_CI_20261008/verify_start1.py evidence/START1_SCALE_RUN_20261008
+```
+
+Resultado: PARAMETRIC_1_TO_20_MEASURED_SCOPED, measured_targets1..20,
+boot_width1. Run37850925619. Tabla real en ../START1_SCALE_RUN_20261008/measurements.csv.
+Target20:19 crecimientos, pico6195867648 bytes,68.7993s. Su stdout difiere
+de boot10; no mezclar ambas familias. El barrido termina en20 por diseño.
 
 | Estado | Interpretación |
 |---|---|

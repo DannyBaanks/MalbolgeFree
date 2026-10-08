@@ -1,0 +1,30 @@
+representation=dense (u32 array, 4064 bytes for 1016 cells)
+LABEL boot_width=1 source_ascii_min=33 boot_word_max=2 source_cells_outside_boot_word=1004 classification=PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD
+WIDEN step=4 c=3 d=3 old_w=1 new_w=2
+AUDIT width=1 fetches=3 fetched_cells_outside_word=3 encrypted_cells=0 encryption_results_outside_word=0
+AUDIT width=2 fetches=1 fetched_cells_outside_word=1 encrypted_cells=0 encryption_results_outside_word=0
+RESULT target=2 status=MAX_STEPS steps=4 padwidth=2 growth=1 final_c=4 cells=1016 capacity=0 stdout_len=0 repr=dense
+HASH source=80ecf9cae5331f54e84421e5cb7b58b15adea26ffcb1cd0bd0644efc6b12de45 stdout=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 final_d=4 encrypted=0 assisted=0
+	Command being timed: "/home/runner/work/_temp/start1-scale/vm2-True"
+	User time (seconds): 0.00
+	System time (seconds): 0.00
+	Percent of CPU this job got: 88%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 664
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 98
+	Voluntary context switches: 1
+	Involuntary context switches: 0
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
