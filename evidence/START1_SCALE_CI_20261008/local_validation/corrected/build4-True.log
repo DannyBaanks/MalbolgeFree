@@ -1,0 +1,23 @@
+	Command being timed: "zig build-exe -O ReleaseFast --dep malbolge_free --dep ladder_cfg -Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig -Mmalbolge_free=/tmp/start1-small-validated-v2-20261008/observed_core.zig -Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg4.zig -femit-bin=/tmp/start1-small-validated-v2-20261008/vm4-True"
+	User time (seconds): 11.49
+	System time (seconds): 0.68
+	Percent of CPU this job got: 100%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:12.16
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 403424
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 21
+	Minor (reclaiming a frame) page faults: 298720
+	Voluntary context switches: 6127
+	Involuntary context switches: 1186
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 18088
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

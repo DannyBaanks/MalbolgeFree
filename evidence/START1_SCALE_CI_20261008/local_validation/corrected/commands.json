@@ -1,0 +1,412 @@
+[
+  {
+    "name": "build1-False",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig",
+      "-Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg1.zig",
+      "-femit-bin=/tmp/start1-small-validated-v2-20261008/vm1-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 11.729359947996272,
+    "log_sha256": "f5c842f9039f19fb80383d24d296cedc7449dfe950b268648092601f56929824",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small1-original",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm1-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.0043015629998990335,
+    "log_sha256": "73e5ff7af38b91ba04a5707b79c5bf6bccc1e3bc5e7f0ecbe96a6c34af169c8f",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build1-True",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/start1-small-validated-v2-20261008/observed_core.zig",
+      "-Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg1.zig",
+      "-femit-bin=/tmp/start1-small-validated-v2-20261008/vm1-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 11.741069612005958,
+    "log_sha256": "f90d8b5b1a35079d8dc9774854abf5b3c55ae35fc92bc52bce290703e8763402",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small1-observed",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm1-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.003625195000495296,
+    "log_sha256": "7051eef6cdf66b933cf3a25ec608f1176b0043b9c74ac8d41d5dcf4c0df76a99",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small1-repeat",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm1-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.0033688039984554052,
+    "log_sha256": "9b26bf2f21488ab619115e1df01530224ece1aaccc5a044f68d1d327194baf9f",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build2-False",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig",
+      "-Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg2.zig",
+      "-femit-bin=/tmp/start1-small-validated-v2-20261008/vm2-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 12.171313810002175,
+    "log_sha256": "88b3a5197191f66c8b7e7e198d2a2f2b39cd265288c9be8168d9cc4b27473a5d",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small2-original",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm2-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.003603184006351512,
+    "log_sha256": "7267aa17be8d5c419a97e204f74913078e094d971843fe64fccb4045842a3051",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build2-True",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/start1-small-validated-v2-20261008/observed_core.zig",
+      "-Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg2.zig",
+      "-femit-bin=/tmp/start1-small-validated-v2-20261008/vm2-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 12.001932293002028,
+    "log_sha256": "6b09e2384fa2262b134c342ef5a2555446f7a486768a49f05b29621828dba07f",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small2-observed",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm2-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.004181547999905888,
+    "log_sha256": "d8c54b85bea8ea12d7aef8f7368aa1bd86e058bc8f96a068bc88fb28e2f6e71d",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small2-repeat",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm2-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.002836597996065393,
+    "log_sha256": "3af65a93e5e3348ef4647c3f566927f501afe20c327bea62fc8d872f14cf05a1",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build3-False",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig",
+      "-Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg3.zig",
+      "-femit-bin=/tmp/start1-small-validated-v2-20261008/vm3-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 11.586651644000085,
+    "log_sha256": "c5afd4ee63fa31bcca6cc97dad184aaf726a9364693330e89e6914d20c39201b",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small3-original",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm3-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.004335466997872572,
+    "log_sha256": "659fe1cc0d358446fd587b56d2b55977280f16678f3663dab4d17ad36837c96d",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build3-True",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/start1-small-validated-v2-20261008/observed_core.zig",
+      "-Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg3.zig",
+      "-femit-bin=/tmp/start1-small-validated-v2-20261008/vm3-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 11.840352626000822,
+    "log_sha256": "718fe6f7c78b9cddc7b082ccac1d94596ce6cc5e4564e2edf01f2d85b5c93713",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small3-observed",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm3-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.003159974003210664,
+    "log_sha256": "3dc426f2876ec6d5ee29101f458bce3ca048a5fec09d3e8eccd2068010635e64",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small3-repeat",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm3-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.003464515000814572,
+    "log_sha256": "391e1b5f8139a25bd9aae24d2e44439ac915fb993ff06f97e4f629d8fb086336",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build4-False",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig",
+      "-Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg4.zig",
+      "-femit-bin=/tmp/start1-small-validated-v2-20261008/vm4-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 12.095971604001534,
+    "log_sha256": "1077b5385f2c0fddab6d28b2d6f093275dd1ebdc65049c65b5e177efdccaa07d",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small4-original",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm4-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.003549465000105556,
+    "log_sha256": "0154a0eb95b048f64414db94bf1ac38342ab99ff01e3772b3b4055040b1b67cd",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build4-True",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/start1-small-validated-v2-20261008/observed_core.zig",
+      "-Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg4.zig",
+      "-femit-bin=/tmp/start1-small-validated-v2-20261008/vm4-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 12.16620138000144,
+    "log_sha256": "196c2a21dc041375993228c3bbec0134aa8a19c0d61e4fdb94fd0dd8e170aafc",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small4-observed",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm4-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.0038437660041381605,
+    "log_sha256": "05dfcbaf27acf4b31d6f4a1e023db325b006546480717105388494caad67fb7a",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small4-repeat",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm4-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.004244829004164785,
+    "log_sha256": "0e3f0884c502561ea88c80f9b3d54aaa621abea2f374c5a07f767d55c249ae60",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build5-False",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig",
+      "-Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg5.zig",
+      "-femit-bin=/tmp/start1-small-validated-v2-20261008/vm5-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 12.808295201000874,
+    "log_sha256": "f50e03c22b5462aa0788f8210751f09f6c4bc3d92a10f38db5e88fc5e48c132c",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small5-original",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm5-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.004144762002397329,
+    "log_sha256": "3607ed6ca112293de7a1cd79a1ac3e7162a81ff34337466d6cdb4c91830ef129",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "build5-True",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validated-v2-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/start1-small-validated-v2-20261008/observed_core.zig",
+      "-Mladder_cfg=/tmp/start1-small-validated-v2-20261008/cfg5.zig",
+      "-femit-bin=/tmp/start1-small-validated-v2-20261008/vm5-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 11.97821832200134,
+    "log_sha256": "75fb50a978cbb9972f5c39e73410c0c68d0b5c11b583c7aa2c8cfb5a9e322cb8",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small5-observed",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm5-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.003919660004612524,
+    "log_sha256": "ee5211945bb1d2628d3e14d364e2d097b7435a5f2d4d5746649b9d11b7447caa",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small5-repeat",
+    "command": [
+      "/tmp/start1-small-validated-v2-20261008/vm5-True"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.0032472089951625094,
+    "log_sha256": "253b0d1b45043c9b1700333eeb788260adcc4c9538df5d49cf2dff0dd30abb9b",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  }
+]

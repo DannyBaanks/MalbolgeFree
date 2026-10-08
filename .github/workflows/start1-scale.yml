@@ -1,0 +1,38 @@
+name: Parametric boot1 scale
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/e20-controlled-20261008]
+    paths:
+      - .github/workflows/start1-scale.yml
+      - evidence/START1_SCALE_CI_20261008/**
+permissions:
+  contents: read
+concurrency:
+  group: start1-scale-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  sweep:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Zig0.16.0
+        run: |
+          curl -fsSL https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz -o "$RUNNER_TEMP/zig.tar.xz"
+          tar -xf "$RUNNER_TEMP/zig.tar.xz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/zig-x86_64-linux-0.16.0" >> "$GITHUB_PATH"
+      - name: Check zero-encryption and boot1 parser cases
+        run: python3 -m unittest discover -s evidence/START1_SCALE_CI_20261008 -p 'test_*.py' -v
+      - name: Validate small cases and measure boot1 targets1 through20
+        run: python3 evidence/START1_SCALE_CI_20261008/sweep.py --output "$RUNNER_TEMP/start1-scale"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: start1-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/start1-scale/*.json
+            ${{ runner.temp }}/start1-scale/*.log
+            ${{ runner.temp }}/start1-scale/*.zig
+          if-no-files-found: error
+          retention-days: 90

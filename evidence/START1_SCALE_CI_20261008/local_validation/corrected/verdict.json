@@ -1,0 +1,15 @@
+{
+  "status": "SMALL_VALIDATION_SCOPED",
+  "boot_width": 1,
+  "classification": "PARAMETRIC_ASCII_OUTSIDE_BOOT_WORD",
+  "measured_targets": [],
+  "closed_word_machine_claim": "NOT_CLAIMED",
+  "dynamic_shrinking": "NOT_CLAIMED",
+  "targets_validated": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ]
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "name": "build1-False",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/start1-small-validation-20261008/probe_start1.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig",
+      "-Mladder_cfg=/tmp/start1-small-validation-20261008/cfg1.zig",
+      "-femit-bin=/tmp/start1-small-validation-20261008/vm1-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 12.196261178003624,
+    "log_sha256": "6f93b19f6dec406ba05a8fa65701d542e7bbaf358a204b8b45a83251a2cdeeff",
+    "address_space_limit_bytes": 2147483648,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  },
+  {
+    "name": "small1-original",
+    "command": [
+      "/tmp/start1-small-validation-20261008/vm1-False"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.003933640997274779,
+    "log_sha256": "daeab914a08b89fef580d781099a0266879a3763cd31d7c37a2fc91995de58a0",
+    "address_space_limit_bytes": 536870912,
+    "cpu_seconds": 600,
+    "wall_seconds": 660
+  }
+]
