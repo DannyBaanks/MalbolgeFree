@@ -1,0 +1,12 @@
+{
+  "timestamp_utc": "2026-10-08T21:29:13Z",
+  "commit": "f27349a6c6d205dc152b598132ca40a1e4d0aa7e",
+  "zig": "0.16.0",
+  "hashes": {
+    "src/malbolge_free.zig": "decb108de14fe36f446741e61533dfbf6d3087522c30adb87956631a86f175a4",
+    "evidence/M5_LADDER_SCALE/ladder_scale.zig": "2e5383f014522baab7ec72bbc8a0c838e514776b793e38c8b2ebddc09fc7518f",
+    "evidence/E20_CI_20261008/run_ci.py": "2af1bc7126e30dddacff04b366bf8646bf45165455838fb786f2216fa8a4e0bf"
+  },
+  "instrumented_core_sha256": "628d00881043d8d74a0aa7f569c54154bf7486786bd871dc2c673a79246775d2",
+  "probe_sha256": "d045f2b5261eaa6c038c8278901321df831a4d9afb84aad30bb60391f4e83c27"
+}

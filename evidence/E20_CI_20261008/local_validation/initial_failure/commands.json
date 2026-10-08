@@ -1,0 +1,87 @@
+[
+  {
+    "name": "t_m5_full_vm.zig-False",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_m5_full_vm.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 0.8821993730016402,
+    "log_sha256": "d0469269f76cc49a2a2d0ddb65a2917914491dd9e30bfafc3e81902cb3cc5ad8"
+  },
+  {
+    "name": "t_m5_full_vm.zig-True",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_m5_full_vm.zig",
+      "-Mmalbolge_free=/tmp/e20-ci-small-validation/instrumented_core.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 1.1768620259972522,
+    "log_sha256": "b5c7d6168fe7b13823659442e32ae27554d34d0109eaac90cd0922be194873b0"
+  },
+  {
+    "name": "t_dense_differential.zig-False",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_dense_differential.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 0.208063812002365,
+    "log_sha256": "dfffacb2e8f89dd8b7e243d6ace1f212ef5ce3506d8794d0e72e130fd2824894"
+  },
+  {
+    "name": "t_dense_differential.zig-True",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_dense_differential.zig",
+      "-Mmalbolge_free=/tmp/e20-ci-small-validation/instrumented_core.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 0.5152758109979914,
+    "log_sha256": "90560f1ca5d4d7f33e9b7923daa4ca90bd681fc11bddb32b16a7c5969111996b"
+  },
+  {
+    "name": "build12-False",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/e20-ci-small-validation/probe.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig",
+      "-Mladder_cfg=/tmp/e20-ci-small-validation/cfg12.zig",
+      "-femit-bin=/tmp/e20-ci-small-validation/vm12-False"
+    ],
+    "exit_code": 0,
+    "seconds": 11.10646063600143,
+    "log_sha256": "3619185aa316863fc6ac89a15704c76b7a92d141ecbe5ccd3269ffe0993ce755"
+  },
+  {
+    "name": "small-original",
+    "command": [
+      "/tmp/e20-ci-small-validation/vm12-False"
+    ],
+    "exit_code": 0,
+    "seconds": 0.014073913000174798,
+    "log_sha256": "9dba98057d3c425dc0b387cbb4f7e98c58276f4f971d42d64529286d22e835b8"
+  }
+]

@@ -1,0 +1,125 @@
+[
+  {
+    "name": "t_m5_full_vm.zig-False",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_m5_full_vm.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 0.8740561899976456,
+    "log_sha256": "33ef91b3db9b246e9829a88c80107980ba4abfce51ffda2a86e5da1d5d89641f"
+  },
+  {
+    "name": "t_m5_full_vm.zig-True",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_m5_full_vm.zig",
+      "-Mmalbolge_free=/tmp/e20-ci-small-validated-v2/instrumented_core.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 1.185279982004431,
+    "log_sha256": "de0569ae4fdf66b2467db774df591396c3c4b03dc785226d91879e017b95b601"
+  },
+  {
+    "name": "t_dense_differential.zig-False",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_dense_differential.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 0.21256262800307013,
+    "log_sha256": "bcc610436ff5bbfbfb407a8fbfe61a0e9112160f097437f26edce9af0f87c44f"
+  },
+  {
+    "name": "t_dense_differential.zig-True",
+    "command": [
+      "zig",
+      "test",
+      "--dep",
+      "malbolge_free",
+      "-Mroot=tests/t_dense_differential.zig",
+      "-Mmalbolge_free=/tmp/e20-ci-small-validated-v2/instrumented_core.zig"
+    ],
+    "exit_code": 0,
+    "seconds": 0.5067640889974427,
+    "log_sha256": "0cae7c23e61cfbede7c1003ef3c9426d8154d9e4eae9fc1eedbd0ecd262cfe57"
+  },
+  {
+    "name": "build12-False",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/e20-ci-small-validated-v2/probe.zig",
+      "-Mmalbolge_free=/tmp/malbolgefree-e20-20261008/src/malbolge_free.zig",
+      "-Mladder_cfg=/tmp/e20-ci-small-validated-v2/cfg12.zig",
+      "-femit-bin=/tmp/e20-ci-small-validated-v2/vm12-False"
+    ],
+    "exit_code": 0,
+    "seconds": 11.206189264994464,
+    "log_sha256": "2adfef31486b2f6ef1c9a58aa9297d7bff1de6d70ab32d70fc96ad6b74d5a4c2"
+  },
+  {
+    "name": "small-original",
+    "command": [
+      "/tmp/e20-ci-small-validated-v2/vm12-False"
+    ],
+    "exit_code": 0,
+    "seconds": 0.012774752001860179,
+    "log_sha256": "91fe0b6fbc2d66dcdb3fcf8ddf71b56a0214c6aad2265d1baf612921b41c3f05"
+  },
+  {
+    "name": "build12-True",
+    "command": [
+      "zig",
+      "build-exe",
+      "-O",
+      "ReleaseFast",
+      "--dep",
+      "malbolge_free",
+      "--dep",
+      "ladder_cfg",
+      "-Mroot=/tmp/e20-ci-small-validated-v2/probe.zig",
+      "-Mmalbolge_free=/tmp/e20-ci-small-validated-v2/instrumented_core.zig",
+      "-Mladder_cfg=/tmp/e20-ci-small-validated-v2/cfg12.zig",
+      "-femit-bin=/tmp/e20-ci-small-validated-v2/vm12-True"
+    ],
+    "exit_code": 0,
+    "seconds": 11.237806962999457,
+    "log_sha256": "b17bab004722d0eed2963e60da4685ab75789b3e77ef5cbd1f004ac446c38417"
+  },
+  {
+    "name": "small-observed",
+    "command": [
+      "/tmp/e20-ci-small-validated-v2/vm12-True"
+    ],
+    "exit_code": 0,
+    "seconds": 0.013164094998501241,
+    "log_sha256": "2ac5547ad5d47bb2a27f04c358782e5eea7545f02967fd175ae83e7572051c35"
+  },
+  {
+    "name": "small-repeat",
+    "command": [
+      "/tmp/e20-ci-small-validated-v2/vm12-True"
+    ],
+    "exit_code": 0,
+    "seconds": 0.01301605600019684,
+    "log_sha256": "8869ff0204c165a820af2a4bfc718d245479f94a2727278033b31f4085c95bdb"
+  }
+]

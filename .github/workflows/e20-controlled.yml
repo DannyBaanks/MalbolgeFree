@@ -1,0 +1,37 @@
+name: E20 controlled research
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/e20-controlled-20261008]
+    paths:
+      - .github/workflows/e20-controlled.yml
+      - evidence/E20_CI_20261008/**
+permissions:
+  contents: read
+concurrency:
+  group: e20-controlled-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  e20:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Zig version
+        run: |
+          curl -fsSL https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz -o "$RUNNER_TEMP/zig.tar.xz"
+          tar -xf "$RUNNER_TEMP/zig.tar.xz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/zig-x86_64-linux-0.16.0" >> "$GITHUB_PATH"
+      - name: Calibrate, apply resource gate, run real VM
+        run: python3 evidence/E20_CI_20261008/run_ci.py --output "$RUNNER_TEMP/e20-evidence"
+      - name: Preserve raw evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e20-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/e20-evidence/*.json
+            ${{ runner.temp }}/e20-evidence/*.log
+            ${{ runner.temp }}/e20-evidence/*.zig
+          if-no-files-found: error
+          retention-days: 90
