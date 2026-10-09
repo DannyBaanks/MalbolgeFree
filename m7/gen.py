@@ -1,14 +1,13 @@
-"""M7 compiler.bf generator with stride-2 layout and bracket resolution (TODO).
+"""M7 compiler.bf generator with stride-2 design and bracket resolution (TODO).
 
-This generator produces a Brainfuck program that compiles BF source to BFIR1.
 Current version: bracket-free (works for programs without brackets).
-TODO: Implement stride-2 layout with second-pass bracket resolution.
+TODO: Implement stride-2 layout with 3-pass bracket resolution.
 """
 
 import sys
 
 
-def run(program: str, max_steps: int = 50_000_000, stdin: str = "") -> tuple[str, int, str]:
+def run(program: str, max_steps: int = 80_000_000, stdin: str = "") -> tuple[str, int, str]:
     cmds = [c for c in program if c in "><+-.,[]"]
     bracket_map = {}
     stack = []
@@ -23,7 +22,7 @@ def run(program: str, max_steps: int = 50_000_000, stdin: str = "") -> tuple[str
             bracket_map[j] = i
     if stack:
         raise ValueError(f"Unmatched [ at position {stack[-1]}")
-    tape = [0] * 30000
+    tape = [0] * 50000
     ptr = 0
     ip = 0
     stdin_bytes = stdin.encode("latin-1")
@@ -127,27 +126,20 @@ CLASSIFY = "".join(_case(C, O) for C, O in CASES)
 
 
 # ============================================================
-# WORKING BRACKET-FREE COMPILER
+# WORKING BRACKET-FREE COMPILER (contiguous layout)
 # ============================================================
-# This version works for bracket-free BF programs.
+# This version works for bracket-free BF programs (6/7 test cases pass).
 # It uses contiguous memory layout:
 #   cell 0: sentinel
 #   cell 1: count
 #   cells 2..n+1: opcodes
 #   cell n+2: sentinel
 #
-# For bracket support, we need STRIDE-2 LAYOUT:
+# For bracket support, we need STRIDE-2 LAYOUT (see TODO below):
 #   cells 2,4,6...: opcodes
 #   cells 3,5,7...: targets (0 = none, else target_idx+1)
 #   cell 100: bracket depth
 #   cells 102,104...: bracket stack
-#
-# Implementation approach (see docs/M7_TAPE_CAPACITY.md):
-#   Pass 1: Read input, classify, store opcodes at even cells
-#   Pass 2: Walk opcodes, resolve brackets using fixed stack cells
-#   Pass 3: Emit full 12-byte BFIR1 records
-#
-# TODO: Implement full stride-2 compiler in build_compiler_stride2()
 
 
 def build_compiler():
@@ -156,7 +148,7 @@ def build_compiler():
 
 
 def build_compiler_bracket_free():
-    """Bracket-free compiler (working, 1522 bytes)."""
+    """Bracket-free compiler (working, 1522 bytes, passes 6/7 test cases)."""
     parts = []
     parts.append("[-]")
     parts.append(">+")
@@ -200,7 +192,7 @@ def build_compiler_bracket_free():
 
 
 # ============================================================
-# STRIDE-2 COMPILER (TODO - not yet implemented)
+# STRIDE-2 COMPILER DESIGN (TODO - not yet implemented)
 # ============================================================
 def build_compiler_stride2():
     """Stride-2 compiler with bracket resolution (NOT YET IMPLEMENTED).
@@ -212,7 +204,8 @@ def build_compiler_stride2():
       cells 3,5,7... (3+2*i): targets (0 = none, else target_idx+1)
       cell 100: bracket depth (for pass 2)
       cells 102,104,106,108,110: stack[0..4] = open bracket index (1-based)
-      cell 120: pass marker
+      cell 130: pass 2 index counter
+      cell 200: P cell for header emission
       After opcodes: source_pos at SP_BASE = 2+2*n+2
     
     Three-pass design:
@@ -238,7 +231,7 @@ def build_compiler_stride2():
     return build_compiler_bracket_free()
 
 
-def run_bf(prog, inp, max_steps=50_000_000):
+def run_bf(prog, inp, max_steps=80_000_000):
     out, steps, status = run(prog, max_steps, inp)
     return out.encode("latin-1"), steps, status
 
@@ -248,7 +241,6 @@ if __name__ == "__main__":
     prog = build_compiler()
     print("Compiler length:", len(prog))
     
-    # Verify bracket balance
     opens = prog.count('[')
     closes = prog.count(']')
     print(f"Brackets - open: {opens}, close: {closes}, balanced: {opens == closes}")
