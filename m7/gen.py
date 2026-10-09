@@ -1,35 +1,74 @@
-"""M7 compiler.bf generator + BFIR1 reference oracle (Python mirror of the Zig
-bf_to_ir.zig + bf_ir_image.zig semantics), for differential testing.
+"""M7 compiler.bf generator with stride-2 layout and bracket resolution (TODO).
 
-The compiler we emit is a pure Brainfuck program (operator-only, no comments)
-that reads BF source on stdin and writes its BFIR1 image on stdout.
-
-Design (cell-verified against MEOW-ENGINE/interpreters/brainfuck.py):
-  - cell 0 : LEFT SENTINEL (always 0)
-  - cell 1 : n (instruction count)
-  - cells 2..(n+1) : opcode array (contiguous)
-  - cell n+2 : right sentinel (0)
-  - cells n+3.. : scratch (P=print, depth, temps)
+This generator produces a Brainfuck program that compiles BF source to BFIR1.
+Current version: bracket-free (works for programs without brackets).
+TODO: Implement stride-2 layout with second-pass bracket resolution.
 """
+
 import sys
 
-from pathlib import Path
 
-# Sibling checkout of MEOW-ENGINE next to this repo.
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "MEOW-ENGINE" / "interpreters"))
-from brainfuck import run as _run
+def run(program: str, max_steps: int = 50_000_000, stdin: str = "") -> tuple[str, int, str]:
+    cmds = [c for c in program if c in "><+-.,[]"]
+    bracket_map = {}
+    stack = []
+    for i, c in enumerate(cmds):
+        if c == "[":
+            stack.append(i)
+        elif c == "]":
+            if not stack:
+                raise ValueError(f"Unmatched ] at position {i}")
+            j = stack.pop()
+            bracket_map[i] = j
+            bracket_map[j] = i
+    if stack:
+        raise ValueError(f"Unmatched [ at position {stack[-1]}")
+    tape = [0] * 30000
+    ptr = 0
+    ip = 0
+    stdin_bytes = stdin.encode("latin-1")
+    stdin_pos = 0
+    output = []
+    steps = 0
+    while ip < len(cmds) and steps < max_steps:
+        c = cmds[ip]
+        if c == ">":
+            ptr += 1
+            if ptr >= len(tape):
+                tape.extend([0] * 10000)
+        elif c == "<":
+            ptr -= 1
+            if ptr < 0:
+                raise ValueError("Pointer underflow")
+        elif c == "+":
+            tape[ptr] = (tape[ptr] + 1) & 255
+        elif c == "-":
+            tape[ptr] = (tape[ptr] - 1) & 255
+        elif c == ".":
+            output.append(chr(tape[ptr]))
+        elif c == ",":
+            if stdin_pos < len(stdin_bytes):
+                tape[ptr] = stdin_bytes[stdin_pos]
+                stdin_pos += 1
+            else:
+                tape[ptr] = 0
+        elif c == "[":
+            if tape[ptr] == 0:
+                ip = bracket_map[ip]
+        elif c == "]":
+            if tape[ptr] != 0:
+                ip = bracket_map[ip]
+        ip += 1
+        steps += 1
+    status = "HALTED" if ip >= len(cmds) else "MAX_STEPS"
+    return "".join(output), steps, status
 
-# ----------------------------------------------------------------------------
-# Reference oracle (mirror of the Zig compiler + encoder)
-# ----------------------------------------------------------------------------
-OPCODES = {
-    ">": 1, "<": 2, "+": 3, "-": 4, ".": 5, ",": 6, "[": 7, "]": 8,
-}
-OP_BY_CODE = {v: k for k, v in OPCODES.items()}
+
+# Reference oracle
+OPCODES = {">": 1, "<": 2, "+": 3, "-": 4, ".": 5, ",": 6, "[": 7, "]": 8}
 
 
 def ref_compile(src):
-    """-> list of (opcode, target|None, source_pos)."""
     code = []
     opens = []
     for source_pos, ch in enumerate(src):
@@ -37,10 +76,10 @@ def ref_compile(src):
             continue
         oc = OPCODES[ch]
         idx = len(code)
-        if oc == 7:  # jump_if_zero = '['
+        if oc == 7:
             opens.append(idx)
             code.append((oc, None, source_pos))
-        elif oc == 8:  # jump_if_nonzero = ']'
+        elif oc == 8:
             o = opens.pop()
             code.append((oc, o, source_pos))
             code[o] = (code[o][0], idx, code[o][2])
@@ -65,12 +104,7 @@ def ref_encode(src):
     return bytes(out)
 
 
-# ----------------------------------------------------------------------------
-# BF idiom: classify a byte at the current cell into opcode 1..8.
-# Pre:  pointer at A (byte 43..93). Scratch A+1, A+2 are 0.
-# Post: pointer at A (opcode 1..8, or unchanged if not an operator).
-#       A+1, A+2 are 0.
-# ----------------------------------------------------------------------------
+# CLASSIFY: byte at current cell -> opcode 1..8 in current cell (net ptr change = 0)
 CASES = [(43, 3), (44, 6), (45, 4), (46, 5), (60, 2), (62, 1), (91, 7), (93, 8)]
 
 
@@ -92,91 +126,134 @@ def _case(C, O):
 CLASSIFY = "".join(_case(C, O) for C, O in CASES)
 
 
-def _emit_header():
-    # Emits "BFIR1" = 66,70,73,82,49 via relative arithmetic from P (sentinel+1).
-    return (
-        ">"
-        + "+" * 66 + "."          # 'B' 66
-        + "++++" + "."            # 'F' 70
-        + "+++" + "."             # 'I' 73
-        + "+" * 9 + "."           # 'R' 82
-        + "-" * 33 + "."          # '1' 49
-        + "[-]<"                   # clear P, back to sentinel (home)
-    )
-
-
-def _emit_count():
-    # Emits count = (cell1 - 1) as 4 LE bytes, ends pointer at cell2.
-    return (
-        "<"                        # last opcode (or cell1 if n==0)
-        + "[<]"                    # -> cell0
-        + ">"                      # -> cell1 (n+1)
-        + "-"                      # n
-        + "."                      # emit n (low byte)
-        + "<"                      # cell0
-        + "..."                    # 3 zero bytes
-        + ">>"                     # -> cell2
-        + "<[-]>"                  # zero cell1 (i=0 for record loop)
-    )
-
-
-def _emit_records():
-    # Bracket-free: 12-byte record = op + 7 zeros + i + 3 zeros. Mobile i counter.
-    return (
-        "["                        # while opcode != 0
-        + "."                      # byte0 = opcode
-        + "[-]"                    # zero current cell
-        + "......."                # bytes 1..7 = 0
-        + "<"                      # -> counter cell (i)
-        + "."                      # byte8 = i
-        + "<"                      # -> cell0 / zeroed prev  (zero)
-        + "..."                    # bytes 9..11 = 0
-        + ">"                      # -> counter
-        + "[->+<]"                 # move i to current (zeroed) cell
-        + ">"                      # -> new counter cell
-        + "+"                      # i+1
-        + ">"                      # -> next opcode
-        + "]"
-    )
+# ============================================================
+# WORKING BRACKET-FREE COMPILER
+# ============================================================
+# This version works for bracket-free BF programs.
+# It uses contiguous memory layout:
+#   cell 0: sentinel
+#   cell 1: count
+#   cells 2..n+1: opcodes
+#   cell n+2: sentinel
+#
+# For bracket support, we need STRIDE-2 LAYOUT:
+#   cells 2,4,6...: opcodes
+#   cells 3,5,7...: targets (0 = none, else target_idx+1)
+#   cell 100: bracket depth
+#   cells 102,104...: bracket stack
+#
+# Implementation approach (see docs/M7_TAPE_CAPACITY.md):
+#   Pass 1: Read input, classify, store opcodes at even cells
+#   Pass 2: Walk opcodes, resolve brackets using fixed stack cells
+#   Pass 3: Emit full 12-byte BFIR1 records
+#
+# TODO: Implement full stride-2 compiler in build_compiler_stride2()
 
 
 def build_compiler():
-    """Assemble the full compiler.bf (operator-only, bracket-free emission)."""
-    p = []
-    # READ: read + classify + count. cell1 = counter (init 1, so never 0),
-    # opcodes contiguous in cells 2..n+1, sentinel at cell n+2.
-    p.append(">+")            # cell1 = 1 (counter init)
-    p.append(">")             # cell2
-    p.append(",")             # cell2 <- first byte
-    p.append("[")             # while byte != 0
-    p.append(CLASSIFY)        # char -> opcode at current cell
-    p.append("[<]")           # -> cell0 (left sentinel, permanent 0)
-    p.append(">")             # -> cell1 (counter, nonzero)
-    p.append("+")             # counter++
-    p.append("[>]")           # -> next free slot (first 0 right)
-    p.append(",")             # read next byte
-    p.append("]")
-    # EMIT: header + count + records. Pointer is at sentinel (cell n+2) after read.
-    p.append(_emit_header())
-    p.append(_emit_count())
-    p.append(_emit_records())
-    return "".join(p)
+    """Build compiler.bf - currently returns bracket-free version."""
+    return build_compiler_bracket_free()
 
 
-def write_compiler(path):
-    with open(path, "w", newline="") as f:
-        f.write(build_compiler())
+def build_compiler_bracket_free():
+    """Bracket-free compiler (working, 1522 bytes)."""
+    parts = []
+    parts.append("[-]")
+    parts.append(">+")
+    parts.append(">")
+    parts.append(",")
+    parts.append("[")
+    parts.append(CLASSIFY)
+    parts.append("[<]")
+    parts.append(">")
+    parts.append("+")
+    parts.append("[>]")
+    parts.append(",")
+    parts.append("]")
+    parts.append(">")
+    parts.append("+" * 66 + ".")
+    parts.append("++++.")
+    parts.append("+++.")
+    parts.append("+" * 9 + ".")
+    parts.append("-" * 33 + ".")
+    parts.append("[-]<")
+    parts.append("<[<]>")
+    parts.append("-")
+    parts.append(".")
+    parts.append("<...")
+    parts.append(">>")
+    parts.append("<[-]>")
+    parts.append("[")
+    parts.append(".")
+    parts.append("[-]")
+    parts.append(".......")
+    parts.append("<")
+    parts.append(".")
+    parts.append("<...")
+    parts.append(">")
+    parts.append("[->+<]")
+    parts.append(">")
+    parts.append("+")
+    parts.append(">")
+    parts.append("]")
+    return "".join(parts)
 
 
-def run_bf(prog, inp, max_steps=30_000_000):
-    out, steps, status = _run(prog, max_steps, inp)
+# ============================================================
+# STRIDE-2 COMPILER (TODO - not yet implemented)
+# ============================================================
+def build_compiler_stride2():
+    """Stride-2 compiler with bracket resolution (NOT YET IMPLEMENTED).
+    
+    Memory layout:
+      cell 0: sentinel (0)
+      cell 1: instruction count (n)
+      cells 2,4,6... (2+2*i): opcodes
+      cells 3,5,7... (3+2*i): targets (0 = none, else target_idx+1)
+      cell 100: bracket depth (for pass 2)
+      cells 102,104,106,108,110: stack[0..4] = open bracket index (1-based)
+      cell 120: pass marker
+      After opcodes: source_pos at SP_BASE = 2+2*n+2
+    
+    Three-pass design:
+      Pass 1: Read all input, classify, store opcodes at even cells,
+              store source_pos in contiguous area after opcodes.
+      Pass 2: Walk opcodes from cell2, resolve brackets:
+              - On '[' (7): push current index to stack[depth], depth++
+              - On ']' (8): depth--, pop from stack, write target to both
+      Pass 3: Emit full 12-byte records from stride-2 layout.
+    
+    Returns:
+      str: Brainfuck source code (NOT YET IMPLEMENTED, returns bracket-free)
+    """
+    # TODO: Implement full three-pass stride-2 compiler
+    # This requires ~5000 bytes of carefully crafted BF code.
+    # Key challenges:
+    #   - Variable pointer distances between phases
+    #   - Implementing stack push/pop in BF with fixed cells
+    #   - Emitting 32-bit little-endian integers in BF
+    #   - Managing three distinct passes with a pass marker
+    
+    # For now, fall back to bracket-free version
+    return build_compiler_bracket_free()
+
+
+def run_bf(prog, inp, max_steps=50_000_000):
+    out, steps, status = run(prog, max_steps, inp)
     return out.encode("latin-1"), steps, status
 
 
 if __name__ == "__main__":
-    cases = ["", "++", "+++.-.", ">+++<+>.>.", ",+.", ">>+<++.", "++++++[>++++++<-]>."]
+    print("CLASSIFY length:", len(CLASSIFY))
     prog = build_compiler()
-    print("compiler.bf len =", len(prog))
+    print("Compiler length:", len(prog))
+    
+    # Verify bracket balance
+    opens = prog.count('[')
+    closes = prog.count(']')
+    print(f"Brackets - open: {opens}, close: {closes}, balanced: {opens == closes}")
+    
+    cases = ["", "++", "+++.-.", ">+++<+>.>.", ",+.", ">>+<++.", "++++++[>++++++<-]>."]
     all_ok = True
     for src in cases:
         got, steps, status = run_bf(prog, src)
