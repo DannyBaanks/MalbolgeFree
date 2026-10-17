@@ -1,0 +1,46 @@
+{
+  "format": "malbolge-free-evidence-hashes/1",
+  "generated_utc": "2026-10-17T23:38:29Z",
+  "document_updated_utc": "2026-10-17T23:58:40Z (PROVENANCE.md wording fixed to name the real constant VENDORED_PY_SHA256; ledger_entry added; the source repo LICENSE copied verbatim beside the vendored interpreter and hashed here. The measurements, timestamps and guard runs above are from the original 23:38Z session and were not re-timed.)",
+  "phase": "F4c-vendored",
+  "claim": "CLASSIC_PARITY_CANONICAL — now measurable from a fresh clone, not only on one machine",
+  "path_base": "repository root (MalbolgeFree); ../ and ../../ are sibling checkouts next to this repository",
+  "vendored_oracle": {
+    "path": "vendor/canonical_malbolge_py/malbolge.py",
+    "sha256": "e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b",
+    "pinned_in": "evidence/compare_f4_canonical.py (VENDORED_PY_SHA256)",
+    "source_repository": "https://github.com/DannyBaanks/MALBOLGE",
+    "source_file": "malbolge.py",
+    "source_commit": "bf4d6fab2052804b2877d29d75c670e1d63f3fa2",
+    "license": "MIT, Copyright (c) 2026 DannyBaanks (source repo LICENSE)",
+    "license_copy": "vendor/canonical_malbolge_py/LICENSE, copied verbatim from the source repo; byte-identical to this repository's own root LICENSE (same sha256)",
+    "attribution_file": "vendor/canonical_malbolge_py/PROVENANCE.md",
+    "verbatim": "measured 2026-10-17: `diff` against the source file is empty; sha256 of this copy equals sha256 of ../MALBOLGE/malbolge.py",
+    "canonical_invariant_measured_on_the_copy": "EOF_VALUE = 59048; `in,out,halt` with empty stdin -> status HALTED, 3 steps, stdout b'\\xa8' (= (3**10-1) % 256)",
+    "not_a_copy_of_our_runtime": "it imports nothing from src/; it is a clean-room implementation from the public language description (Iizawa 2005, Appendix C), so it can falsify both cores"
+  },
+  "artifacts": {
+    "evidence/f4c_canonical_parity_vendored_20261017.json": "04ef041432ddc2462c4b64b5aa48ac3f4c42b47af6e7ddf5fb6d222a5812d926",
+    "evidence/compare_f4_canonical.py": "7d3374b86e08659113300637fd20e32d4b4075318a13f31326ea8cdbd3bbcc2c",
+    "vendor/canonical_malbolge_py/malbolge.py": "e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b",
+    "vendor/canonical_malbolge_py/PROVENANCE.md": "ff30e8fa500073ea1adbf4d40104480094c90154fbac7de109756c786c2b2962",
+    "vendor/canonical_malbolge_py/LICENSE": "709121601d459258fdc9a0d7f40473571250e9f13335e42bbfc2290b343c9fa5",
+    "src/malbolge_free.zig": "8eba78b433d8847138b583fb029eb278afd65a07a8e9ab7de8ad9347a4391236",
+    "src/malbolge_core.py": "7c53f53d460a763a458a94867b3ccc2908c9f458772e32808928d676fc3d963e",
+    "../MALBOLGE/malbolge.py": "e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b",
+    "../../ISyCo/workspace/assembly/malbolge/reference_interpreter_classic": "761edd4ad06199bad2b56c9e251fe4fe1ad6faece5b4ae267e5f45297ff11ad1",
+    "evidence/f4c_canonical_parity_20261017.json": "bc6d1b36f39cedb81414e49ea658e75656b1e7673c27bcbf9dee18e6e5f4983d"
+  },
+  "equivalence_with_the_published_report": "evidence/f4c_canonical_parity_20261017.json (already committed and pushed as fed7180) is NOT rewritten. The new report was checked against it case by case: same 22 (case, core) keys, and for both oracles the runtime stdout SHA-256, the expected stdout SHA-256 and the match flags are identical. That is expected — the vendored file is byte-identical to the ../MALBOLGE/malbolge.py the old run used — and it is verified rather than assumed.",
+  "counts_are_now_explicit": "the v2 report records cases=11, cores=2, oracles_used=2, verdicts=22, hash_comparisons=44. The v1 report's `comparisons: 22` counted (case x core) verdicts, not oracle comparisons; prose written before this said '11 x 2 x 2 = 22', which is arithmetically wrong (it is 44). Corrected in the docs, with the sealed v1 JSON left untouched.",
+  "guards_measured": {
+    "drift_exit_4": "in a sandbox copy of the repo, one appended line to vendor/canonical_malbolge_py/malbolge.py produced F4C_VENDORED_ORACLE_DRIFT (pinned e64af4f0…, found 9f9968ea…) and exit 4 — a hard failure, never a skip and never a PASS",
+    "absent_exit_3": "in the same sandbox, deleting the vendored copy with no C oracle and no MALFREE_MALBOLGE_REFERENCE produced F4c_ORACLES_MISSING and exit 3, which the harness prints as SKIP (NOT_DEMONSTRATED, missing external input)",
+    "vacuity": "all_match is ANDed across every (case, core, oracle) triple and the verdict requires oracles_used > 0; a missing oracle row for a case counts as a mismatch, not as a pass"
+  },
+  "ci_effect": "CI checks out only this repository plus Malbolge-Translator, so on both runners the vendored oracle is the only canonical one: the gate will report 10 cases x 2 cores x 1 oracle = 20 stdout-hash comparisons (the 11th case needs hello_world.malbolge, which is not in this repo). Canonical parity stops being a SKIP in CI and becomes a measured PASS. The C oracle remains external and optional.",
+  "scope": "stdout bytes only. 10 corpus cases on empty stdin (the EOF witness) plus fed-input echo controls, and on this machine an 11th external program. Steps and status are recorded from our cores but not compared to the C oracle, which exposes neither.",
+  "not_claimed": "vendoring does not make the oracle part of Classic's definition; it pins one implementation's behavior by hash. If MALBOLGE/malbolge.py changes upstream, this copy does not silently follow — re-vendor deliberately, update the pin, and say so here and in the ledger.",
+  "ledger_entry": "docs/HONESTY_LEDGER.md entry 25 (appended 2026-10-17): the vendoring decision, its provenance, the arithmetic correction to entry 24's '11 x 2 x 2 = 22' wording, and the superseding of entry 24 note (g) — F4c is measured on CI now, not skipped.",
+  "warning_local_trap": "evidence/malbolge.py in this repository is a DIFFERENT interpreter that assigns a = -1 at EOF (non-canonical, the family of the bug fixed on 2026-10-17). The F4c gate never imports it. See docs/HONESTY_LEDGER.md entry 24 note (a)."
+}

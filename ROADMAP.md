@@ -198,9 +198,16 @@ guía.
   pero el oráculo (`Malbolge-Translator/zig/src/engine.zig`) compartía nuestra
   convención de EOF, así que no podía falsificar este bug. Veredicto actual: 4/6 de
   coincidencia con ese oráculo (`evidence/f4_engine_zig_divergence_20261017.json`) y
-  **22/22** contra dos intérpretes canónicos (`evidence/f4c_canonical_parity_20261017.json`).
+  **22 veredictos / 44 comparaciones de hash** contra los intérpretes canónicos
+  (`evidence/f4c_canonical_parity_20261017.json`, y la re-medición con el oráculo ya
+  vendorizado en `evidence/f4c_canonical_parity_vendored_20261017.json`).
   La paridad canónica es la que sostiene M3 hoy; `compare_f4.py` deja de ser gate.
 - **M6**: el claim heredado se mantiene, pero su evidencia del paso 1 es ahora F4c.
-  Como los oráculos canónicos no se vendorizan, el gate sale con código 3
-  (`NOT_DEMONSTRATED`) donde no haya ninguno: CI lo reporta como skip explícito,
+  El 2026-10-17 se vendorizó el intérprete canónico de Python
+  (`vendor/canonical_malbolge_py/malbolge.py`, copia verbatim de
+  `github.com/DannyBaanks/MALBOLGE@bf4d6fa`, MIT, con `PROVENANCE.md` que declara el
+  repo de origen), así que CI mide la paridad canónica en lugar de omitirla: 10 casos
+  × 2 cores × 1 oráculo = 20 comparaciones en cada runner. El pin es un SHA-256: si el
+  fichero vendorizado deriva, el gate falla con código 4; si se quita y no queda ningún
+  oráculo, sale con código 3 (`NOT_DEMONSTRATED`), que CI reporta como skip explícito,
   nunca como PASS inventado.

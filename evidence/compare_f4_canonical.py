@@ -8,11 +8,17 @@ nothing, so the claim is now measured against implementations that follow the
 1998 interpreter (`malbolge.c`: `if ( x == EOF ) a = 59048;`), of which two are
 available locally:
 
-  ORACLE_C  reference_interpreter_classic  — Olmstead's C, compiled natively.
-  ORACLE_PY ISyCo Git/MALBOLGE/malbolge.py — independent Python, EOF_VALUE=59048.
+  ORACLE_C    reference_interpreter_classic — Olmstead's C, compiled natively.
+              External, so it is used when reachable or when MALFREE_REFERENCE_CLASSIC
+              points at it; without it the claim rests on the Python oracle alone.
+  ORACLE_PY   vendor/canonical_malbolge_py/malbolge.py — canonical Python
+              (EOF_VALUE=59048), vendored verbatim so a fresh clone can MEASURE this
+              parity instead of skipping it. Its SHA-256 is pinned below: a drift is
+              exit 4, never a PASS, because a silently edited oracle is exactly what
+              kept the EOF bug green for a month.
 
-Both oracles are optional: if neither is present the gate reports
-NOT_DEMONSTRATED with exit 3, exactly like compare_f4.py's missing-oracle path.
+With no usable oracle at all the gate reports NOT_DEMONSTRATED with exit 3, like
+compare_f4.py's missing-oracle path.
 
 Comparisons are on stdout BYTES only (sha256 + hex). The C oracle exposes no
 step count or status, so steps are recorded from our sides but never compared.
@@ -32,26 +38,62 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "corpus" / "classic"
 SIBLING = ROOT.parent  # `.../ISyCo Git`
 
+VENDORED_PY = ROOT / "vendor" / "canonical_malbolge_py" / "malbolge.py"
+VENDORED_PY_SHA256 = "e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b"
+VENDORED_PY_SOURCE = "github.com/DannyBaanks/MALBOLGE@bf4d6fa (malbolge.py, MIT)"
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--output", type=pathlib.Path, help="new report path (never overwritten)")
 args = parser.parse_args()
 
+
+def sha(b: bytes) -> str:
+    return hashlib.sha256(b).hexdigest()
+
+
+def use_vendored_py() -> bool:
+    if not VENDORED_PY.is_file():
+        return False
+    digest = sha(VENDORED_PY.read_bytes())
+    if digest != VENDORED_PY_SHA256:
+        print(
+            "F4C_VENDORED_ORACLE_DRIFT: {}\n"
+            "  pinned: {}\n  found:  {}\n"
+            "  The vendored canonical oracle no longer matches the copy described in\n"
+            "  vendor/canonical_malbolge_py/PROVENANCE.md. Parity measured against it\n"
+            "  would be meaningless, so this is a hard failure — not a skip, not a PASS.\n"
+            "  Restore the verbatim copy, or re-vendor deliberately and update the pin\n"
+            "  plus PROVENANCE.md (source commit and hash).".format(VENDORED_PY, VENDORED_PY_SHA256, digest),
+            file=sys.stderr,
+        )
+        raise SystemExit(4)
+    return True
+
+
 CANDIDATE_C = pathlib.Path(
     SIBLING.parent / "ISyCo" / "workspace" / "assembly" / "malbolge" / "reference_interpreter_classic"
 )
-CANDIDATE_PY = SIBLING / "MALBOLGE" / "malbolge.py"
 
 oracle_c = pathlib.Path(os.environ.get("MALFREE_REFERENCE_CLASSIC", CANDIDATE_C))
-oracle_py = pathlib.Path(os.environ.get("MALFREE_MALBOLGE_REFERENCE", CANDIDATE_PY))
+have_c = oracle_c.is_file() and os.access(oracle_c, os.X_OK)
+vendored_py_used = use_vendored_py()
+# An externally supplied interpreter is an ADDITIONAL oracle, never a replacement:
+# the pinned vendored copy is what CI and a fresh clone actually measure against.
+oracle_py_env = pathlib.Path(os.environ["MALFREE_MALBOLGE_REFERENCE"]) if "MALFREE_MALBOLGE_REFERENCE" in os.environ else None
+have_py_env = bool(oracle_py_env and oracle_py_env.is_file())
 
-have_c = oracle_c.is_file()
-have_py = oracle_py.is_file()
-if not (have_c or have_py):
+if not (have_c or vendored_py_used or have_py_env):
     print(
-        "F4c_ORACLES_MISSING: neither canonical oracle is present:\n"
-        "  C : {}\n  PY: {}\n"
+        "F4c_ORACLES_MISSING: no canonical oracle is usable:\n"
+        "  C        : {} ({})\n  vendored PY: {}{}\n  MALFREE_MALBOLGE_REFERENCE: {}\n"
         "  CLASSIC_PARITY_CANONICAL = NOT_DEMONSTRATED here (NOT a parity mismatch).\n"
-        "  Set MALFREE_REFERENCE_CLASSIC and/or MALFREE_MALBOLGE_REFERENCE.".format(oracle_c, oracle_py),
+        "  Restore vendor/canonical_malbolge_py/malbolge.py or set MALFREE_REFERENCE_CLASSIC.".format(
+            oracle_c,
+            "present" if oracle_c.is_file() else "absent",
+            VENDORED_PY,
+            "" if VENDORED_PY.is_file() else " (absent)",
+            oracle_py_env if oracle_py_env else "unset",
+        ),
         file=sys.stderr,
     )
     raise SystemExit(3)
@@ -65,17 +107,15 @@ def load_module(path: pathlib.Path, name: str):
     return mod
 
 
-def sha(b: bytes) -> str:
-    return hashlib.sha256(b).hexdigest()
-
-
-def provenance(p: pathlib.Path) -> dict:
-    # The oracles are sibling checkouts this repo does not vendor: publish a
-    # root-relative path plus their SHA-256, never a machine-specific layout.
-    return {
+def provenance(p: pathlib.Path, **extra) -> dict:
+    # Publish a root-relative path plus the oracle's SHA-256, never a
+    # machine-specific layout: the identity that matters is the hash.
+    info = {
         "path": os.path.relpath(p.resolve(), ROOT).replace(os.sep, "/"),
         "sha256": sha(p.read_bytes()),
     }
+    info.update(extra)
+    return info
 
 
 # Cases: the six canonical-corpus programs on empty stdin (the EOF witness: each
@@ -157,20 +197,34 @@ if have_c:
             "stdout_sha256": sha(proc.stdout), "stdout_hex": proc.stdout.hex(),
         }
 
-ref_py_rows = {}
-if have_py:
-    refpy = load_module(oracle_py, "malbolge_canonical_reference")
+def run_python_oracle(path: pathlib.Path, module_name: str) -> dict:
+    mod = load_module(path, module_name)
+    rows = {}
     for c in CASES:
         src = c["path"].read_text(encoding="utf-8")
-        status, steps, out = refpy.run(src, stdin_data=c["stdin"].encode("latin-1"), max_steps=2_000_000)
-        ref_py_rows[c["case"]] = {
+        status, steps, out = mod.run(src, stdin_data=c["stdin"].encode("latin-1"), max_steps=2_000_000)
+        rows[c["case"]] = {
             "status": status, "steps": steps,
             "stdout_sha256": sha(out), "stdout_hex": out.hex(),
         }
+    return rows
+
+
+python_oracles = {}
+if vendored_py_used:
+    python_oracles["canonical_python_vendored"] = (
+        run_python_oracle(VENDORED_PY, "malbolge_canonical_vendored"),
+        provenance(VENDORED_PY, pinned_sha256=VENDORED_PY_SHA256, source=VENDORED_PY_SOURCE),
+    )
+if have_py_env:
+    python_oracles["canonical_python_external"] = (
+        run_python_oracle(oracle_py_env, "malbolge_canonical_external"),
+        provenance(oracle_py_env, pinned_sha256=None),
+    )
 
 # --- verdicts ----------------------------------------------------------------
-references = ({"canonical_c_olmstead": ref_c_rows} if have_c else {}) | (
-    {"canonical_python_malbolge_py": ref_py_rows} if have_py else {})
+references = ({"canonical_c_olmstead": ref_c_rows} if have_c else {}) | {
+    name: rows for name, (rows, _meta) in python_oracles.items()}
 
 verdicts = []
 all_match = True
@@ -189,17 +243,22 @@ for c in CASES:
 
 report = {
     "phase": "F4c",
+    "format": "f4c-canonical-parity/2",
     "claim": "CLASSIC_PARITY_CANONICAL",
     "runtime": {"zig": "src/malbolge_free.zig", "python": "src/malbolge_core.py"},
-    "oracles": {
-        "canonical_c_olmstead": provenance(oracle_c) if have_c else None,
-        "canonical_python_malbolge_py": provenance(oracle_py) if have_py else None,
-    },
+    "oracles": (
+        {"canonical_c_olmstead": provenance(oracle_c, pinned_sha256=None)} if have_c else {}
+    ) | {name: meta for name, (_rows, meta) in python_oracles.items()},
     "eof_convention": "in on end of input assigns 3**w - 1 (59048 at w=10); out truncates to 0xa8",
+    # Counted explicitly so a verdict can never be vacuous: `verdicts` is
+    # cases x cores, `hash_comparisons` is that times the oracles actually used.
     "cases": len(CASES),
-    "comparisons": len(verdicts),
-    "all_match": all_match,
-    "verdicts": verdicts,
+    "cores": 2,
+    "oracles_used": len(references),
+    "verdicts": len(verdicts),
+    "hash_comparisons": len(verdicts) * len(references),
+    "all_match": all_match and len(references) > 0,
+    "verdicts_detail": verdicts,
 }
 if args.output:
     output = args.output if args.output.is_absolute() else ROOT / args.output
@@ -208,5 +267,7 @@ if args.output:
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
 print(json.dumps(report, indent=2))
-print("\n=>", "PASS" if all_match else "MISMATCH", flush=True)
-raise SystemExit(0 if all_match else 1)
+verdict = "PASS" if report["all_match"] else "MISMATCH"
+print("\n=>", verdict, "({} cases x 2 cores x {} oracle(s) = {} stdout-hash comparisons)".format(
+    report["cases"], report["oracles_used"], report["hash_comparisons"]), flush=True)
+raise SystemExit(0 if report["all_match"] else 1)

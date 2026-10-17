@@ -9,12 +9,15 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > **Release v1.1.0** (2026-10-02) — all milestones green or explicitly bounded.
 > **Patch 2026-10-17** — Classic EOF corrected in both cores (`in` at end of
 > input now assigns `3^w - 1`, so `out` after EOF emits `0xa8`, not `0xff`) and
-> parity re-measured against canonical interpreters: 22/22 byte-a-byte. See
-> [Canonical parity](#canonical-parity-2026-10-17) and ledger entry 24.
-> Harness 49/49 PASS on the machine that produced the sealed evidence. On a
-> checkout with no canonical interpreter present the F4c gate exits 3 and the
-> harness prints `SKIP (NOT_DEMONSTRATED, missing external input)` — measured,
-> not assumed; it never reports a PASS it did not obtain. Turing completeness holds
+> parity re-measured against canonical interpreters. The canonical Python
+> interpreter is now **vendored** (`vendor/canonical_malbolge_py/`, hash-pinned),
+> so a fresh clone measures that parity instead of skipping it. See
+> [Canonical parity](#canonical-parity-2026-10-17) and ledger entries 24 and 25.
+> Harness 49/49 PASS on the machine that produced the sealed evidence; CI runs
+> the same gate against the vendored oracle on ubuntu + windows. Where no
+> canonical interpreter is usable at all the gate exits 3 and the harness prints
+> `SKIP (NOT_DEMONSTRATED, missing external input)` — measured, not assumed; it
+> never reports a PASS it did not obtain. Turing completeness holds
 > via the documented inherited claim (`fixed` == Classic; Classic is TC per
 > Scheffer 1999) — see [Turing Completeness Status](#turing-completeness-status).
 > What is *not* claimed (unbounded growth, Unshackled parity, Ouroboros
@@ -248,7 +251,7 @@ its own fixed dimension.
 | `E10_TO_E19_TOY_LADDER` | **DEMONSTRATED (toy)** — state transport + codec only; see `epoch_ladder/` |
 | `UNSHACKLED_PARITY` | **NOT_DEMONSTRABLE** by construction (the original uses `srand(time(NULL))`) |
 | `VALUE_OVERFLOW_WIDENING` (`pad_to_padwidth`) | **DESTROYED** — rotate breaks consistency across widths |
-| `CLASSIC_PARITY_CANONICAL` (11 cases × 2 cores × 2 oracles) | **DEMONSTRATED** (2026-10-17) — `evidence/compare_f4_canonical.py` diffs both cores byte-a-byte against two independent canonical implementations; 22/22 stdout SHA-256 agree, including the four EOF witnesses and an external `Hello, world.` program |
+| `CLASSIC_PARITY_CANONICAL` (11 cases × 2 cores, 2 oracles here) | **DEMONSTRATED** (2026-10-17) — `evidence/compare_f4_canonical.py` diffs both cores byte-a-byte against canonical implementations: 22 (case × core) verdicts, **44** stdout SHA-256 comparisons on this machine (2 oracles), 20 on CI (1 vendored oracle, no external `hello_world.malbolge`). Includes the four EOF witnesses. Report: `evidence/f4c_canonical_parity_vendored_20261017.json` |
 | `CLASSIC_PARITY_ZIG` (6/6 corpus vs `engine.zig`) | **SUPERSEDED — measured divergence** (2026-10-17). The old oracle `Malbolge-Translator/zig/src/engine.zig` assigns `0xFFFF` at EOF, the same non-canonical family our core used to assign; 4/6 programs now differ. See `evidence/f4_engine_zig_divergence_20261017.json` and `docs/HONESTY_LEDGER.md` entry 24 |
 
 ### Canonical parity (2026-10-17)
@@ -256,36 +259,44 @@ its own fixed dimension.
 EOF was wrong in both cores: `in` at end of input stored a sentinel
 (`-1` in Python, `u128::max` in Zig) that only `crazy` normalized, so `out` after
 EOF emitted `0xff` where the 1998 interpreter emits `3^10 - 1 = 59048` → `0xa8`.
-An external audit measured it; the fix and the re-sealing are ledger entry 24.
+An external audit measured it; the fix and the re-sealing are ledger entry 24, and
+the vendoring of the canonical oracle below is ledger entry 25.
 
-Parity is therefore re-measured against **canonical** oracles, not against a peer
-that shares our convention:
+Parity is therefore measured against **canonical** implementations, never against
+a peer that shares our convention:
 
+- `vendor/canonical_malbolge_py/malbolge.py` — a clean-room Classic interpreter
+  with `EOF_VALUE = 59048`, **vendored verbatim** from
+  [`DannyBaanks/MALBOLGE`](https://github.com/DannyBaanks/MALBOLGE) at commit
+  `bf4d6fa` (MIT). Provenance and the reason for vendoring:
+  `vendor/canonical_malbolge_py/PROVENANCE.md`; the source repo's MIT `LICENSE`
+  text is copied verbatim next to it.
 - `reference_interpreter_classic` — Olmstead's C (`if ( x == EOF ) a = 59048;`),
-  compiled natively from `reference_interpreter.c`;
-- `MALBOLGE/malbolge.py` — an independent Python interpreter with
-  `EOF_VALUE = 59048`.
+  compiled natively from `reference_interpreter.c`. Kept **outside** the repo; used
+  when reachable or when `MALFREE_REFERENCE_CLASSIC` points at it.
 
-Both live outside this repo, so the gate reports `NOT_DEMONSTRATED` (exit 3) when
-neither is present, exactly like the old missing-oracle path. The comparison is on
-stdout bytes only: the C oracle exposes no step count.
+The vendored oracle is hash-pinned inside the gate. If its SHA-256 stops matching,
+the gate exits **4** with `F4C_VENDORED_ORACLE_DRIFT`: a silently edited oracle
+producing a green parity verdict is the exact failure mode that hid this bug for a
+month, so drift is a hard failure — never a skip, never a PASS.
 
-To reproduce it on your own machine, point one of the two env vars at any Classic
-Malbolge interpreter you have already checked is canonical:
+Comparisons are on stdout bytes only: the C oracle exposes no step count.
+
+Before trusting any interpreter as an oracle, test it on the EOF witness itself —
+the property this bug turned on: `in,out,halt` on empty stdin must emit `0xa8`
+(`59048 % 256`). An interpreter that emits `0xff` shares the sentinel family and
+cannot falsify it; that is how the old F4 oracle let the bug sit under a green
+seal. Note that this repository still ships `evidence/malbolge.py`, an older
+interpreter that assigns `a = -1` at EOF — the gate never imports it, and pointing
+`MALFREE_MALBOLGE_REFERENCE` at it would defeat the purpose.
+
+To add an oracle of your own:
 
 ```bash
 export MALFREE_REFERENCE_CLASSIC=/path/to/reference_interpreter_classic  # ELF/binary
-export MALFREE_MALBOLGE_REFERENCE=/path/to/malbolge.py                   # Python
+export MALFREE_MALBOLGE_REFERENCE=/path/to/canonical/malbolge.py         # extra, unpinned
 py evidence/compare_f4_canonical.py
 ```
-
-Before trusting an oracle, test it on the EOF witness itself — the property this
-bug turned on: `in,out,halt` on empty stdin must emit `0xa8` (`59048 % 256`). An
-interpreter that emits `0xff` shares the sentinel family and cannot falsify it;
-that is exactly how the old F4 oracle let the bug sit under a green seal. The
-report publishes each oracle's path **relative to the repo root** plus its
-SHA-256, so the identity of the interpreter used is checkable without leaking a
-local layout.
 
 ### The old F4 oracle (2026-09-12, oracle rebuilt 2026-10-01)
 
@@ -337,8 +348,9 @@ py tests/run_all.py
 py malbolge_cli.py verify
 py malbolge_cli.py assemble "in,out,rot,movd,opr,nop,end"
 
-# canonical Classic parity (needs an external canonical interpreter; exits 3
-# with NOT_DEMONSTRATED when none is present)
+# canonical Classic parity (uses the vendored hash-pinned oracle; adds
+# MALFREE_REFERENCE_CLASSIC when Olmstead's C is reachable; exit 3 = no usable
+# oracle at all, exit 4 = the vendored oracle drifted from its pin)
 py evidence/compare_f4_canonical.py
 
 # old F4 measurement (engine.zig oracle — kept as a record, no longer a gate)
@@ -467,10 +479,9 @@ MIT ^w^
 
 **M6 is PASS via the documented inherited claim**
 (`docs/TURING_COMPLETENESS_INHERITED.md`): our `fixed` profile is byte-identical
-to Classic Malbolge (F4c canonical parity 22/22 byte-a-byte against two canonical
-interpreters; reproducible from a fresh clone once you supply one via
-`MALFREE_REFERENCE_CLASSIC` / `MALFREE_MALBOLGE_REFERENCE` — see
-[Canonical parity](#canonical-parity-2026-10-17)), and Classic is
+to Classic Malbolge — F4c canonical parity, 22 (case × core) verdicts against the
+hash-pinned vendored oracle plus Olmstead's C where available, reproducible from a
+fresh clone (see [Canonical parity](#canonical-parity-2026-10-17)) — and Classic is
 Turing-complete per Scheffer 1999 (cyclic tag system compiler, cited via the
 esolangs wiki). This is the ROADMAP's explicitly named third route — an
 inheritance, **not** a new proof.

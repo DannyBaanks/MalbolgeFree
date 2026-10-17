@@ -12,15 +12,22 @@ and Classic is Turing-complete per published literature.
 
 ## Step 1: `fixed` == Malbolge Classic (PROVEN, reproduced against canonical interpreters)
 
-**Evidence (2026-10-17, current)**: `evidence/compare_f4_canonical.py` — 11 cases
-× 2 cores × 2 canonical oracles = **22/22** stdout SHA-256 byte-exact matches
-(`evidence/f4c_canonical_parity_20261017.json`). The oracles are Olmstead's C
-`reference_interpreter_classic` and `MALBOLGE/malbolge.py`, both assigning
-`a = 3^10 - 1 = 59048` at end of input. This repo does **not** vendor them, so the
-gate is reproducible wherever a canonical Classic interpreter is supplied via
-`MALFREE_REFERENCE_CLASSIC` / `MALFREE_MALBOLGE_REFERENCE`; with neither present it
-exits 3 and the harness prints `NOT_DEMONSTRATED` — it never reports a PASS it did
-not obtain. That distinction matters for this claim: the earlier F4 evidence below
+**Evidence (2026-10-17, current)**: `evidence/compare_f4_canonical.py` — 22
+(case × core) verdicts, 44 stdout SHA-256 comparisons on the machine that sealed
+the evidence (2 oracles), all matching
+(`evidence/f4c_canonical_parity_vendored_20261017.json`). Oracles: the **vendored**
+canonical Python interpreter `vendor/canonical_malbolge_py/malbolge.py`
+(`EOF_VALUE = 59048`, copied verbatim from `DannyBaanks/MALBOLGE@bf4d6fa`, MIT,
+provenance in `vendor/canonical_malbolge_py/PROVENANCE.md`) and, where reachable,
+Olmstead's C `reference_interpreter_classic`. Because the Python oracle now ships
+with this repository, a fresh clone — including both CI runners — measures the
+claim instead of skipping it. The vendored file's SHA-256 is pinned in the gate:
+if it drifts the gate exits 4 (`F4C_VENDORED_ORACLE_DRIFT`), so an edited oracle
+cannot quietly manufacture a PASS. With no usable oracle at all it exits 3 and the
+harness prints `NOT_DEMONSTRATED`; it never reports a PASS it did not obtain.
+`harness: 49/49 PASS` on the machine that sealed the evidence.
+
+That distinction matters for this claim: the earlier F4 evidence below
 was real independence from a peer that shared our EOF convention, and it could not
 falsify the bug. `harness: 49/49 PASS` on the machine that sealed the evidence.
 
@@ -61,8 +68,9 @@ TURING_COMPLETENESS_INHERITED = DEMONSTRATED (inherited, not new)
 
 The chain:
   1. `MalbolgeCore(width=10, mem_limit=3^10, growth_policy=fixed)` == Classic
-     (F4c canonical parity 22/22 against two canonical interpreters; the older
-     F4 6/6 against `engine.zig` is superseded — see ledger entry 24).
+     (F4c: 22 (case x core) verdicts against the hash-pinned vendored canonical
+     interpreter, plus Olmstead's C where reachable; the older F4 6/6 against
+     `engine.zig` is superseded — see ledger entry 24).
   2. Classic Malbolge is Turing-complete (Scheffer 1999, cyclic tag system
      compiler; cited via esolangs wiki).
   3. Therefore `fixed` is Turing-complete.

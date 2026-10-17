@@ -25,12 +25,15 @@ jobs:
         with:
           path: MalbolgeFree
 
-      # compare_f4_canonical.py needs an external CANONICAL interpreter
-      # (`a = 59048` at w=10) that this repo does not vendor, so on these runners
-      # it exits 3 and the harness prints it as NOT_DEMONSTRATED (skip): the build
-      # stays green and the job summary states plainly that canonical parity was
-      # not established here. Set MALFREE_REFERENCE_CLASSIC or
-      # MALFREE_MALBOLGE_REFERENCE to run it for real.
+      # compare_f4_canonical.py needs a CANONICAL interpreter (`a = 59048` at
+      # w=10). Since 2026-10-17 it ships one inside this repo:
+      # vendor/canonical_malbolge_py/malbolge.py, a verbatim copy of
+      # github.com/DannyBaanks/MALBOLGE@bf4d6fa (see its PROVENANCE.md), so both
+      # runners MEASURE canonical parity instead of skipping it: 10 cases x 2 cores
+      # x 1 oracle = 20 stdout-hash comparisons. The copy is pinned by SHA-256, so
+      # drift is exit 4 (hard FAIL) and only a missing oracle is exit 3
+      # (NOT_DEMONSTRATED skip). Set MALFREE_REFERENCE_CLASSIC or
+      # MALFREE_MALBOLGE_REFERENCE to add an external oracle as a second witness.
       - name: Checkout Malbolge-Translator (M6/TC oracle)
         uses: actions/checkout@v4
         with:

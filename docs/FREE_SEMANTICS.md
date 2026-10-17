@@ -63,12 +63,17 @@ that is exactly the anchor property applied to the fill.
 
 `Free(k=10, fixed, wrap)` == Classic. On the Python side that equality is
 reproduced bit-for-bit across all 59049 cells (`tests/t_phase23.py`). On the Zig
-side it is now measured against **canonical** interpreters: 22/22 stdout matches
-(`evidence/compare_f4_canonical.py`, 2026-10-17). Earlier states of this note were
+side it is now measured against **canonical** interpreters: 22 verdicts
+(11 cases x 2 cores), 44 stdout SHA-256 comparisons with this machine's two
+oracles (`evidence/compare_f4_canonical.py`, 2026-10-17; the canonical Python
+oracle is vendored and hash-pinned in `vendor/canonical_malbolge_py/`, so a fresh
+clone measures 10 x 2 x 1 = 20 comparisons instead of skipping). Earlier states of
+this note were
 themselves corrections: 2026-09-05 found 4/6 with a bitwise-mask bug in the Zig
 `crazy` op, 2026-09-12 reported 6/6 against `engine.zig`, and the 2026-10-17 audit
 showed that oracle shared our non-canonical EOF convention, so it could not falsify
-the EOF bug (see `docs/HONESTY_LEDGER.md` entries 19, 20, 22 and the appended 24).
+the EOF bug (see `docs/HONESTY_LEDGER.md` entries 19, 20, 22 and the appended 24
+and 25).
 
 `Free(k=19)` reproduces the *parameterized* Unshackled behavior: the real
 Unshackled starts `rotwidth = 10 + rand() % 6`, so exact bit-parity is
@@ -79,8 +84,11 @@ impossible — **documented as parity-class, not bit-parity**.
 ```
 C0  SINGLE_PARAMETRIC_CORE         = DEMONSTRATED
 C1  CLASSIC_PARITY_K10             = DEMONSTRATED 2026-10-17 against canonical
-                                     interpreters, 22/22 stdout SHA-256
-                                     (evidence/f4c_canonical_parity_20261017.json).
+                                     interpreters: 22 verdicts (11 cases x 2 cores),
+                                     44 stdout SHA-256 comparisons with 2 oracles
+                                     (evidence/f4c_canonical_parity_20261017.json;
+                                     re-measured with the vendored pinned oracle in
+                                     evidence/f4c_canonical_parity_vendored_20261017.json).
                                      History of this row: 4/6 on 2026-09-05 (Zig
                                      crazy bitwise-mask bug, later fixed), recorded
                                      6/6 vs engine.zig, then superseded because that

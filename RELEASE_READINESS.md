@@ -8,9 +8,12 @@ M6 (TC) y Uroboros siguen NOT_DEMONSTRATED y NO se presentan como capacidades.
 **Corrección 2026-10-17 (anexa)**: la fila "Classic Parity (6/6 corpus)" de abajo
 es HISTÓRICA. El 2026-10-17 una auditoría externa midió que nuestro EOF no era
 canónico; ese oráculo (`engine.zig`) compartía la convención errónea y por eso dio
-6/6. Estado actual: **22/22** contra dos intérpretes canónicos
-(`evidence/f4c_canonical_parity_20261017.json`), 4/6 con el oráculo viejo
-(`evidence/f4_engine_zig_divergence_20261017.json`), harness 49/49. Ver
+6/6. Estado actual: **22 veredictos / 44 comparaciones de hash** contra los
+intérpretes canónicos (`evidence/f4c_canonical_parity_20261017.json`; re-medido con
+el oráculo vendorizado en `evidence/f4c_canonical_parity_vendored_20261017.json`),
+4/6 con el oráculo viejo (`evidence/f4_engine_zig_divergence_20261017.json`),
+harness 49/49. El oráculo canónico de Python está vendorizado y fijado por SHA-256
+(`vendor/canonical_malbolge_py/`), así que CI mide la paridad en vez de saltarla. Ver
 `docs/HONESTY_LEDGER.md` entrada 24.
 
 ---

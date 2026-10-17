@@ -193,8 +193,14 @@ const opA = a % modulus;
 No hay rama especial para EOF: despues de la correccion de la seccion 6 el
 acumulador ya llega dentro de rango y `crazy` lo consume como cualquier otro valor.
 El checker `evidence/compare_f4_canonical.py` (gate F4c) compara los dos cores
-contra los oraculos canonicos; `evidence/compare_f4.py` queda como la medicion de
-la divergencia con el oraculo antiguo de Malbolge-Translator.
+contra los oraculos canonicos. Desde 2026-10-17 el interprete canonico de Python
+esta vendorizado en `vendor/canonical_malbolge_py/malbolge.py` (copia verbatim de
+`github.com/DannyBaanks/MALBOLGE@bf4d6fa`, fijada por SHA-256 y documentada en su
+`PROVENANCE.md`), asi que el gate se mide tambien en una clonacion limpia o en CI;
+si el fichero vendorizado no coincide con el hash fijado el gate falla con codigo
+4, y si no hay ningun oraculo utilizable sale con codigo 3 (`NOT_DEMONSTRATED`).
+`evidence/compare_f4.py` queda como la medicion de la divergencia con el oraculo
+antiguo de Malbolge-Translator.
 
 ## 8. Gates M0
 
@@ -213,6 +219,9 @@ la divergencia con el oraculo antiguo de Malbolge-Translator.
 **Veredicto M0:** `PARTIAL / SEMANTICS_DRAFTED`.
 
 **Veredicto M1:** `PASS para F4 Classic` (2026-10-01). Re-medido 2026-10-17 contra
-oraculos canonicos: `PASS para F4c`, 22/22 comparaciones byte-a-byte; el centinela
+oraculos canonicos: `PASS para F4c` — 22 veredictos byte-a-byte (11 casos x 2 cores)
+y 44 comparaciones de SHA-256 con los dos oraculos de esta maquina; en CI, con el
+oraculo vendorizado como unico canonico disponible, son 10 casos x 2 cores x 1
+oraculo = 20 comparaciones. El centinela
 de EOF fue retirado y `in` en EOF asigna `3^w - 1`. Precision numerica y los modos
 no-`fixed` siguen abiertos para los milestones siguientes.

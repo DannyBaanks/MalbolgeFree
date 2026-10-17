@@ -26,6 +26,22 @@ b523e463980c9a265f5f18567856b60027d93fdabcc1491b0fe248be7f5b7dc5  tests/fixtures
 #   made root-relative and oracle hashes added); the 22 measurements are unchanged.
 bc6d1b36f39cedb81414e49ea658e75656b1e7673c27bcbf9dee18e6e5f4983d  evidence/f4c_canonical_parity_20261017.json
 3a132ffa112834bd1b2b6b6d62548c3e3c26bd5e6fefcb50f8ea659f346a7d5c  evidence/F4C_CANONICAL_PARITY_20261017.hashes.json
-123c3d726773d97bbd4afcc21750063534170e25713f8517a74fec6358aeb7f1  evidence/compare_f4_canonical.py
+# Re-sealed 2026-10-17T23:59:30Z — vendored canonical oracle (HONESTY_LEDGER entry 25).
+# Added vendor/canonical_malbolge_py/{malbolge.py,PROVENANCE.md,LICENSE}: the
+# canonical Python interpreter copied verbatim from github.com/DannyBaanks/MALBOLGE
+# at bf4d6fa, with its provenance and the source repo MIT license text.
+# The gate was rewritten to read the pinned vendored copy, so
+# evidence/compare_f4_canonical.py below carries its new hash
+# (123c3d726773d97bbd4afcc21750063534170e25713f8517a74fec6358aeb7f1 was the
+# pre-vendoring revision; it stays recoverable from git history). Nothing already
+# published was rewritten: the v1 F4c report and its hashes doc keep their recorded
+# bytes, and the new report is checked case-by-case against the published one in
+# evidence/F4C_VENDORED_ORACLE_20261017.hashes.json.
+7d3374b86e08659113300637fd20e32d4b4075318a13f31326ea8cdbd3bbcc2c  evidence/compare_f4_canonical.py
 585d83fd224848b1b57a081b2b530f22fcd471b1b58d25cdd620d092e30df87e  evidence/run_f4c.zig
 3ed8c1ea1643bf9cc57b9b0854e8368e74b447a2dc4bdc519a6676a85eb0a6fd  evidence/f4_engine_zig_divergence_20261017.json
+e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b  vendor/canonical_malbolge_py/malbolge.py
+ff30e8fa500073ea1adbf4d40104480094c90154fbac7de109756c786c2b2962  vendor/canonical_malbolge_py/PROVENANCE.md
+709121601d459258fdc9a0d7f40473571250e9f13335e42bbfc2290b343c9fa5  vendor/canonical_malbolge_py/LICENSE
+04ef041432ddc2462c4b64b5aa48ac3f4c42b47af6e7ddf5fb6d222a5812d926  evidence/f4c_canonical_parity_vendored_20261017.json
+80b7bb62ed11c850794b70415e23f06f387bbb57367135156fb04fac03837d32  evidence/F4C_VENDORED_ORACLE_20261017.hashes.json
