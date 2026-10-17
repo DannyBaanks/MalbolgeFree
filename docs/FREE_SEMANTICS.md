@@ -62,10 +62,13 @@ that is exactly the anchor property applied to the fill.
 ## Honesty note
 
 `Free(k=10, fixed, wrap)` == Classic. On the Python side that equality is
-reproduced bit-for-bit across all 59049 cells (`tests/t_phase23.py`); on the
-Zig side the recorded 6/6 corpus parity is **not currently reproducible**
-(2026-09-05 re-audit: 4/6, bitwise-mask bug in the Zig `crazy` op located —
-see README and `docs/HONESTY_LEDGER.md`).
+reproduced bit-for-bit across all 59049 cells (`tests/t_phase23.py`). On the Zig
+side it is now measured against **canonical** interpreters: 22/22 stdout matches
+(`evidence/compare_f4_canonical.py`, 2026-10-17). Earlier states of this note were
+themselves corrections: 2026-09-05 found 4/6 with a bitwise-mask bug in the Zig
+`crazy` op, 2026-09-12 reported 6/6 against `engine.zig`, and the 2026-10-17 audit
+showed that oracle shared our non-canonical EOF convention, so it could not falsify
+the EOF bug (see `docs/HONESTY_LEDGER.md` entries 19, 20, 22 and the appended 24).
 
 `Free(k=19)` reproduces the *parameterized* Unshackled behavior: the real
 Unshackled starts `rotwidth = 10 + rand() % 6`, so exact bit-parity is
@@ -75,10 +78,13 @@ impossible — **documented as parity-class, not bit-parity**.
 
 ```
 C0  SINGLE_PARAMETRIC_CORE         = DEMONSTRATED
-C1  CLASSIC_PARITY_K10             = recorded 6/6 in evidence/f4_classic_parity.json;
-                                     NOT reproducing live as of 2026-09-05 (4/6,
-                                     bitwise-mask bug located in Zig crazy op,
-                                     fix pending owner decision)
+C1  CLASSIC_PARITY_K10             = DEMONSTRATED 2026-10-17 against canonical
+                                     interpreters, 22/22 stdout SHA-256
+                                     (evidence/f4c_canonical_parity_20261017.json).
+                                     History of this row: 4/6 on 2026-09-05 (Zig
+                                     crazy bitwise-mask bug, later fixed), recorded
+                                     6/6 vs engine.zig, then superseded because that
+                                     oracle shared our non-canonical EOF value.
 C2  UNSHACKLED_PARITY_K19          = NOT_DEMONSTRABLE (nondeterministic reference)
 C3  ARBITRARY_FINITE_K             = DEMONSTRATED
 C4  NO_FIXED_COMPILED_MAX_ADDR     = DEMONSTRATED

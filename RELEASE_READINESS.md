@@ -5,6 +5,14 @@ ubuntu+windows; C8 ladder medido hasta `w=19`; paridad Python↔Zig en epochal;
 CLI de producto con `run`/`inspect`/`trace`. Limitaciones explicitas abajo.
 M6 (TC) y Uroboros siguen NOT_DEMONSTRATED y NO se presentan como capacidades.
 
+**Corrección 2026-10-17 (anexa)**: la fila "Classic Parity (6/6 corpus)" de abajo
+es HISTÓRICA. El 2026-10-17 una auditoría externa midió que nuestro EOF no era
+canónico; ese oráculo (`engine.zig`) compartía la convención errónea y por eso dio
+6/6. Estado actual: **22/22** contra dos intérpretes canónicos
+(`evidence/f4c_canonical_parity_20261017.json`), 4/6 con el oráculo viejo
+(`evidence/f4_engine_zig_divergence_20261017.json`), harness 49/49. Ver
+`docs/HONESTY_LEDGER.md` entrada 24.
+
 ---
 
 ## ✅ COMPLETE (as of 2026-09-09)

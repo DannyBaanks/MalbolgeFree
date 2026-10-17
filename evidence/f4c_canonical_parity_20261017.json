@@ -1,0 +1,728 @@
+{
+  "phase": "F4c",
+  "claim": "CLASSIC_PARITY_CANONICAL",
+  "runtime": {
+    "zig": "src/malbolge_free.zig",
+    "python": "src/malbolge_core.py"
+  },
+  "oracles": {
+    "canonical_c_olmstead": {
+      "path": "../../ISyCo/workspace/assembly/malbolge/reference_interpreter_classic",
+      "sha256": "761edd4ad06199bad2b56c9e251fe4fe1ad6faece5b4ae267e5f45297ff11ad1"
+    },
+    "canonical_python_malbolge_py": {
+      "path": "../MALBOLGE/malbolge.py",
+      "sha256": "e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b"
+    }
+  },
+  "eof_convention": "in on end of input assigns 3**w - 1 (59048 at w=10); out truncates to 0xa8",
+  "cases": 11,
+  "comparisons": 22,
+  "all_match": true,
+  "verdicts": [
+    {
+      "case": "echo.mal/eof",
+      "program": "echo.mal",
+      "stdin": "",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+        "stdout_hex": "a8"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+            "stdout_hex": "a8"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 3,
+            "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+            "stdout_hex": "a8"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo.mal/eof",
+      "program": "echo.mal",
+      "stdin": "",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+        "stdout_hex": "a8"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+            "stdout_hex": "a8"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 3,
+            "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+            "stdout_hex": "a8"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo1.mal/eof",
+      "program": "echo1.mal",
+      "stdin": "",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+        "stdout_hex": "a8"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+            "stdout_hex": "a8"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 3,
+            "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+            "stdout_hex": "a8"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo1.mal/eof",
+      "program": "echo1.mal",
+      "stdin": "",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+        "stdout_hex": "a8"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+            "stdout_hex": "a8"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 3,
+            "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69",
+            "stdout_hex": "a8"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo2.mal/eof",
+      "program": "echo2.mal",
+      "stdin": "",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 5,
+        "stdout_sha256": "ee1e877713365238452c2b5fcd9aebc27f9868350395a48c1cfe5a4743d85ba3",
+        "stdout_hex": "a8a8"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "ee1e877713365238452c2b5fcd9aebc27f9868350395a48c1cfe5a4743d85ba3",
+            "stdout_hex": "a8a8"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 5,
+            "stdout_sha256": "ee1e877713365238452c2b5fcd9aebc27f9868350395a48c1cfe5a4743d85ba3",
+            "stdout_hex": "a8a8"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo2.mal/eof",
+      "program": "echo2.mal",
+      "stdin": "",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 5,
+        "stdout_sha256": "ee1e877713365238452c2b5fcd9aebc27f9868350395a48c1cfe5a4743d85ba3",
+        "stdout_hex": "a8a8"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "ee1e877713365238452c2b5fcd9aebc27f9868350395a48c1cfe5a4743d85ba3",
+            "stdout_hex": "a8a8"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 5,
+            "stdout_sha256": "ee1e877713365238452c2b5fcd9aebc27f9868350395a48c1cfe5a4743d85ba3",
+            "stdout_hex": "a8a8"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo3.mal/eof",
+      "program": "echo3.mal",
+      "stdin": "",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 7,
+        "stdout_sha256": "c9095d8ba2ada64f9d6c529236714a13a5c919568e9ec168bd074ce77472165d",
+        "stdout_hex": "a8a8a8"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "c9095d8ba2ada64f9d6c529236714a13a5c919568e9ec168bd074ce77472165d",
+            "stdout_hex": "a8a8a8"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 7,
+            "stdout_sha256": "c9095d8ba2ada64f9d6c529236714a13a5c919568e9ec168bd074ce77472165d",
+            "stdout_hex": "a8a8a8"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo3.mal/eof",
+      "program": "echo3.mal",
+      "stdin": "",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 7,
+        "stdout_sha256": "c9095d8ba2ada64f9d6c529236714a13a5c919568e9ec168bd074ce77472165d",
+        "stdout_hex": "a8a8a8"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "c9095d8ba2ada64f9d6c529236714a13a5c919568e9ec168bd074ce77472165d",
+            "stdout_hex": "a8a8a8"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 7,
+            "stdout_sha256": "c9095d8ba2ada64f9d6c529236714a13a5c919568e9ec168bd074ce77472165d",
+            "stdout_hex": "a8a8a8"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "hello.mal/eof",
+      "program": "hello.mal",
+      "stdin": "",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 40,
+        "stdout_sha256": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+        "stdout_hex": "48656c6c6f20576f726c6421"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+            "stdout_hex": "48656c6c6f20576f726c6421"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 40,
+            "stdout_sha256": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+            "stdout_hex": "48656c6c6f20576f726c6421"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "hello.mal/eof",
+      "program": "hello.mal",
+      "stdin": "",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 40,
+        "stdout_sha256": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+        "stdout_hex": "48656c6c6f20576f726c6421"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+            "stdout_hex": "48656c6c6f20576f726c6421"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 40,
+            "stdout_sha256": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+            "stdout_hex": "48656c6c6f20576f726c6421"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "reproducer.mal/eof",
+      "program": "reproducer.mal",
+      "stdin": "",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 1948,
+        "stdout_sha256": "d94a327593e239b882ba8cf12340cbbbc884fbc84361e1bc7c6928db172c0d50",
+        "stdout_hex": "64656620656e636f6465286368617273293a0a2020202072657475726e2027272e6a6f696e286368722828584c4154312e696e6465782863292d69292539342b33332920666f7220692c6320696e20656e756d65726174652863686172732929"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "d94a327593e239b882ba8cf12340cbbbc884fbc84361e1bc7c6928db172c0d50",
+            "stdout_hex": "64656620656e636f6465286368617273293a0a2020202072657475726e2027272e6a6f696e286368722828584c4154312e696e6465782863292d69292539342b33332920666f7220692c6320696e20656e756d65726174652863686172732929"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 1948,
+            "stdout_sha256": "d94a327593e239b882ba8cf12340cbbbc884fbc84361e1bc7c6928db172c0d50",
+            "stdout_hex": "64656620656e636f6465286368617273293a0a2020202072657475726e2027272e6a6f696e286368722828584c4154312e696e6465782863292d69292539342b33332920666f7220692c6320696e20656e756d65726174652863686172732929"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "reproducer.mal/eof",
+      "program": "reproducer.mal",
+      "stdin": "",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 1948,
+        "stdout_sha256": "d94a327593e239b882ba8cf12340cbbbc884fbc84361e1bc7c6928db172c0d50",
+        "stdout_hex": "64656620656e636f6465286368617273293a0a2020202072657475726e2027272e6a6f696e286368722828584c4154312e696e6465782863292d69292539342b33332920666f7220692c6320696e20656e756d65726174652863686172732929"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "d94a327593e239b882ba8cf12340cbbbc884fbc84361e1bc7c6928db172c0d50",
+            "stdout_hex": "64656620656e636f6465286368617273293a0a2020202072657475726e2027272e6a6f696e286368722828584c4154312e696e6465782863292d69292539342b33332920666f7220692c6320696e20656e756d65726174652863686172732929"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 1948,
+            "stdout_sha256": "d94a327593e239b882ba8cf12340cbbbc884fbc84361e1bc7c6928db172c0d50",
+            "stdout_hex": "64656620656e636f6465286368617273293a0a2020202072657475726e2027272e6a6f696e286368722828584c4154312e696e6465782863292d69292539342b33332920666f7220692c6320696e20656e756d65726174652863686172732929"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo.mal/fed_A",
+      "program": "echo.mal",
+      "stdin": "A",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+        "stdout_hex": "41"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "stdout_hex": "41"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 3,
+            "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "stdout_hex": "41"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo.mal/fed_A",
+      "program": "echo.mal",
+      "stdin": "A",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+        "stdout_hex": "41"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "stdout_hex": "41"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 3,
+            "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "stdout_hex": "41"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo1.mal/fed_A",
+      "program": "echo1.mal",
+      "stdin": "A",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+        "stdout_hex": "41"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "stdout_hex": "41"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 3,
+            "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "stdout_hex": "41"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo1.mal/fed_A",
+      "program": "echo1.mal",
+      "stdin": "A",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+        "stdout_hex": "41"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "stdout_hex": "41"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 3,
+            "stdout_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+            "stdout_hex": "41"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo2.mal/fed_AB",
+      "program": "echo2.mal",
+      "stdin": "AB",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 5,
+        "stdout_sha256": "38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153",
+        "stdout_hex": "4142"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153",
+            "stdout_hex": "4142"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 5,
+            "stdout_sha256": "38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153",
+            "stdout_hex": "4142"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo2.mal/fed_AB",
+      "program": "echo2.mal",
+      "stdin": "AB",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 5,
+        "stdout_sha256": "38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153",
+        "stdout_hex": "4142"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153",
+            "stdout_hex": "4142"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 5,
+            "stdout_sha256": "38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153",
+            "stdout_hex": "4142"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo3.mal/fed_ABC",
+      "program": "echo3.mal",
+      "stdin": "ABC",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 7,
+        "stdout_sha256": "b5d4045c3f466fa91fe2cc6abe79232a1a57cdf104f7a26e716e0a1e2789df78",
+        "stdout_hex": "414243"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "b5d4045c3f466fa91fe2cc6abe79232a1a57cdf104f7a26e716e0a1e2789df78",
+            "stdout_hex": "414243"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 7,
+            "stdout_sha256": "b5d4045c3f466fa91fe2cc6abe79232a1a57cdf104f7a26e716e0a1e2789df78",
+            "stdout_hex": "414243"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "echo3.mal/fed_ABC",
+      "program": "echo3.mal",
+      "stdin": "ABC",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 7,
+        "stdout_sha256": "b5d4045c3f466fa91fe2cc6abe79232a1a57cdf104f7a26e716e0a1e2789df78",
+        "stdout_hex": "414243"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "b5d4045c3f466fa91fe2cc6abe79232a1a57cdf104f7a26e716e0a1e2789df78",
+            "stdout_hex": "414243"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 7,
+            "stdout_sha256": "b5d4045c3f466fa91fe2cc6abe79232a1a57cdf104f7a26e716e0a1e2789df78",
+            "stdout_hex": "414243"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "external_hello_world/eof",
+      "program": "hello_world.malbolge",
+      "stdin": "",
+      "side": "zig",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 48,
+        "stdout_sha256": "f8c3bf62a9aa3e6fc1619c250e48abe7519373d3edf41be62eb5dc45199af2ef",
+        "stdout_hex": "48656c6c6f2c20776f726c642e"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "f8c3bf62a9aa3e6fc1619c250e48abe7519373d3edf41be62eb5dc45199af2ef",
+            "stdout_hex": "48656c6c6f2c20776f726c642e"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 48,
+            "stdout_sha256": "f8c3bf62a9aa3e6fc1619c250e48abe7519373d3edf41be62eb5dc45199af2ef",
+            "stdout_hex": "48656c6c6f2c20776f726c642e"
+          },
+          "match": true
+        }
+      }
+    },
+    {
+      "case": "external_hello_world/eof",
+      "program": "hello_world.malbolge",
+      "stdin": "",
+      "side": "python",
+      "runtime": {
+        "status": "HALTED",
+        "steps": 48,
+        "stdout_sha256": "f8c3bf62a9aa3e6fc1619c250e48abe7519373d3edf41be62eb5dc45199af2ef",
+        "stdout_hex": "48656c6c6f2c20776f726c642e"
+      },
+      "references": {
+        "canonical_c_olmstead": {
+          "expected": {
+            "status": "HALTED",
+            "steps": null,
+            "stdout_sha256": "f8c3bf62a9aa3e6fc1619c250e48abe7519373d3edf41be62eb5dc45199af2ef",
+            "stdout_hex": "48656c6c6f2c20776f726c642e"
+          },
+          "match": true
+        },
+        "canonical_python_malbolge_py": {
+          "expected": {
+            "status": "HALTED",
+            "steps": 48,
+            "stdout_sha256": "f8c3bf62a9aa3e6fc1619c250e48abe7519373d3edf41be62eb5dc45199af2ef",
+            "stdout_hex": "48656c6c6f2c20776f726c642e"
+          },
+          "match": true
+        }
+      }
+    }
+  ]
+}

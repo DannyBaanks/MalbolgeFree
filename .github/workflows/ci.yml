@@ -16,18 +16,22 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     timeout-minutes: 30
     steps:
-      # compare_f4.py resolves the independent oracle as
-      # <parents[2]>/Malbolge-Translator/zig/parity_check.exe, so the two repos
-      # must sit side by side in the workspace.
+      # Kept for the M6/TC gates, which still reach this sibling repo. The old
+      # F4 Classic-parity gate used it as its oracle; since 2026-10-17 parity is
+      # measured by compare_f4_canonical.py against canonical interpreters instead
+      # (engine.zig assigns 0xFFFF at EOF, so it could not falsify the EOF bug).
       - name: Checkout MalbolgeFree
         uses: actions/checkout@v4
         with:
           path: MalbolgeFree
 
-      # The oracle source and its corpus are tracked in that repo since
-      # 0c8a56b, and compare_f4.py builds it natively with `zig run`. No .exe,
-      # no wine, no multiarch. F4 therefore runs for real on both runners.
-      - name: Checkout Malbolge-Translator (oracle)
+      # compare_f4_canonical.py needs an external CANONICAL interpreter
+      # (`a = 59048` at w=10) that this repo does not vendor, so on these runners
+      # it exits 3 and the harness prints it as NOT_DEMONSTRATED (skip): the build
+      # stays green and the job summary states plainly that canonical parity was
+      # not established here. Set MALFREE_REFERENCE_CLASSIC or
+      # MALFREE_MALBOLGE_REFERENCE to run it for real.
+      - name: Checkout Malbolge-Translator (M6/TC oracle)
         uses: actions/checkout@v4
         with:
           repository: DannyBaanks/Malbolge-Translator

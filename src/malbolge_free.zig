@@ -73,8 +73,11 @@ pub fn tritlen(v0: u128) u8 {
     return n;
 }
 
-/// EOF sentinel. Never stored in memory; normalized at op use sites.
-pub const EOF_SENTINEL: u128 = std.math.maxInt(u128);
+// Canonical EOF: the all-twos value 3^w - 1, not a sentinel (`a = 59048` in
+// malbolge.c, `a = END-1` in fast20.c; both local references emit 0xa8 for
+// `in,out,halt` on empty stdin). The retired maxInt(u128) design normalized at
+// each use site, which made `out` emit 0xff and every accumulator op need a
+// special case.
 
 /// Where the BF data tape lives inside the Free address space, and how many
 /// cells it has. These were previously the bare literals 1000 and 256, which is
@@ -508,7 +511,10 @@ pub const MalbolgeCore = struct {
                             a = stdin_data[stdin_idx];
                             stdin_idx += 1;
                         } else {
-                            a = EOF_SENTINEL;
+                            // Canonical EOF: the all-twos value of the current
+                            // frontier width. `padwidth` == `width` under
+                            // .fixed, so Classic gives exactly 59048.
+                            a = pow3(self.padwidth) - 1;
                         }
                     },
                     39 => { // rot
@@ -534,7 +540,7 @@ pub const MalbolgeCore = struct {
                             .epochal => self.padwidth,
                         };
                         const modulus: u128 = pow3(w);
-                        const opA = if (a == EOF_SENTINEL) modulus - 1 else (a % modulus);
+                        const opA = a % modulus;
                         const nv = crazy(opA, v, w);
                         try self.cellWrite(dd, nv);
                         a = nv;
@@ -545,10 +551,7 @@ pub const MalbolgeCore = struct {
                         a = v;
                     },
                     70 => { // jmp_a — jump to address in accumulator
-                        // EOF_SENTINEL is never a valid address (it would
-                        // overflow c+1 in unbounded mode); normalize to 0,
-                        // mirroring how OPR normalizes it to modulus-1.
-                        c = if (a == EOF_SENTINEL) 0 else a;
+                        c = a;
                     },
                     71 => { // inc — increment cell[d] modulo 256 (BF semantics)
                         const dd = if (self.mem_limit) |lim| d % lim else d;
@@ -568,9 +571,9 @@ pub const MalbolgeCore = struct {
                         const dd = if (self.mem_limit) |lim| d % lim else d;
                         a = try self.cell(dd);
                     },
-                    74 => { // store — cell[d] = a (byte-wrapped, EOF -> 0)
+                    74 => { // store — cell[d] = a (byte-wrapped)
                         const dd = if (self.mem_limit) |lim| d % lim else d;
-                        const v: u128 = if (a == EOF_SENTINEL) 0 else (a % 256);
+                        const v: u128 = a % 256;
                         try self.cellWrite(dd, v);
                     },
 75 => { // tape_base — enter the data tape at a stable address

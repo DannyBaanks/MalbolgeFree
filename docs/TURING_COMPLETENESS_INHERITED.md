@@ -10,9 +10,21 @@ and Classic is Turing-complete per published literature.
 
 # ── The chain of evidence ─────────────────────────────────────────────────────
 
-## Step 1: `fixed` == Malbolge Classic (PROVEN, reproduced from fresh clone)
+## Step 1: `fixed` == Malbolge Classic (PROVEN, reproduced against canonical interpreters)
 
-**Evidence**: `evidence/compare_f4.py` — 6/6 corpus byte-exact match against the
+**Evidence (2026-10-17, current)**: `evidence/compare_f4_canonical.py` — 11 cases
+× 2 cores × 2 canonical oracles = **22/22** stdout SHA-256 byte-exact matches
+(`evidence/f4c_canonical_parity_20261017.json`). The oracles are Olmstead's C
+`reference_interpreter_classic` and `MALBOLGE/malbolge.py`, both assigning
+`a = 3^10 - 1 = 59048` at end of input. This repo does **not** vendor them, so the
+gate is reproducible wherever a canonical Classic interpreter is supplied via
+`MALFREE_REFERENCE_CLASSIC` / `MALFREE_MALBOLGE_REFERENCE`; with neither present it
+exits 3 and the harness prints `NOT_DEMONSTRATED` — it never reports a PASS it did
+not obtain. That distinction matters for this claim: the earlier F4 evidence below
+was real independence from a peer that shared our EOF convention, and it could not
+falsify the bug. `harness: 49/49 PASS` on the machine that sealed the evidence.
+
+**Evidence (superseded, 2026-09-12)**: `evidence/compare_f4.py` — 6/6 corpus byte-exact match against the
 independent oracle in Malbolge-Translator (engine.zig, never imports
 malbolge_free.zig). Statuses, step counts, and stdout SHA-256 all identical.
 Reproducible: `zig run` builds the oracle natively from tracked source; a fresh
@@ -49,7 +61,8 @@ TURING_COMPLETENESS_INHERITED = DEMONSTRATED (inherited, not new)
 
 The chain:
   1. `MalbolgeCore(width=10, mem_limit=3^10, growth_policy=fixed)` == Classic
-     (F4 6/6, reproducible, corpus-divergence guarded).
+     (F4c canonical parity 22/22 against two canonical interpreters; the older
+     F4 6/6 against `engine.zig` is superseded — see ledger entry 24).
   2. Classic Malbolge is Turing-complete (Scheffer 1999, cyclic tag system
      compiler; cited via esolangs wiki).
   3. Therefore `fixed` is Turing-complete.

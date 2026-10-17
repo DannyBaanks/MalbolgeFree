@@ -7,7 +7,14 @@ Malbolge Free       :   ^w^   (Malbolgato)
 ```
 
 > **Release v1.1.0** (2026-10-02) — all milestones green or explicitly bounded.
-> Harness 49/49 PASS, CI green on ubuntu + windows. Turing completeness holds
+> **Patch 2026-10-17** — Classic EOF corrected in both cores (`in` at end of
+> input now assigns `3^w - 1`, so `out` after EOF emits `0xa8`, not `0xff`) and
+> parity re-measured against canonical interpreters: 22/22 byte-a-byte. See
+> [Canonical parity](#canonical-parity-2026-10-17) and ledger entry 24.
+> Harness 49/49 PASS on the machine that produced the sealed evidence. On a
+> checkout with no canonical interpreter present the F4c gate exits 3 and the
+> harness prints `SKIP (NOT_DEMONSTRATED, missing external input)` — measured,
+> not assumed; it never reports a PASS it did not obtain. Turing completeness holds
 > via the documented inherited claim (`fixed` == Classic; Classic is TC per
 > Scheffer 1999) — see [Turing Completeness Status](#turing-completeness-status).
 > What is *not* claimed (unbounded growth, Unshackled parity, Ouroboros
@@ -88,7 +95,7 @@ In the code, the current value of `w` is stored in a field called `padwidth`
 | `pad_to_padwidth` | yes — by value overflow | pads operands when big values appear | **DESTROYED** by rotate (see below) |
 | `epochal` | yes — by address frontier | widens `w` when `c`/`d` reach `3^w` | **DEMONSTRATED** — ladder `10 -> 19` measured on the real VM |
 
-## Demonstrated (re-verified 2026-09-16)
+## Demonstrated (re-verified 2026-09-16; Classic parity re-verified 2026-10-17)
 
 **FRONTIER WIDTH WIDENING** (`epochal` policy, unbounded memory): a witness
 program built from `in`/`out`/`crazy`/`nop` ops only
@@ -241,28 +248,69 @@ its own fixed dimension.
 | `E10_TO_E19_TOY_LADDER` | **DEMONSTRATED (toy)** — state transport + codec only; see `epoch_ladder/` |
 | `UNSHACKLED_PARITY` | **NOT_DEMONSTRABLE** by construction (the original uses `srand(time(NULL))`) |
 | `VALUE_OVERFLOW_WIDENING` (`pad_to_padwidth`) | **DESTROYED** — rotate breaks consistency across widths |
-| `CLASSIC_PARITY_ZIG` (6/6 corpus) | **DEMONSTRATED** — reverified 2026-09-12, and now reproducible from a fresh checkout: the oracle is built natively with `zig run`, no `.exe` and no wine |
+| `CLASSIC_PARITY_CANONICAL` (11 cases × 2 cores × 2 oracles) | **DEMONSTRATED** (2026-10-17) — `evidence/compare_f4_canonical.py` diffs both cores byte-a-byte against two independent canonical implementations; 22/22 stdout SHA-256 agree, including the four EOF witnesses and an external `Hello, world.` program |
+| `CLASSIC_PARITY_ZIG` (6/6 corpus vs `engine.zig`) | **SUPERSEDED — measured divergence** (2026-10-17). The old oracle `Malbolge-Translator/zig/src/engine.zig` assigns `0xFFFF` at EOF, the same non-canonical family our core used to assign; 4/6 programs now differ. See `evidence/f4_engine_zig_divergence_20261017.json` and `docs/HONESTY_LEDGER.md` entry 24 |
 
-### Parity re-audit (2026-09-12, oracle rebuilt 2026-10-01)
+### Canonical parity (2026-10-17)
 
-`evidence/compare_f4.py` re-runs against the canonical reference and reports
-`all_match: true` for all six programs, including `hello.mal` and
-`reproducer.mal`. This claim is limited to the six-program corpus.
+EOF was wrong in both cores: `in` at end of input stored a sentinel
+(`-1` in Python, `u128::max` in Zig) that only `crazy` normalized, so `out` after
+EOF emitted `0xff` where the 1998 interpreter emits `3^10 - 1 = 59048` → `0xa8`.
+An external audit measured it; the fix and the re-sealing are ledger entry 24.
 
-The oracle used to be a Windows `.exe` produced by hand and never committed, so
-outside Danny's machine F4 could not run at all. The oracle is now
-`zig/src/parity_check.zig` in the sibling `Malbolge-Translator` repo, tracked
-along with its corpus (commit `0c8a56b`), and it is built natively:
+Parity is therefore re-measured against **canonical** oracles, not against a peer
+that shares our convention:
+
+- `reference_interpreter_classic` — Olmstead's C (`if ( x == EOF ) a = 59048;`),
+  compiled natively from `reference_interpreter.c`;
+- `MALBOLGE/malbolge.py` — an independent Python interpreter with
+  `EOF_VALUE = 59048`.
+
+Both live outside this repo, so the gate reports `NOT_DEMONSTRATED` (exit 3) when
+neither is present, exactly like the old missing-oracle path. The comparison is on
+stdout bytes only: the C oracle exposes no step count.
+
+To reproduce it on your own machine, point one of the two env vars at any Classic
+Malbolge interpreter you have already checked is canonical:
 
 ```bash
-zig run --dep engine=engine -Mroot=src/parity_check.zig -Mengine=src/engine.zig
+export MALFREE_REFERENCE_CLASSIC=/path/to/reference_interpreter_classic  # ELF/binary
+export MALFREE_MALBOLGE_REFERENCE=/path/to/malbolge.py                   # Python
+py evidence/compare_f4_canonical.py
 ```
 
-run from that repo's `zig/` directory. It imports `engine.zig`, never
-`malbolge_free.zig`, so it stays an independent implementation of Classic
-rather than a copy of the runtime under test. `compare_f4.py` also verifies
-that both repos embed a byte-identical corpus and refuses to report parity if
-they ever diverge (`F4_CORPUS_DIVERGENCE`, exit 4).
+Before trusting an oracle, test it on the EOF witness itself — the property this
+bug turned on: `in,out,halt` on empty stdin must emit `0xa8` (`59048 % 256`). An
+interpreter that emits `0xff` shares the sentinel family and cannot falsify it;
+that is exactly how the old F4 oracle let the bug sit under a green seal. The
+report publishes each oracle's path **relative to the repo root** plus its
+SHA-256, so the identity of the interpreter used is checkable without leaking a
+local layout.
+
+### The old F4 oracle (2026-09-12, oracle rebuilt 2026-10-01)
+
+`evidence/compare_f4.py` is kept, but it is **no longer a gate**. Two findings on
+2026-10-17:
+
+1. Its oracle was a Windows `.exe` produced by hand and never committed, so
+   outside Danny's machine F4 could not run at all. It was replaced by
+   `zig/src/parity_check.zig` in the sibling `Malbolge-Translator` repo, tracked
+   with its corpus (commit `0c8a56b`) and built natively:
+
+   ```bash
+   zig run --dep engine=engine -Mroot=src/parity_check.zig -Mengine=src/engine.zig
+   ```
+
+   run from that repo's `zig/` directory. It imports `engine.zig`, never
+   `malbolge_free.zig`, so it stayed an independent implementation of Classic
+   rather than a copy of the runtime under test. Independence was real; canonicity
+   was not — independence from a bug is not agreement with the language.
+2. `compare_f4.py` always exited 0, even after printing `=> MISMATCH`, so
+   `tests/run_all.py` printed `PASS: F4 Classic parity` over a failing comparison.
+   The exit code now follows the verdict.
+
+`compare_f4.py` also verifies that both repos embed a byte-identical corpus and
+refuses to report parity if they ever diverge (`F4_CORPUS_DIVERGENCE`, exit 4).
 
 ## The "Purrfect" Badge
 
@@ -289,7 +337,11 @@ py tests/run_all.py
 py malbolge_cli.py verify
 py malbolge_cli.py assemble "in,out,rot,movd,opr,nop,end"
 
-# classic-parity checker (independent Zig oracle vs canonical Zig core)
+# canonical Classic parity (needs an external canonical interpreter; exits 3
+# with NOT_DEMONSTRATED when none is present)
+py evidence/compare_f4_canonical.py
+
+# old F4 measurement (engine.zig oracle — kept as a record, no longer a gate)
 py evidence/compare_f4.py
 
 # frontier widening evidence (10 -> 11 -> 12 on the committed witness)
@@ -415,7 +467,10 @@ MIT ^w^
 
 **M6 is PASS via the documented inherited claim**
 (`docs/TURING_COMPLETENESS_INHERITED.md`): our `fixed` profile is byte-identical
-to Classic Malbolge (F4 6/6, reproducible from a fresh clone), and Classic is
+to Classic Malbolge (F4c canonical parity 22/22 byte-a-byte against two canonical
+interpreters; reproducible from a fresh clone once you supply one via
+`MALFREE_REFERENCE_CLASSIC` / `MALFREE_MALBOLGE_REFERENCE` — see
+[Canonical parity](#canonical-parity-2026-10-17)), and Classic is
 Turing-complete per Scheffer 1999 (cyclic tag system compiler, cited via the
 esolangs wiki). This is the ROADMAP's explicitly named third route — an
 inheritance, **not** a new proof.

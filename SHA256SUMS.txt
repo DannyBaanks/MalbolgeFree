@@ -1,7 +1,7 @@
 # MalbolgeFree release hashes (SHA-256). Generated 2026-10-02T07:56:25Z.
 # Covers: canonical runtime, Python core, corpus, CLI, fixtures, canonical evidence.
-decb108de14fe36f446741e61533dfbf6d3087522c30adb87956631a86f175a4  src/malbolge_free.zig
-3372521736ffca8a9fa3543e590a2161a5838d1bbf657a8e64e1c19e4dae1a73  src/malbolge_core.py
+8eba78b433d8847138b583fb029eb278afd65a07a8e9ab7de8ad9347a4391236  src/malbolge_free.zig
+7c53f53d460a763a458a94867b3ccc2908c9f458772e32808928d676fc3d963e  src/malbolge_core.py
 c365c50089d72a6859d33619f7c1987419f4d90c35efa7f1fc59a1683b0376d5  src/bfir1_backend.zig
 248edbddbf9283596794fd2989562a09326fe815eb951edaed4eeed270d2a59c  src/hell.zig
 681f8033410df7a4a5d7eaa3f8c730929459de77ed4fd27cac02cd813ab36c0c  corpus/classic/echo1.mal
@@ -12,9 +12,20 @@ c365c50089d72a6859d33619f7c1987419f4d90c35efa7f1fc59a1683b0376d5  src/bfir1_back
 0b77006aae9b60952eb111493da5a96b0d75f19355661df82923430fcd14786c  corpus/classic/reproducer.mal
 d7d6d1e34e70210ef2939828ec6593efcaa52f32edf51122eff2638c92efe598  corpus/free/cross_3pow19.mal
 5f6e11aebc6801b4fb89908c5ae4bb13a871e9422793fab1f9cb0a5a4ed0790c  malbolge_cli.py
-6a31424ba45773454edbdc21ee5c703eb1390538ca89772b21ee071a1db7e10b  GUIA.md
-4daec51956b32e5bd78b17043d04de1e3c6ffa915103f9a7754cd54fd17bfe6f  tests/run_all.py
+8ecbd8a286144e6178bb9fdde0c78a2f8e1ecbd81c537ba8228528719f3a271a  GUIA.md
+720149b2bbf2172d143857454e4d3df1591d36b6df86f33d60e87bcd9a5e214a  tests/run_all.py
 44157cc8bdd6de4bdd7578f8ba19e3b16d6f5d030f768de29475dcb4764b9557  evidence/f4_classic_parity.json
 c8fd681f739fbb88f31ecb6d52e2d7cdee81d7b0e7c4cb5fec7327901378d5ca  evidence/f9_repeated_frontier.json
 b523e463980c9a265f5f18567856b60027d93fdabcc1491b0fe248be7f5b7dc5  tests/fixtures/free_pure/vertical_slice.hell
 1fdb4c60f6465b0a98a1ab22e6aba702aca86ba77928bfa140b79bdd01e3fb34  tests/fixtures/m7/bracketed_probe.bin
+# Re-sealed 2026-10-17T21:58:11Z (HONESTY_LEDGER entry 24, canonical EOF fix):
+#   updated src/malbolge_free.zig, src/malbolge_core.py, tests/run_all.py, GUIA.md;
+#   added the F4c canonical-parity artifacts below. Earlier hashes for those four
+#   paths are in git history; no sealed evidence file was rewritten.
+#   The three F4c artifacts below carry their pre-commit sanitization (oracle paths
+#   made root-relative and oracle hashes added); the 22 measurements are unchanged.
+bc6d1b36f39cedb81414e49ea658e75656b1e7673c27bcbf9dee18e6e5f4983d  evidence/f4c_canonical_parity_20261017.json
+3a132ffa112834bd1b2b6b6d62548c3e3c26bd5e6fefcb50f8ea659f346a7d5c  evidence/F4C_CANONICAL_PARITY_20261017.hashes.json
+123c3d726773d97bbd4afcc21750063534170e25713f8517a74fec6358aeb7f1  evidence/compare_f4_canonical.py
+585d83fd224848b1b57a081b2b530f22fcd471b1b58d25cdd620d092e30df87e  evidence/run_f4c.zig
+3ed8c1ea1643bf9cc57b9b0854e8368e74b447a2dc4bdc519a6676a85eb0a6fd  evidence/f4_engine_zig_divergence_20261017.json

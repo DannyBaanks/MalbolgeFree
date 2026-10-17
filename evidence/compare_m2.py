@@ -7,7 +7,8 @@ import subprocess
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TRANSLATED = "5z]&gqtyfr$(we4{WP)H-Zn,[%\\3dL+Q;>U!pJS72FhOA1CB6v^=I_0/8|jsb9m<.TVac`uY*MK'X~xDl}REokN:#?G\"i@"
 CRZ = ((1, 0, 0), (1, 0, 2), (2, 2, 1))
-EOF = (1 << 128) - 1
+EOF = 3**10 - 1  # canonical: malbolge.c assigns 59048 on end of input
+NULL = (1 << 128) - 1  # serialization of `encrypted_addr orelse maxInt` (run_m2.zig)
 LIMIT = 3**10
 
 
@@ -39,7 +40,7 @@ def oracle(source: bytes, stdin: bytes, max_steps: int = 16):
         cell_before = mem[cc]
         op = (cell_before + cc) % 94
         ab, cb, db = a, c, d
-        enc_addr = enc_value = EOF
+        enc_addr = enc_value = NULL
         halted = op == 81
         if op == 4:
             c = mem[d % LIMIT]
@@ -59,7 +60,7 @@ def oracle(source: bytes, stdin: bytes, max_steps: int = 16):
             d = mem[d % LIMIT]
         elif op == 62:
             dd = d % LIMIT
-            aa = LIMIT - 1 if a == EOF else a % LIMIT
+            aa = a % LIMIT
             mem[dd] = crazy(aa, mem[dd])
             a = mem[dd]
         if not halted:

@@ -50,7 +50,7 @@ test "M6.3 input: linear echo devuelve el byte recibido" {
     try std.testing.expectEqual(@as(u8, 'A'), res.stdout.items[0]);
 }
 
-test "M6.3 input: EOF se almacena como cero" {
+test "M6.3 input: EOF almacena el valor canonico 3^w-1 (byte 168)" {
     const allocator = std.testing.allocator;
     const bytes = try imageFor(&.{ .input, .output }, allocator);
     defer allocator.free(bytes);
@@ -76,5 +76,12 @@ test "M6.3 input: EOF se almacena como cero" {
 
     try std.testing.expectEqualStrings("HALTED", res.status);
     try std.testing.expectEqual(@as(usize, 1), res.stdout.items.len);
-    try std.testing.expectEqual(@as(u8, 0), res.stdout.items[0]);
+    // Canonical EOF: `in` assigns a = 3^10-1 = 59048, `store` wraps it to a byte,
+    // so `,` leaves 168 in the cell and `.` emits 168. Before 2026-10-17 this
+    // path stored 0, because the accumulator held a negative/maxInt sentinel that
+    // `store` special-cased. Consequence for the BF dialect: `,` at EOF is not
+    // zero, so a program cannot use "read until the input runs out" as a loop
+    // terminator; the differential cases carry an explicit 0x00 instead
+    // (tests/t_m64_branch.zig, tests/t_m65_differential.zig).
+    try std.testing.expectEqual(@as(u8, 168), res.stdout.items[0]);
 }

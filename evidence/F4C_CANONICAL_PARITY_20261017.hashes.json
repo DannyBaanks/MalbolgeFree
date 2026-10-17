@@ -1,0 +1,35 @@
+{
+  "format": "malbolge-free-evidence-hashes/1",
+  "generated_utc": "2026-10-17T20:46:55Z",
+  "sanitized_utc": "2026-10-17T21:58:11Z — before the first commit, the report's oracle paths were re-encoded from absolute local paths to repository-root-relative paths plus the oracle's own SHA-256. All 22 verdicts are byte-identical to the pre-sanitization measurement; the C oracle hash recorded here (761edd4a…) and in the report agree, which is what makes the two artifacts corroborate each other rather than both pointing at a path only Danny has.",
+  "path_base": "repository root (MalbolgeFree); ../ and ../../ are sibling checkouts next to this repository",
+  "artifacts": {
+    "evidence/f4c_canonical_parity_20261017.json": "bc6d1b36f39cedb81414e49ea658e75656b1e7673c27bcbf9dee18e6e5f4983d",
+    "evidence/compare_f4_canonical.py": "123c3d726773d97bbd4afcc21750063534170e25713f8517a74fec6358aeb7f1",
+    "evidence/run_f4c.zig": "585d83fd224848b1b57a081b2b530f22fcd471b1b58d25cdd620d092e30df87e",
+    "src/malbolge_free.zig": "8eba78b433d8847138b583fb029eb278afd65a07a8e9ab7de8ad9347a4391236",
+    "src/malbolge_core.py": "7c53f53d460a763a458a94867b3ccc2908c9f458772e32808928d676fc3d963e",
+    "../../ISyCo/workspace/assembly/malbolge/reference_interpreter.c": "8a3fb071b5b4dcac18bbd6fa4005241094fa06bb0329d6f04962006378cf0f9c",
+    "../../ISyCo/workspace/assembly/malbolge/reference_interpreter_classic": "761edd4ad06199bad2b56c9e251fe4fe1ad6faece5b4ae267e5f45297ff11ad1",
+    "../../ISyCo/workspace/assembly/malbolge/hello_world.malbolge": "c8a95363dbe2e997192834cf42a6f317be4a3bef93263e026300bc8243e77601",
+    "../MALBOLGE/malbolge.py": "e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b",
+    "evidence/f4_engine_zig_divergence_20261017.json": "3ed8c1ea1643bf9cc57b9b0854e8368e74b447a2dc4bdc519a6676a85eb0a6fd",
+    "evidence/compare_f4.py": "8e82b7f39245a1ab2195036f29642bcfc032a2cacbba55a48494340ed10b860c",
+    "../malbolge-lisp/fast20.c": "89d6e89101d36dce39c0b9abcbab344f9a530b08690db9231c4861d2df55552f",
+    "../MALDOOM/vendor/Unshackled.c": "d772b096e925a0f32ac283e59e666bcccc4b5febc2287fd1e0d2bbbb9372c3a7"
+  },
+  "verdict": "CLASSIC_PARITY_CANONICAL=PASS (22/22 byte-a-byte comparisons)",
+  "scope": "11 cases x 2 cores (Zig src/malbolge_free.zig, Python src/malbolge_core.py) x 2 canonical oracles (Olmstead C ELF reference_interpreter_classic, ../MALBOLGE/malbolge.py); stdout bytes only. 6 corpus programs on empty stdin, 4 fed-input echo controls, 1 external Hello-world program. EOF witness: in-then-out emits 0xa8 = (3**10-1) % 256, not 0xff. Measured negative: the previous F4 oracle (Malbolge-Translator/zig/src/engine.zig, which assigns a = 0xFFFF at EOF) now diverges on the 4 echo programs; recorded in evidence/f4_engine_zig_divergence_20261017.json. The 69M-step Lutter quine and the 62.9M-step record quine are NOT re-run here (too slow for a gate); they read no stdin, so EOF cannot affect them, and the 2026-10-17 external audit already measured them matching.",
+  "width_control_k19": {
+    "claim": "EOF follows the machine width: at w=19, in-then-out emits 0xda = (3**19-1) % 256",
+    "reference": "../malbolge-lisp/fast20.c, line 88 `INS_23:;int CR=getchar();a=CR==EOF?END-1:CR;` with `#define END 1162261467ULL`",
+    "measured": "gcc -O2 fast20.c, then `./fast20 ubO.mal < /dev/null | xxd` -> `da` (2026-10-17)",
+    "asserted_by": "tests/t_m0_eof_precision.zig (`EOF follows the machine width, not a Classic constant`)",
+    "why_not_a_gate": "compiling a sibling-repo C source inside the gate would couple this repo to a compiler and to a checkout it does not own"
+  },
+  "unshackled_note": {
+    "claim": "Unshackled (k>=20, Unicode I/O) really does use -1 at EOF; that is a different machine, not the Classic value",
+    "reference": "../MALDOOM/vendor/Unshackled.c, case 23 sets a->unicode = -1 with head = T2",
+    "measured": "vendor ELF on `ubO` with empty stdin prints nothing and writes `invalid unicode codepoint` to stderr (2026-10-17)"
+  }
+}

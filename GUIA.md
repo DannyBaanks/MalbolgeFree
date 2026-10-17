@@ -73,11 +73,12 @@ Con entrada por stdin (el programa `ubO` lee un byte y lo imprime):
 py malbolge_cli.py run "ubO" --stdin "A"
 ```
 
-Sin `--stdin`, `in` lee EOF y el programa imprime `ff`:
+Sin `--stdin`, `in` lee EOF —que vale `3^10 - 1 = 59048`— y el programa imprime
+`a % 256`, o sea `a8`:
 
 ```text
 status=HALTED steps=3 padwidth=10
-stdout[1 bytes]=ff
+stdout[1 bytes]=a8
 ```
 
 ## Inspeccionar el estado sin ejecutar
@@ -112,14 +113,16 @@ Salida verificada:
 status=HALTED steps=3 padwidth=10
 showing 3 events of a 3-step run (a/c/d are accumulator/code/data registers):
   step      c      d  op  a_before  a_after  enc@
-     1      0      0    in        0       -1  0
-     2      1      1   out       -1       -1  1
-     3      2      2  halt       -1       -1  -
+     1      0      0    in        0    59048  0
+     2      1      1   out    59048    59048  1
+     3      2      2  halt    59048    59048  -
 ```
 
-Se lee así: en el paso 1 (`in` sin stdin) el acumulador pasa de `0` a `-1`
-(EOF); en el paso 2 (`out`) emite `a % 256 = 255`; en el paso 3 (`halt`)
-termina. `enc@` es la celda que se auto-cifró tras ejecutar (`-` = ninguna).
+Se lee así: en el paso 1 (`in` sin stdin) el acumulador pasa de `0` a `59048` —
+EOF asigna el valor canónico `3^10 - 1`, no un centinela; ver
+`docs/CLASSIC_SEMANTICS.md`—; en el paso 2 (`out`) emite `a % 256 = 168`
+(`0xa8`); en el paso 3 (`halt`) termina. `enc@` es la celda que se auto-cifró
+tras ejecutar (`-` = ninguna).
 
 ## Códigos de salida (parte del contrato)
 

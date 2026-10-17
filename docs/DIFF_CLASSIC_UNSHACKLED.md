@@ -10,7 +10,7 @@
 | memory init | full array, crazy-fill | lazy trie, crazy-fill via `initial_values` | NO — shape differs, result same for k=10 |
 | eager vs lazy | eager allocation | lazy trie | NO (optimization) |
 | `pos` accumulator | `c` only | `pos = c` after jmp; explicit `pos` reg | NO (equivalent, observable) |
-| I/O | `ord(c)` / `a % 256` | Unicode codepoints, EOF = -1, `\n` special | YES but orthogonal |
+| I/O | `ord(c)` / `a % 256`; EOF assigns `3^10 - 1` = 59048 (`out` -> `0xa8`) | Unicode codepoints, EOF = -1 (`out` of it is an error), `\n` special | YES but orthogonal |
 | determinism | yes | no — `srand(time(NULL))` | YES for reproducibility |
 
 ## Conclusions

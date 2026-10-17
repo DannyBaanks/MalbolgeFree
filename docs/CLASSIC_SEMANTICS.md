@@ -3,6 +3,22 @@
 Source audited: `MALDOOM/vendor/malbolge/malbolge.py` (PROVENANCE: public-language
 description, Iizawa 2005 Appendix C, transcription of 1998 `malbolge.c`).
 
+## EOF correction (2026-10-17)
+
+This table used to read `a = -1` on EOF. That was wrong, and the error is
+traceable: it was transcribed from the vendored `malbolge.py`, which assigns a
+negative sentinel, while the C lineage it claims to describe assigns the
+all-twos value — `if ( x == EOF ) a = 59048;` in `malbolge.c` (two copies on
+this machine: `ISyCo/workspace/assembly/malbolge/reference_interpreter.c` and
+`ISyCo Git/ags-shinh/be/fetcher/malbolge.c`) and `a = CR==EOF?END-1:CR` in
+Iizawa's `fast20.c`. Measured: `reference_interpreter_classic` and
+`ISyCo Git/MALBOLGE/malbolge.py` both emit `0xa8` for `in,out,hlt` on empty
+stdin; the sentinel emits `0xff`. `MalbolgeFree` now follows the references.
+The width rule is measured too: `fast20.c` compiled from
+`ISyCo Git/malbolge-lisp/fast20.c` prints exactly `da` for `in,out,hlt` on empty
+stdin, i.e. `(3^19 - 1) % 256` — EOF follows the machine width, not a hardcoded
+Classic constant. See `docs/HONESTY_LEDGER.md` entry 24.
+
 ## Machine state
 
 - Registers: `a` (accumulator), `c` (code ptr), `d` (data ptr). Start 0,0,0.
@@ -26,7 +42,7 @@ description, Iizawa 2005 Appendix C, transcription of 1998 `malbolge.c`).
 |---|---|---|
 | 4  | jmp  | `c = mem[d]` (via `c_target`) |
 | 5  | out  | emit `a % 256` |
-| 23 | in   | `a = ord(ch)` or `a = -1` on EOF |
+| 23 | in   | `a = ord(ch)`; on EOF `a = 3^10 - 1 = 59048` (canonical) |
 | 39 | rot  | `mem[d] = v//3 + (v%3) * 3^9; a = mem[d]` (10-trit rotate) |
 | 40 | movd | `d = mem[d]` |
 | 62 | crazy| `mem[d] = crazy(a, mem[d]); a = mem[d]` |

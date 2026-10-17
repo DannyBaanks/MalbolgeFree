@@ -1,0 +1,99 @@
+{
+  "phase": "F4",
+  "claim": "CLASSIC_COMPATIBILITY",
+  "oracle": "Malbolge-Translator/zig/src/parity_check.zig (native zig run)",
+  "runtime": "src/malbolge_free.zig",
+  "all_match": false,
+  "verdicts": [
+    {
+      "program": "echo.mal",
+      "match": false,
+      "reference": {
+        "program": "echo.mal",
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89"
+      },
+      "runtime": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69"
+      }
+    },
+    {
+      "program": "echo1.mal",
+      "match": false,
+      "reference": {
+        "program": "echo1.mal",
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89"
+      },
+      "runtime": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_sha256": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69"
+      }
+    },
+    {
+      "program": "echo2.mal",
+      "match": false,
+      "reference": {
+        "program": "echo2.mal",
+        "status": "HALTED",
+        "steps": 5,
+        "stdout_sha256": "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb"
+      },
+      "runtime": {
+        "status": "HALTED",
+        "steps": 5,
+        "stdout_sha256": "ee1e877713365238452c2b5fcd9aebc27f9868350395a48c1cfe5a4743d85ba3"
+      }
+    },
+    {
+      "program": "echo3.mal",
+      "match": false,
+      "reference": {
+        "program": "echo3.mal",
+        "status": "HALTED",
+        "steps": 7,
+        "stdout_sha256": "5ae7e6a42304dc6e4176210b83c43024f99a0bce9a870c3b6d2c95fc8ebfb74c"
+      },
+      "runtime": {
+        "status": "HALTED",
+        "steps": 7,
+        "stdout_sha256": "c9095d8ba2ada64f9d6c529236714a13a5c919568e9ec168bd074ce77472165d"
+      }
+    },
+    {
+      "program": "hello.mal",
+      "match": true,
+      "reference": {
+        "program": "hello.mal",
+        "status": "HALTED",
+        "steps": 40,
+        "stdout_sha256": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069"
+      },
+      "runtime": {
+        "status": "HALTED",
+        "steps": 40,
+        "stdout_sha256": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069"
+      }
+    },
+    {
+      "program": "reproducer.mal",
+      "match": true,
+      "reference": {
+        "program": "reproducer.mal",
+        "status": "HALTED",
+        "steps": 1948,
+        "stdout_sha256": "d94a327593e239b882ba8cf12340cbbbc884fbc84361e1bc7c6928db172c0d50"
+      },
+      "runtime": {
+        "status": "HALTED",
+        "steps": 1948,
+        "stdout_sha256": "d94a327593e239b882ba8cf12340cbbbc884fbc84361e1bc7c6928db172c0d50"
+      }
+    }
+  ]
+}

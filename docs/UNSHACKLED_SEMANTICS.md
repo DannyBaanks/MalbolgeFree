@@ -53,6 +53,16 @@ No `MAX_ADDR`. Addresses are `Number` (arbitrary-width), positions `pos` are
   becomes a special "1,2 as trits" form. Output uses `is_nl(a)` to map to
   `"\n"` — newline is not raw 10 in the character space, it's a distinguished
   value that the host translates.
+- Measured in `Unshackled.c` (`case 23`): on EOF it builds `a` with `head = T2`
+  and sets `a->unicode = -1`, so the *character* is -1 even though the number is
+  a trit form. Running the vendored binary on `ubO` with empty stdin prints
+  nothing and writes `invalid unicode codepoint` to stderr — `out` of the EOF
+  value is an error in this machine.
+- This is **not** the Classic EOF value. Classic (and our parametric core, whose
+  width is an ordinary `w`) assigns `3^w - 1`: `59048` at `w = 10`, `3^19 - 1` at
+  `w = 19`, where `out` truncates to `0xa8` and `0xda`. See
+  `docs/CLASSIC_SEMANTICS.md` and `docs/SPEC_V1.md` §6. Claiming "-1" for Classic
+  was the bug recorded in `docs/HONESTY_LEDGER.md` entry 24.
 
 ## Width growth vs width capping
 

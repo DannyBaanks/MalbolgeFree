@@ -10,7 +10,7 @@ infinity claims this project does not make.)
 | Claim | Status |
 |---|---|
 | C0 SINGLE_PARAMETRIC_CORE | **DEMONSTRATED** — one core, no `k==10/19` switch, verified by inspection + full corpus run |
-| C1 CLASSIC_PARITY_K10 | **DEMONSTRATED 6/6** — live F4 rerun matches the independent Zig oracle after correcting `crazy` to use modulo. |
+| C1 CLASSIC_PARITY_K10 | **DEMONSTRATED** — 2026-10-17: `evidence/compare_f4_canonical.py` matches BOTH cores byte-a-byte against two independent canonical oracles (Olmstead's C `reference_interpreter_classic`, and `ISyCo Git/MALBOLGE/malbolge.py`): 22/22 comparisons over 11 cases. The earlier reading of this claim — "matches the independent Zig oracle" — is superseded: that oracle (`Malbolge-Translator/zig/src/engine.zig`) assigns `0xFFFF` at EOF, so it agreed with our own EOF bug. Independence is not canonicity; the divergence is recorded in `evidence/f4_engine_zig_divergence_20261017.json`. |
 | C2 UNSHACKLED_PARITY_K19 | **NOT_DEMONSTRABLE** — original `Unshackled.c` uses `srand(time(NULL))`, so reference parity is nondeterministic by construction. We can reproduce the deterministic subset only. |
 | C3 ARBITRARY_FINITE_K | **DEMONSTRATED** — widths 10, 11, 12, 19, 20, 23, 26 all load + fill correctly, and `src/malbolge_free.zig` runs the corpus k=10 (wrap) and k=20 (no wrap) |
 | C4 NO_FIXED_COMPILED_MAX_ADDRESS | **DEMONSTRATED** — there is no `MAX_ADDR`. The `mem_limit` becomes `null` precisely in unbounded mode, and nothing lazily resets memory to a 3^k window |
@@ -19,7 +19,7 @@ infinity claims this project does not make.)
 | C7 FRONTIER_WIDTH_WIDENING | **DEMONSTRATED** — `tests/t_frontier_moment.zig` prints `WIDEN step=59050 c=59049 d=59049 old_w=10 new_w=11`; the same witness continues through the C8 event. |
 | C8 REPEATED_WIDTH_WIDENING | **DEMONSTRATED** for two frontiers: `10→11` at step 59050 and `11→12` at step 177148. Evidence: `f9_repeated_frontier.json`, `tests/t_m5_full_vm.zig`. Rungs up to 16 measured on the real VM (2026-09-16, `M5_LADDER_SCALE/results.json`); rungs 17/18/19 measured 2026-10-01 with the dense representation (`--dense`, label `linux-14gib-dense`, peak RSS 1.92 GiB). Step counts identical to the hash predictions. Do not extrapolate beyond 19. |
 | C9 CLASSIC + UNSHACKLED -> FREE | **DEMONSTRATED** in both readings |
-| C10 TURING_COMPLETENESS | **INHERITED** — `fixed` == Classic (F4 6/6) and Classic is TC (Scheffer 1999). See `docs/TURING_COMPLETENESS_INHERITED.md`. A NEW proof stays NOT_DEMONSTRATED |
+| C10 TURING_COMPLETENESS | **INHERITED** — `fixed` == Classic (F4c canonical parity 22/22) and Classic is TC (Scheffer 1999). See `docs/TURING_COMPLETENESS_INHERITED.md`. A NEW proof stays NOT_DEMONSTRATED |
 
 `EPOCHAL_PYTHON_PARITY` = **DEMONSTRATED** (2026-10-01). `src/malbolge_core.py` now
 implements the `epochal` policy (frontier trigger before the step touches memory,
@@ -66,6 +66,7 @@ cd malbolge-free
 zig run evidence/f7_witness.zig         # witness crossing (k=20 fixed + pad)
 zig run evidence/f7_cross.zig           # boundary sweep (k=10 vs k=20)
 py    evidence/f7_python_check.py       # simulated trace of the witness (movd chain)
-py    evidence/compare_f4.py            # classic-parity checker (pyref vs zig)
+py    evidence/compare_f4_canonical.py  # CANONICAL Classic parity (22/22; exit 3 = no oracle)
+py    evidence/compare_f4.py            # old engine.zig measurement (record, not a gate)
 zig run evidence/run_f4.zig             # corpus-on-Zig emitter
 ```

@@ -202,7 +202,12 @@ class MalbolgeCore:
                 out.append(a % 256)
             elif op == 23:              # in
                 ch = next(stdin_iter, None)
-                a = -1 if ch is None else ch
+                # Canonical EOF is the all-twos value, not a sentinel: malbolge.c
+                # assigns 59048, fast20.c assigns END-1. Measured against
+                # reference_interpreter_classic and MALBOLGE/malbolge.py, which
+                # emit 0xa8 where a sentinel emitted 0xff. padwidth is the machine
+                # frontier: it equals width under 'fixed' and grows only where it may.
+                a = (3 ** self.padwidth) - 1 if ch is None else ch
             elif op == 39:              # rot
                 dd = d % limit if limit is not None else d
                 v = self._cell(dd)
@@ -228,8 +233,8 @@ class MalbolgeCore:
                 elif self.growth_policy == "fixed":
                     w = self.width
                 else:
-                    w = max(self.padwidth, tritlen(v), tritlen(a if a >= 0 else 0))
-                aa = (3 ** w) - 1 if a < 0 else a % (3 ** w)
+                    w = max(self.padwidth, tritlen(v), tritlen(a))
+                aa = a % (3 ** w)
                 nv = crazy(aa, v, w)
                 self._cell_write(dd, nv)
                 a = nv

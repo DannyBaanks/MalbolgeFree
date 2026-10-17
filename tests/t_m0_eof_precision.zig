@@ -55,25 +55,34 @@ fn runTraced(alloc: std.mem.Allocator, ops: []const u8, stdin: []const u8, trace
     return vm.runWithTrace(1000, stdin, trace);
 }
 
-test "EOF then out emits exactly 0xff and halts" {
+/// Canonical EOF value for Classic: Olmstead's 1998 `malbolge.c` assigns
+/// `a = 59048` and Iizawa's `fast20.c` assigns `a = END-1`. Both are the
+/// all-twos value 3^w-1 of the machine width, never a negative sentinel.
+/// Verified 2026-10-17 against `reference_interpreter_classic` (emits 0xa8)
+/// and `ISyCo Git/MALBOLGE/malbolge.py` (emits 0xa8) on `in,out,hlt` with an
+/// empty stdin; this core used to emit 0xff there.
+const CLASSIC_EOF: u128 = 59048; // == 3^10 - 1
+
+test "EOF then out emits the canonical 3^10-1 byte and halts" {
     const alloc = std.testing.allocator;
     var res = try runClassic(alloc, &[_]u8{ IN, OUT, HALT }, "");
     defer res.stdout.deinit(alloc);
 
     try std.testing.expectEqualStrings("HALTED", res.status);
     try std.testing.expectEqual(@as(usize, 1), res.stdout.items.len);
-    // u128 max mod 256 == 255. This is the one EOF fact SPEC_V1 already claimed.
-    try std.testing.expectEqual(@as(u8, 0xff), res.stdout.items[0]);
+    try std.testing.expectEqual(core.pow3(10) - 1, CLASSIC_EOF);
+    try std.testing.expectEqual(@as(u8, @intCast(CLASSIC_EOF % 256)), res.stdout.items[0]);
+    try std.testing.expectEqual(@as(u8, 0xa8), res.stdout.items[0]);
 }
 
-test "EOF is sticky: every further in reports EOF" {
+test "EOF is sticky: every further in reports the same all-twos value" {
     const alloc = std.testing.allocator;
     var res = try runClassic(alloc, &[_]u8{ IN, OUT, IN, OUT, IN, OUT, HALT }, "");
     defer res.stdout.deinit(alloc);
 
     try std.testing.expectEqualStrings("HALTED", res.status);
     try std.testing.expectEqual(@as(usize, 3), res.stdout.items.len);
-    for (res.stdout.items) |b| try std.testing.expectEqual(@as(u8, 0xff), b);
+    for (res.stdout.items) |b| try std.testing.expectEqual(@as(u8, 0xa8), b);
 }
 
 test "a real byte is not EOF: the same program distinguishes them" {
@@ -83,11 +92,11 @@ test "a real byte is not EOF: the same program distinguishes them" {
     var fed = try runClassic(alloc, &[_]u8{ IN, OUT, HALT }, "A");
     defer fed.stdout.deinit(alloc);
 
-    try std.testing.expectEqual(@as(u8, 0xff), eof.stdout.items[0]);
+    try std.testing.expectEqual(@as(u8, 0xa8), eof.stdout.items[0]);
     try std.testing.expectEqual(@as(u8, 'A'), fed.stdout.items[0]);
 }
 
-test "EOF normalises to 3^w - 1 inside crazy" {
+test "EOF is the all-twos value, and crazy consumes it as an ordinary operand" {
     const alloc = std.testing.allocator;
     // c and d advance together from 0, so at the crazy step (c == d == 2) the
     // cell read is still the pristine source char at position 2. That makes the
@@ -97,24 +106,44 @@ test "EOF normalises to 3^w - 1 inside crazy" {
     defer res.stdout.deinit(alloc);
 
     const w: u8 = 10;
-    const modulus_minus_one = core.pow3(w) - 1; // EOF normalises to this
+    const modulus_minus_one = core.pow3(w) - 1; // what `in` assigns at EOF
     const mem_at_d = opChar(CRAZY, 2);          // d == c == 2 at that step
     const expected_a = core.crazy(modulus_minus_one, mem_at_d, w);
     try std.testing.expectEqualStrings("HALTED", res.status);
     try std.testing.expectEqual(@as(u8, @intCast(expected_a % 256)), res.stdout.items[0]);
 }
 
-test "EOF is visible in the trace as the sentinel right after in" {
+test "EOF is visible in the trace as 3^w-1 right after in" {
     const alloc = std.testing.allocator;
     var trace = std.ArrayList(core.TraceEvent).empty;
     defer trace.deinit(alloc);
     var res = try runTraced(alloc, &[_]u8{ IN, OUT, HALT }, "", &trace);
     defer res.stdout.deinit(alloc);
 
-    // step 1 is the in; its a_after must be the sentinel, and a_before zero.
+    // step 1 is the in; its a_after must be the canonical all-twos value, and
+    // a_before zero.
     try std.testing.expectEqual(@as(usize, 3), trace.items.len);
     try std.testing.expectEqual(@as(u128, 0), trace.items[0].a_before);
-    try std.testing.expectEqual(core.EOF_SENTINEL, trace.items[0].a_after);
+    try std.testing.expectEqual(CLASSIC_EOF, trace.items[0].a_after);
+}
+
+test "EOF follows the machine width, not a Classic constant" {
+    const alloc = std.testing.allocator;
+    // free_pure at fixed k=19 is the width Unshackled addresses. Its EOF must
+    // be 3^19-1, which is what `fast20.c` (`a = END-1`) produces: measured on
+    // this machine that reference prints 0xda, where the old sentinel printed
+    // 0xff.
+    var vm = core.MalbolgeCore.initFreePure(alloc, 19, .fixed);
+    defer vm.deinit();
+    const ops = try source(alloc, &[_]u8{ IN, OUT, HALT });
+    defer alloc.free(ops);
+    try vm.load(ops);
+    var res = try vm.run(1000, "");
+    defer res.stdout.deinit(alloc);
+
+    try std.testing.expectEqualStrings("HALTED", res.status);
+    try std.testing.expectEqual(@as(u8, @intCast((core.pow3(19) - 1) % 256)), res.stdout.items[0]);
+    try std.testing.expectEqual(@as(u8, 0xda), res.stdout.items[0]);
 }
 
 test "rot after EOF ignores the accumulator, so it is not an EOF path" {

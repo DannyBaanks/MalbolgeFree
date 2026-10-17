@@ -83,7 +83,10 @@ test "M6.5 full differential: cinco programas comparan stdout/cinta/puntero/term
     const cases = [_]Case{
         .{ .source = "+++[-].", .input = "" },
         .{ .source = "++[>++<-]>.", .input = "" },
-        .{ .source = ",[.,]", .input = "AB" },
+        // El terminador viaja en la entrada: con el EOF canonico (a = 3^w-1,
+        // Classic 59048) el idioma BF "leer hasta agotar la entrada" ya no
+        // termina. Ver tests/t_m64_branch.zig para la misma decision.
+        .{ .source = ",[.,]", .input = "AB\x00" },
         .{ .source = "+[>+<-]>.", .input = "" },
         .{ .source = HELLO_WORLD, .input = "" },
     };

@@ -184,3 +184,23 @@ guía.
 | M6 Turing completeness válida | PASS (vía claim heredado, `docs/TURING_COMPLETENESS_INHERITED.md`): `fixed` == Classic (F4 6/6 reproducible) y Classic es TC (Scheffer 1999, citado). `TURING_COMPLETENESS_NEW_CLAIM` sigue NOT_DEMONSTRATED. Frontera medida: control por output SÍ con 8 opcodes; movimiento de puntero por dato NO en el espacio buscado (`docs/M6_EIGHT_OPCODE_BOUNDARY.md`). El backend asistido (M6.2-M6.5) es una herramienta de conveniencia, no parte del claim |
 | M7 Producto operable | PASS: CLI estable `run`/`inspect`/`trace`/`verify`/`assemble`/`disassemble` con exit codes contractuales y guia `GUIA.md` con salidas reales; `trace_run` equivale a `run` (60k pasos); producto usa el core Python (sin toolchain), diferencial Zig↔Python demostrado |
 | M8 Release formal 1.0 | EN CURSO: docs sincronizados, hashes generados, CI en ambos OS; release con limitaciones explicitas |
+
+---
+
+## Corrección 2026-10-17 (anexa, no reescribe la tabla anterior)
+
+- **M0**: la fila dice "EOF y precision fijados con pruebas". Las pruebas fijaron
+  un valor **incorrecto**: `in` en end-of-input asignaba un centinela (`u128::max` /
+  `-1`) normalizado solo dentro de `crazy`, y `out` tras EOF emitía `0xff`. Canónico
+  es `3^w - 1` (`0xa8` a `w=10`). Corregido en ambos núcleos y sellado de nuevo;
+  `t_m0_eof_precision.zig` ahora afirma el valor canónico y el control `w=19` (`0xda`).
+- **M3**: "corpus 6/6 contra oráculo independiente" sigue siendo independencia real,
+  pero el oráculo (`Malbolge-Translator/zig/src/engine.zig`) compartía nuestra
+  convención de EOF, así que no podía falsificar este bug. Veredicto actual: 4/6 de
+  coincidencia con ese oráculo (`evidence/f4_engine_zig_divergence_20261017.json`) y
+  **22/22** contra dos intérpretes canónicos (`evidence/f4c_canonical_parity_20261017.json`).
+  La paridad canónica es la que sostiene M3 hoy; `compare_f4.py` deja de ser gate.
+- **M6**: el claim heredado se mantiene, pero su evidencia del paso 1 es ahora F4c.
+  Como los oráculos canónicos no se vendorizan, el gate sale con código 3
+  (`NOT_DEMONSTRATED`) donde no haya ninguno: CI lo reporta como skip explícito,
+  nunca como PASS inventado.

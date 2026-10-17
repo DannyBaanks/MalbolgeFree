@@ -65,7 +65,13 @@ test "M6.4 branches: tres programas con loops comparan stdout/cinta/puntero/term
     const cases = [_]Case{
         .{ .source = "+++[-].", .input = "" },
         .{ .source = "++[>++<-]>.", .input = "" },
-        .{ .source = ",[.,]", .input = "AB" },
+        // `,[.,]` reads one byte past what it prints. Since 2026-10-17 the core
+        // assigns the canonical EOF value 3^w-1 to `a` (Classic: 59048, so `.`
+        // would emit 0xa8), which is NOT zero: the "read until the input
+        // exhausts itself" idiom no longer terminates. The terminator is part of
+        // the input instead, which keeps this program in defined territory on
+        // both sides of the differential.
+        .{ .source = ",[.,]", .input = "AB\x00" },
     };
 
     for (cases) |case| {

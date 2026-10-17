@@ -95,7 +95,7 @@ Semantica:
 |---:|---|
 | 4 | `c = M[d]` |
 | 5 | emitir `a mod 256` |
-| 23 | leer un byte; EOF usa el sentinel definido abajo |
+| 23 | leer un byte; en EOF asigna `3^w - 1` (seccion 6) |
 | 39 | rotar `M[d]`; guardar resultado en `M[d]` y `a` |
 | 40 | `d = M[d]` |
 | 62 | `M[d] = crazy(a, M[d], w)`; `a = M[d]` |
@@ -142,25 +142,40 @@ el disco antes de citar: este texto quedo detras de la evidencia.
 
 ## 6. EOF
 
-El runtime actual usa `u128::maxInt(u128)` internamente y lo normaliza en las
-operaciones. El comportamiento observable de EOF debe quedar fijado con casos
-de prueba para `in`, `crazy` y `out`.
+`in` en EOF asigna el valor canonico `3^w - 1`; con `w = 10` es `59048`. Ese es el
+valor del interprete original de 1998 (`malbolge.c`: `if ( x == EOF ) a = 59048;`)
+y el de `fast20.c` de Iizawa (`INS_23:;int CR=getchar();a=CR==EOF?END-1:CR;`, con
+`#define END 1162261467ULL` = `3^19`). No es un centinela negativo ni `u128::max`.
 
-Estado: **CERRADO** (2026-10-01). `tests/t_m0_eof_precision.zig` fija con trazas
-ejecutadas, no con prosa:
+Estado: **CERRADO** (2026-10-01; corregido 2026-10-17). Antes de la correccion el
+runtime guardaba `u128::max` y lo normalizaba solo dentro de `crazy`, asi que `out`
+tras EOF emitia `0xff`. Una auditoria externa de 2026-10-17 midio la divergencia
+frente a tres oraculos canonicos; `docs/HONESTY_LEDGER.md` entrada 24 registra el
+cambio y `docs/CLASSIC_SEMANTICS.md` explica el origen del error (la copia
+`MALDOOM/vendor/malbolge/malbolge.py`, que aun lleva `a = -1`). La tabla es la
+observada despues de la correccion, fijada con trazas ejecutadas en
+`tests/t_m0_eof_precision.zig`, no con prosa:
 
 | caso | resultado observado |
 |---|---|
-| `in` en EOF -> `out` | emite exactamente `0xff`, termina `HALTED` |
-| `in` en EOF repetido | el sentinel es pegajoso: N lectures dan N `0xff` |
-| byte real vs EOF | el mismo programa distingue: `A` -> `0x41`, EOF -> `0xff` |
-| `in` en EOF -> `crazy` | normaliza a `3^w - 1`; valor verificado contra `crazy(3^w-1, mem[d], w)` calculado en el test |
-| sentinel en la traza | `a_before = 0`, `a_after = u128::max` justo tras `in` |
+| `in` en EOF -> `out` | emite exactamente `0xa8` (= `59048 % 256`), termina `HALTED` |
+| `in` en EOF repetido | el valor es pegajoso: N lectures dan N `0xa8` |
+| byte real vs EOF | el mismo programa distingue: `A` -> `0x41`, EOF -> `0xa8` |
+| `in` en EOF -> `crazy` | `3^w - 1` entra como operando ordinario: `crazy(3^w-1, mem[d], w)`, valor calculado en el test |
+| EOF en la traza | `a_before = 0`, `a_after = 59048` justo tras `in` |
 | `in` en EOF -> `rot` | `rot` lee `mem[d]`, no el acumulador: EOF no se filtra ahi |
+| `in` en EOF con `w = 19` | emite `0xda` (= `(3^19 - 1) % 256`): EOF sigue el ancho de la maquina, no una constante Classic. Control medido: `fast20.c` compilado localmente sobre `ubO` con stdin vacio imprime exactamente `da` |
 
 Nota de calculo: como `c` y `d` avanzan juntos desde 0, en el paso `crazy`
 `c == d == 2` y la celda leida sigue siendo el caracter fuente intacto. Eso hace
 el valor esperado **computable**, no una constante magica.
+
+Consecuencia en la capa BF: el backend baja `,` como `IN; STORE`, de modo que `,`
+en EOF ya no guarda 0 sino `168`. El idiomita `,[.,]` ("leer hasta EOF") deja de
+terminar. Los casos diferenciales BF llevan ahora un terminador `0x00` explicito
+en la entrada (`tests/t_m64_branch.zig`, `tests/t_m65_differential.zig`) y
+`tests/t_m63_input.zig` fija el byte canonico. La convencion `,` -> 0 de los VMs
+BF de referencia no se toca: es otra maquina.
 
 ## 7. Resolucion M1 De La Contradiccion
 
@@ -172,11 +187,14 @@ La semantica correcta para el acumulador es:
 
 ```zig
 const modulus: u128 = pow3(w);
-const opA = if (a == EOF_SENTINEL) modulus - 1 else (a % modulus);
+const opA = a % modulus;
 ```
 
-F4 ahora importa `src/malbolge_free.zig` como modulo `malbolge_free` y compara
-contra el oraculo externo de Malbolge-Translator.
+No hay rama especial para EOF: despues de la correccion de la seccion 6 el
+acumulador ya llega dentro de rango y `crazy` lo consume como cualquier otro valor.
+El checker `evidence/compare_f4_canonical.py` (gate F4c) compara los dos cores
+contra los oraculos canonicos; `evidence/compare_f4.py` queda como la medicion de
+la divergencia con el oraculo antiguo de Malbolge-Translator.
 
 ## 8. Gates M0
 
@@ -194,5 +212,7 @@ contra el oraculo externo de Malbolge-Translator.
 
 **Veredicto M0:** `PARTIAL / SEMANTICS_DRAFTED`.
 
-**Veredicto M1:** `PASS para F4 Classic`; EOF, precision numerica y los modos
+**Veredicto M1:** `PASS para F4 Classic` (2026-10-01). Re-medido 2026-10-17 contra
+oraculos canonicos: `PASS para F4c`, 22/22 comparaciones byte-a-byte; el centinela
+de EOF fue retirado y `in` en EOF asigna `3^w - 1`. Precision numerica y los modos
 no-`fixed` siguen abiertos para los milestones siguientes.

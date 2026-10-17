@@ -133,3 +133,10 @@ if args.output:
     output.write_text(json.dumps(report, indent=2), encoding="utf-8")
 print(json.dumps(report, indent=2))
 print("\n=>", "PASS" if all_match else "MISMATCH")
+# Exit code follows the verdict. Before 2026-10-17 this script always exited 0,
+# so `tests/run_all.py` printed "PASS: F4 Classic parity" straight after a
+# `=> MISMATCH` line: the one gate meant to catch a parity break could never
+# report one. The oracle here (Malbolge-Translator engine.zig) also assigns a
+# non-canonical EOF value, so parity against it is no longer the claim; see
+# compare_f4_canonical.py and docs/HONESTY_LEDGER.md entry 24.
+raise SystemExit(0 if all_match else 1)

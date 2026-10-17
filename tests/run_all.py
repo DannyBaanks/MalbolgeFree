@@ -59,7 +59,13 @@ GATES = [
     ("Classic codec unit tests", [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_classic_codec.py", "-v"]),
     ("constructive assembler unit tests", [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_constructive_assembler.py", "-v"]),
     ("product CLI verify", [sys.executable, str(ROOT / "malbolge_cli.py"), "verify"]),
-    ("F4 Classic parity", [sys.executable, str(ROOT / "evidence" / "compare_f4.py")]),
+    # Parity is measured against CANONICAL oracles (Olmstead's C interpreter and
+    # MALBOLGE/malbolge.py, both `a = 3**10-1` at EOF). The former F4 gate used
+    # Malbolge-Translator/zig/src/engine.zig, which assigns 0xFFFF at EOF: a peer
+    # that shares a convention cannot falsify it. compare_f4.py is kept as the
+    # measurement of that divergence and is no longer a gate; see
+    # evidence/f4_engine_zig_divergence_20261017.json and HONESTY_LEDGER entry 24.
+    ("F4c canonical Classic parity", [sys.executable, str(ROOT / "evidence" / "compare_f4_canonical.py")]),
     ("M2 Classic trace differential", [sys.executable, str(ROOT / "evidence" / "compare_m2.py")]),
     ("EPOCHAL Python parity differential", [sys.executable, str(ROOT / "evidence" / "compare_epochal.py")]),
     ("M1 numeric and EOF", zig_test("tests/t_m1_contract.zig")),
