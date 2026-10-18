@@ -144,6 +144,46 @@ exactamente los ocho opcodes Classic. Ofrecerlo sería mentir en silencio
 comportándose como `free_pure`. `free_pure` acepta `--growth fixed|epochal`
 y `--width`.
 
+### El EOF bajo `--growth epochal` (aviso obligatorio)
+
+El valor que `in` asigna al acabarse la entrada es `3^padwidth - 1`, no una
+constante. Con `classic` y con `free_pure --growth fixed` el `padwidth` nunca
+crece, así que ese valor fijo es `59048` en width 10 y `26` en width 3. Con
+`--growth epochal` el ancho sigue a la frontera de direcciones y el EOF cambia
+de valor en el paso del ensanche: un programa escrito contra `59048` deja de
+reconocer el fin de entrada en cuanto la máquina ensancha.
+
+```powershell
+py malbolge_cli.py trace tests/frontier_witness.txt --file --profile free_pure --growth epochal --width 3 --max-steps 400 --limit 400
+```
+
+Salida verificada: los 72 eventos `in` de esa ejecución se agrupan en tres
+valores; la columna *paso* es el primer evento de cada grupo.
+
+| paso | `in` asigna | igual a |
+|---|---|---|
+| 68 | `80` | `3^4 - 1` |
+| 82 | `242` | `3^5 - 1` |
+| 256 | `728` | `3^6 - 1` |
+
+Control, mismo programa y mismo límite de pasos sin política de crecimiento:
+
+```powershell
+py malbolge_cli.py trace tests/frontier_witness.txt --file --profile free_pure --growth fixed --width 3 --max-steps 400 --limit 400
+```
+
+Los 72 eventos `in` quedan en `26` (`3^3 - 1`) y la traza termina con
+`padwidth=3`; el comando epochal termina con `padwidth=6`. En un programa real
+ocurre lo mismo: el quine `corpus/classic/quine_m281.mal` lee `59048` bajo
+`--growth fixed` y `177146` (`3^11 - 1`) bajo `--growth epochal`, tras ensanchar
+en el paso 1230 (`evidence/f11_frontier_eof_20261018.json`, ledger entrada 34).
+
+Los dos comandos salen con exit `2` (`MAX_STEPS`) porque el witness no halta;
+eso no inválida la traza, que se imprime antes de salir.
+
+Regla práctica: no reutilices un test de EOF de Classic bajo `--growth
+epochal`, y no compares stdout entre perfiles sin declarar el `padwidth` final.
+
 ## Como leer los estados
 
 | Estado | Significado | Accion |
@@ -162,5 +202,8 @@ y `--width`.
   runtime Unshackled de memoria `3^19`.
 - La paridad con un Unshackled externo permanece `NOT_DEMONSTRATED` hasta tener
   una implementacion de referencia localizada y una ejecucion reproducible.
+- Con `--growth epochal` el EOF vale `3^padwidth - 1` y cambia de valor en el
+  ensanche (`59048` -> `177146` en el quine medido): un test de fin de entrada
+  heredado de Classic deja de funcionar en silencio. Ver el aviso en Perfiles.
 - No usar `git reset`, `git clean`, `git stash` ni checkout masivo en estos
   working trees.

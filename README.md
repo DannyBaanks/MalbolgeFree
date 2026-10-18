@@ -98,6 +98,20 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > which is why it carries its own 900 s timeout. Ledger entry 35. Note for anyone reading
 > CI later: GitHub flags that `ubuntu-latest` migrates to Ubuntu 26 on 2026-10-19, so
 > timings may move with no change in these bytes.
+>
+> **Appended 2026-10-18 (seal) — a documentation edit that moved the seal, disclosed.**
+> `GUIA.md` is the guide a human operates the CLI by, and it did not warn that under
+> `--growth epochal` the value `in` assigns at end of input is `3^padwidth - 1` and
+> changes at a widening. It now does, with two runnable commands and their measured
+> output (epochal at `--width 3`: `80` -> `242` -> `728` at steps 68 / 82 / 256,
+> ends `padwidth=6`; the `--growth fixed` control: 72 events all at `26`, ends
+> `padwidth=3`). Unlike `README.md`, `GUIA.md` *is* inside `SHA256SUMS.txt`, so the fix
+> is an integrity event: the identity moved `298fe800…` -> `a39adde9…`, checked paths
+> 53 -> 54, because `tests/frontier_witness.txt` — which the guide now cites and was
+> previously pinned only transitively by five `@embedFile` sites — was sealed in the same
+> block. S1 measures `entries=54 … ok=54 drift=0`, GNU `sha256sum -c` agrees, harness
+> `52 PASS / 0 FAIL / 0 SKIP`, rc 0. No gate added, no claim about the language changed:
+> the finding stays entry 34's. Ledger entry 36.
 
 
 ## What this is, in one minute

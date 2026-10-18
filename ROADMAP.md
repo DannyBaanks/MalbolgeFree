@@ -370,3 +370,27 @@ resolución de 0,1 s que imprime el gate: se anota como se midió, sin explicar.
 entorno:** GitHub anuncia que `ubuntu-latest` migra a Ubuntu 26 el 2026-10-19, así que los
 tiempos de CI pueden moverse sin que cambie ni un byte nuestro; lo que separa un cambio de
 entorno de una deriva real son los pins y S1. Ledger entrada 35.
+
+**Anexo 2026-10-18 (4) — la guía de operación avisaba de menos de lo que medimos.**
+`GUIA.md` explicaba que `in` sin entrada asigna `59048` y que el perfil `epochal` ensancha,
+pero no unía las dos cosas: el valor de EOF es `3^padwidth - 1`, así que cambia en el paso
+del ensanche y un test de fin de entrada heredado de Classic deja de disparar en silencio.
+Ahora está escrito, con dos comandos del CLI medidos en esta máquina antes de redactarlos
+(`tests/frontier_witness.txt`, 400 pasos, sin stdin): epochal con `--width 3` da
+`80` -> `242` -> `728` (`3^4-1`, `3^5-1`, `3^6-1`) en los pasos 68 / 82 / 256 y termina con
+`padwidth=6`; el control con `--growth fixed` deja los 72 eventos `in` en `26` y termina con
+`padwidth=3`. Los dos salen con exit `2` porque el witness no halta. No añade ningún claim
+nuevo sobre el lenguaje: la afirmación sigue siendo la de la entrada 34, medida allí con
+ambos cores; el CLI solo usa el core Python, y eso queda dicho en la propia guía.
+
+**Por qué esto mueve el sello:** `README.md`, `ROADMAP.md`, `RELEASE_READINESS.md`,
+`CHANGELOG.md` y `docs/HONESTY_LEDGER.md` no están en `SHA256SUMS.txt`, pero `GUIA.md` sí.
+Corregir la guía de operación es entonces un evento de integridad, no un cambio de texto:
+la identidad se movió `298fe800…` -> `a39adde94cf5da95…` y las rutas verificadas 53 -> 54.
+El quinto path es `tests/frontier_witness.txt`, que hasta ahora solo estaba fijado de forma
+transitiva por cinco `@embedFile` de cuatro tests Zig: si alguien lo editaba, ninguna línea
+de hash se enteraba. Sus bytes no cambiaron (`3370003c…`, 190 000 B). Tras el anexo, S1
+mide `entries=54 checked=54 ok=54 drift=0 missing=0 escaping=0 duplicate=0 malformed=0` y
+`sha256sum -c --quiet` devuelve 0 por su cuenta; el harness completo sigue en
+`52 PASS / 0 FAIL / 0 SKIP`, rc 0 (2:09.11, RSS pico 92 228 kB). Gates: 52, sin cambios —
+la demo de la guía no se subió a `GATES` a propósito. Ledger entrada 36.

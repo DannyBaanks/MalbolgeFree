@@ -263,8 +263,24 @@ malformed=0`, `SEAL VERDICT: PASS`, `52 PASS / 0 FAIL / 0 SKIP` y el mismo conju
 nombres de gate en ambas plataformas. Los gates nuevos no dependen de nada externo y no
 faltaron: `F11 EXPECTATIONS=15 MATCH=15 FALSIFIED=0`, `F12 EXPECTATIONS=7 MATCH=7
 FALSIFIED=0`, con los mismos pasos, sha y bytes de stdout que el run local sellado. El
-class de defecto de la entrada 26 (re-endline en Windows) se prueba ahora contra el corpus
+tipo de defecto de la entrada 26 (re-endline en Windows) se prueba ahora contra el corpus
 nuevo: si `quine_m281.mal` hubiera llegado con CRLF, F11 y F12 habrían salido con 4 en vez
 de medir. Timings: F12 ~3 min en CI contra sus 900 s de timeout — con el default de 180 s
 no habría pasado. Queda igual: F10 sigue sin re-ejecutarse en CI (fuera de `GATES`, exit 3
 sin el quine de Lutter). No hay release, tag ni PR; `src/` intacto. Ledger entrada 35.
+
+**Anexo 2026-10-18 (4) — un cambio de documentación que sí movió el sello.** El contrato
+operativo en español (`GUIA.md`) se auditó contra lo que medimos en F11 y le faltaba el
+aviso: bajo `--growth epochal` el valor que `in` asigna al acabarse la entrada es
+`3^padwidth - 1` y cambia en el ensanche, así que un test de EOF de Classic (`59048`) deja
+de significar «fin de entrada». Se añadió la sección con dos comandos medidos localmente
+(epochal `--width 3`: 80 / 242 / 728 en los pasos 68 / 82 / 256, termina `padwidth=6`;
+control `--growth fixed`: 72 eventos en `26`, termina `padwidth=3`; ambos exit 2) y una
+viñeta en *Trampas*. Como `GUIA.md` está sellado —a diferencia de README/ROADMAP/CHANGELOG/ledger—,
+la corrección es evento de integridad: identidad `298fe800…` -> `a39adde9…`, rutas 53 -> 54
+por sellar además `tests/frontier_witness.txt` (`3370003c…`, bytes intactos), que hasta ahora
+solo estaba fijado transitivamente por cinco `@embedFile`. S1: `entries=54 ok=54 drift=0
+missing=0 escaping=0 duplicate=0 malformed=0`, `SEAL VERDICT: PASS`, rc 0; `sha256sum -c
+--quiet` coincide. Harness: `52 PASS / 0 FAIL / 0 SKIP`, rc 0. Ningún gate nuevo, ningún
+claim ascendido, `src/` intacto (los dos cores conservan los sellos de la entrada 24), sin
+release ni tag ni PR. Ledger entrada 36.

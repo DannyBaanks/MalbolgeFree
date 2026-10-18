@@ -12,7 +12,7 @@ c365c50089d72a6859d33619f7c1987419f4d90c35efa7f1fc59a1683b0376d5  src/bfir1_back
 0b77006aae9b60952eb111493da5a96b0d75f19355661df82923430fcd14786c  corpus/classic/reproducer.mal
 d7d6d1e34e70210ef2939828ec6593efcaa52f32edf51122eff2638c92efe598  corpus/free/cross_3pow19.mal
 5f6e11aebc6801b4fb89908c5ae4bb13a871e9422793fab1f9cb0a5a4ed0790c  malbolge_cli.py
-8ecbd8a286144e6178bb9fdde0c78a2f8e1ecbd81c537ba8228528719f3a271a  GUIA.md
+92fc4a50a2f95b7bf4f2c05dc94201f43d814f31a9792c7805e601f7c1c0c9cc  GUIA.md
 e49210fafc8d4ea3fcf9386fb87435ce5db021b2e20a527baef651aa6c4d390c  tests/run_all.py
 44157cc8bdd6de4bdd7578f8ba19e3b16d6f5d030f768de29475dcb4764b9557  evidence/f4_classic_parity.json
 c8fd681f739fbb88f31ecb6d52e2d7cdee81d7b0e7c4cb5fec7327901378d5ca  evidence/f9_repeated_frontier.json
@@ -145,3 +145,25 @@ f9eaf930d36d80169c7ce40493d1ddc6e5928778f6dca9e7406d633b041f0bea  evidence/F11_F
 f8409f5c0eeba77734068038052a822435830e1cd07369d27e974a2578a71699  evidence/F12_SELF_REPRODUCTION_20261018/PROVENANCE.md
 8b98089d72cc328080e27d2a3ae32ee754f14b911d3bb873cd22fad844563e27  evidence/F12_SELF_REPRODUCTION_20261018/console.txt
 eecd6d055d50e2befdd3a19929317ed54efd99541f4db32227a11045f2aef9d9  evidence/F12_SELF_REPRODUCTION_20261018/resource_usage.txt
+# Appended 2026-10-18T15:36:52Z (HONESTY_LEDGER entry 36): GUIA.md is updated in
+# place above, so its sealed line carries the new hash. Superseded revision
+# 8ecbd8a286144e6178bb9fdde0c78a2f8e1ecbd81c537ba8228528719f3a271a
+# stays recoverable from git history at aa702f0. The edit adds the operational
+# warning that was missing from the ops guide: with --growth epochal the
+# end-of-input value is 3^padwidth - 1 and therefore changes at a widening, so a
+# Classic EOF test stops firing in silence. The two CLI commands it documents
+# were run on this machine before writing them (tests/frontier_witness.txt, 400
+# steps, no stdin): epochal at width 3 gives in -> 80, 242, 728 (3^4-1, 3^5-1,
+# 3^6-1) and ends padwidth=6; the fixed control keeps all 72 in events at 26 and
+# ends padwidth=3. Both exit 2 (MAX_STEPS) because the witness never halts. The
+# real-program numbers cited there (59048 vs 177146, widening at step 1230) come
+# from the F11 gate report sealed above.
+# That demo reads tests/frontier_witness.txt, which was never sealed: five Zig
+# tests embed it with @embedFile, so its bytes were pinned only transitively and
+# a drift there would not have moved any hash line. Documented output now
+# depends on it, so it is sealed as a new line below (checked-sealed paths go
+# from 53 to 54). Its bytes are unchanged; sha256sum of the 190 000-byte file
+# here equals the value published below.
+# src/, corpus/, evidence/ and tests/ bytes are otherwise unchanged, and nothing
+# already published was rewritten.
+3370003cfa18b02e21f095173328d1fa7587222dae6e280e78413e3903013a57  tests/frontier_witness.txt

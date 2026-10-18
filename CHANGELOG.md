@@ -34,6 +34,20 @@ in `docs/HONESTY_LEDGER.md`, not here.
 - The moved seal measured in CI: run `39118092762` on `2b57e9d` prints
   `manifest_sha256=d45319d1… entries=40 ok=40` with 50 PASS / 0 FAIL / 0 SKIP on both
   ubuntu and windows runners — documentation only, no sealed byte changed.
+- F11/F12: `corpus/classic/quine_m281.mal` vendored from the published MB-Database copy
+  (byte-identical to BolgeForge `candidate_m281_53562b.mal`, reproducible with the public
+  `synthesize.py 281`), plus two gates that need no external input — F11 frontier crossing
+  and width-relative EOF (`in` at EOF = `3^padwidth - 1`: `59048` vs `177146`), F12 the
+  62 239 852-step byte-exact self-reproduction. Gate count 50 → 52, sealed paths 40 → 53,
+  `manifest_sha256=298fe800…`.
+- Those two gates measured green on both runners: run `39129462270` on `318aa9b`, ubuntu
+  3 m 56 s and windows 7 m 05 s, each printing `entries=53 ok=53` and
+  `52 PASS / 0 FAIL / 0 SKIP` — documentation only.
+- `GUIA.md` gained the missing warning that `--growth epochal` changes the end-of-input
+  value at a widening, with two measured CLI commands. `GUIA.md` is sealed, so this is an
+  integrity event: identity `298fe800…` → `a39adde9…`, sealed paths 53 → 54, because the
+  fixture the guide now cites (`tests/frontier_witness.txt`) was sealed in the same block.
+  No gate added.
 
 ## 2026-09-24 and earlier
 
