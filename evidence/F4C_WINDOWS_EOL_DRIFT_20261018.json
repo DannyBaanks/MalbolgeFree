@@ -1,0 +1,46 @@
+{
+  "format": "malbolge-free-evidence-hashes/1",
+  "generated_utc": "2026-10-18T07:31:27Z",
+  "phase": "F4c-vendored-EOL",
+  "claim": "The vendored canonical oracle is only usable if checkout is byte-exact; CI on windows-latest proved that by FAILING, and the pin is what caught it.",
+  "event": {
+    "workflow": "ci",
+    "run_id": 39080665610,
+    "commit_pushed": "7e6eb5da5d01a6ba5d71cead7492bcba32589a2b",
+    "harness (ubuntu-latest)": "completed success",
+    "harness (windows-latest)": "completed failure, step 'Run full harness' (job 117536756198)",
+    "gate_message_measured_in_ci_log": "F4C_VENDORED_ORACLE_DRIFT  pinned e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b  found 4a2a666f7a28562eeded5e462fb2bc05412619341579c258c7417f28b325214e",
+    "gate_exit_code": 4,
+    "harness_treatment_of_exit_4": "hard FAIL, never a skip (tests/run_all.py) — the run went red instead of reporting a parity PASS it had not earned",
+    "previous_run_for_reference": "39078519776 (commit fed7180, before the oracle was vendored) was success on BOTH runners because F4c exited 3 and the harness printed SKIP"
+  },
+  "root_cause": "GitHub windows-latest images set core.autocrlf=true, so actions/checkout rewrites LF to CRLF for paths git classifies as text. vendor/canonical_malbolge_py/malbolge.py was such a path, so the runner was not running the interpreter whose SHA-256 is pinned; `file` reports 'with CRLF line terminators' for the converted copy.",
+  "reproduced_locally": {
+    "method": "clone --no-checkout of this repository, git config core.autocrlf true, git checkout 7e6eb5d",
+    "without_attributes": "vendor/canonical_malbolge_py/malbolge.py sha256 = 4a2a666f7a28562eeded5e462fb2bc05412619341579c258c7417f28b325214e (identical to the hash CI found, so the CI failure is explained, not guessed)",
+    "with_attribute_star_text": "same clone with '* -text' supplied to git before checkout: sha256 = e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b, `file` reports plain 'ASCII text executable' — the pin matches",
+    "fix_committed_as": ".gitattributes containing '* -text' (every path, not just the oracle: the sealed corpus, fixtures and evidence artifacts are hash-referenced too)"
+  },
+  "fresh_clone_measured": {
+    "statement": "the vendored oracle makes canonical parity measurable from a clone that has NO sibling checkout at all — this is the CI situation, now verified without waiting for CI",
+    "oracles_available": ["canonical_python_vendored"],
+    "cases": 10,
+    "cores": 2,
+    "oracles_used": 1,
+    "verdicts": 20,
+    "hash_comparisons": 20,
+    "all_match": true,
+    "gate_verdict_line": "=> PASS (10 cases x 2 cores x 1 oracle(s) = 20 stdout-hash comparisons)",
+    "why_10_not_11": "the 11th case needs external_hello_world.malbolge, which lives outside this repository; the gate drops it instead of substituting anything"
+  },
+  "artifacts": {
+    ".gitattributes": "362ccde66be0a86fda3bbf833ad7d0b46edb5ddc28834c801eb62435715c6919",
+    "vendor/canonical_malbolge_py/malbolge.py": "e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b",
+    "vendor/canonical_malbolge_py/malbolge.py_if_reendedlined_to_crlf": "4a2a666f7a28562eeded5e462fb2bc05412619341579c258c7417f28b325214e",
+    "evidence/f4c_canonical_parity_vendored_20261017.json": "04ef041432ddc2462c4b64b5aa48ac3f4c42b47af6e7ddf5fb6d222a5812d926"
+  },
+  "not_rewritten": "evidence/F4C_VENDORED_ORACLE_20261017.hashes.json and evidence/f4c_canonical_parity_vendored_20261017.json are left exactly as published in 7e6eb5d, including that hashes doc's 'ci_effect' paragraph, which described the intent ('both runners MEASURE canonical parity') before the EOL defect was measured. This file is the appended correction of that outcome.",
+  "scope": "end-of-line handling of checked-out bytes, and the resulting F4c verdict on the two CI runners. Nothing about the cores changed: src/malbolge_free.zig and src/malbolge_core.py are byte-identical to the hashes sealed for entry 24.",
+  "not_claimed": "no claim that Windows CI is green at the time of writing — this file records the failure and the fix; the green run, if it happens, is verified separately with gh run watch and reported in the ledger.",
+  "why_it_matters": "independence of an oracle is a property of its bytes. A runner that silently rewrites those bytes has a different interpreter than the one pinned, and parity measured against it would be a verdict about a program nobody reviewed."
+}

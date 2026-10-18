@@ -279,6 +279,10 @@ The vendored oracle is hash-pinned inside the gate. If its SHA-256 stops matchin
 the gate exits **4** with `F4C_VENDORED_ORACLE_DRIFT`: a silently edited oracle
 producing a green parity verdict is the exact failure mode that hid this bug for a
 month, so drift is a hard failure — never a skip, never a PASS.
+That pin is also why `.gitattributes` says `* -text`: the Windows runners default to
+`core.autocrlf=true`, and at `7e6eb5d` they handed the gate a CRLF copy of the oracle.
+The pin disagreed and CI failed loudly instead of certifying a program nobody reviewed
+(ledger entry 26).
 
 Comparisons are on stdout bytes only: the C oracle exposes no step count.
 

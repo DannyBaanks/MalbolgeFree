@@ -34,6 +34,10 @@ jobs:
       # drift is exit 4 (hard FAIL) and only a missing oracle is exit 3
       # (NOT_DEMONSTRATED skip). Set MALFREE_REFERENCE_CLASSIC or
       # MALFREE_MALBOLGE_REFERENCE to add an external oracle as a second witness.
+      # .gitattributes ('* -text') is load-bearing for this gate: windows-latest
+      # defaults to core.autocrlf=true, and at 7e6eb5d that re-end-lined the vendored
+      # oracle, the pin disagreed, and the job failed with F4C_VENDORED_ORACLE_DRIFT
+      # instead of reporting a parity PASS it had not earned (ledger entry 26).
       - name: Checkout Malbolge-Translator (M6/TC oracle)
         uses: actions/checkout@v4
         with:

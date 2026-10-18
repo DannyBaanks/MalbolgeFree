@@ -45,3 +45,9 @@ ff30e8fa500073ea1adbf4d40104480094c90154fbac7de109756c786c2b2962  vendor/canonic
 709121601d459258fdc9a0d7f40473571250e9f13335e42bbfc2290b343c9fa5  vendor/canonical_malbolge_py/LICENSE
 04ef041432ddc2462c4b64b5aa48ac3f4c42b47af6e7ddf5fb6d222a5812d926  evidence/f4c_canonical_parity_vendored_20261017.json
 80b7bb62ed11c850794b70415e23f06f387bbb57367135156fb04fac03837d32  evidence/F4C_VENDORED_ORACLE_20261017.hashes.json
+# Appended 2026-10-18T07:45:00Z (HONESTY_LEDGER entry 26): windows-latest checked out
+# the vendored oracle with CRLF, the pinned SHA-256 disagreed, and the gate exited 4
+# instead of reporting parity. The artifact below records that measurement and the
+# byte-exact fresh-clone run (10 x 2 x 1 = 20 comparisons, all_match true). The
+# published entry-25 artifacts above are untouched.
+4a4b6623693596af6c6e85141417e5dbd9b96291b20cc8e96c99ba7a0b1aff09  evidence/F4C_WINDOWS_EOL_DRIFT_20261018.json

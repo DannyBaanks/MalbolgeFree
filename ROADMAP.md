@@ -207,7 +207,13 @@ guía.
   (`vendor/canonical_malbolge_py/malbolge.py`, copia verbatim de
   `github.com/DannyBaanks/MALBOLGE@bf4d6fa`, MIT, con `PROVENANCE.md` que declara el
   repo de origen), así que CI mide la paridad canónica en lugar de omitirla: 10 casos
-  × 2 cores × 1 oráculo = 20 comparaciones en cada runner. El pin es un SHA-256: si el
+  × 2 cores × 1 oráculo = 20 comparaciones, medido en un clon sin checkouts hermanos
+  (`all_match: true`). El primer run con el oráculo vendorizado **falló en
+  windows-latest**: el runner re-end-lineaba el fichero (`core.autocrlf=true`), el pin
+  no cuadraba y el gate salió con código 4 — el defecto lo cazó el sello, no la
+  prosa; se corrigió con `.gitattributes` (`* -text`). Ver
+  `evidence/F4C_WINDOWS_EOL_DRIFT_20261018.json` y ledger entrada 26. El pin es un
+  SHA-256: si el
   fichero vendorizado deriva, el gate falla con código 4; si se quita y no queda ningún
   oráculo, sale con código 3 (`NOT_DEMONSTRATED`), que CI reporta como skip explícito,
   nunca como PASS inventado.

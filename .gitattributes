@@ -1,0 +1,10 @@
+# Byte-exact checkout, everywhere.
+#
+# Windows runner images set core.autocrlf=true, so a plain checkout rewrites LF to
+# CRLF. That silently changes the bytes of hash-pinned artifacts: the F4c gate pins
+# vendor/canonical_malbolge_py/malbolge.py by SHA-256, and on the first CI run with
+# that oracle vendored it reported F4C_VENDORED_ORACLE_DRIFT (pinned e64af4f0...,
+# found 4a2a666f...) because the runner had CRLF copies. An oracle whose bytes move
+# under it is exactly the failure mode that hid the EOF bug, so no path in this
+# repository is treated as text that git may re-endline.
+* -text
