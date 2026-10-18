@@ -13,7 +13,7 @@ c365c50089d72a6859d33619f7c1987419f4d90c35efa7f1fc59a1683b0376d5  src/bfir1_back
 d7d6d1e34e70210ef2939828ec6593efcaa52f32edf51122eff2638c92efe598  corpus/free/cross_3pow19.mal
 5f6e11aebc6801b4fb89908c5ae4bb13a871e9422793fab1f9cb0a5a4ed0790c  malbolge_cli.py
 8ecbd8a286144e6178bb9fdde0c78a2f8e1ecbd81c537ba8228528719f3a271a  GUIA.md
-720149b2bbf2172d143857454e4d3df1591d36b6df86f33d60e87bcd9a5e214a  tests/run_all.py
+246e904117e795d509f2e88b329b4259d9c3c140e7fcb33a6d3e12408a1e8a65  tests/run_all.py
 44157cc8bdd6de4bdd7578f8ba19e3b16d6f5d030f768de29475dcb4764b9557  evidence/f4_classic_parity.json
 c8fd681f739fbb88f31ecb6d52e2d7cdee81d7b0e7c4cb5fec7327901378d5ca  evidence/f9_repeated_frontier.json
 b523e463980c9a265f5f18567856b60027d93fdabcc1491b0fe248be7f5b7dc5  tests/fixtures/free_pure/vertical_slice.hell
@@ -76,3 +76,20 @@ d9754ed8275918125d087d6b2d56ec600333a0db183a246f8fb9648dae02d71d  evidence/f10_q
 22d6ac260ecfc90402cf3a92a2b75581a8eb56e305b88d90b3d8d80239789fb4  evidence/run_quine_epochal.zig
 c4d1697bbbb18151432e7ca989157258c6f5b18859de0be5ad9820221f78e528  evidence/compare_quine_epochal.py
 3fefa898c05defd006f581a001078f3260f55a6d20b1f5e54eae61049fe3d372  evidence/F10_QUINE_EPOCHAL_20261018.hashes.json
+# Appended 2026-10-18T09:27:11Z (HONESTY_LEDGER entry 30): the seal itself becomes a
+# gate. Until now SHA256SUMS.txt was only ever checked by hand on the sealing machine,
+# so CI could publish bytes that no longer matched their recorded hashes. The new gate
+# S1 (evidence/verify_seal_manifest.py, below) re-hashes every listed path in Python —
+# Windows runners have no `sha256sum` — and exits 4 on drift, a missing path, a
+# malformed line, a duplicate, or a path that escapes the repository. Integrity failure
+# is exit 4, never a skip: there is no external input to be missing, so exit 3 is
+# unreachable by construction.
+#   tests/run_all.py is updated in place above (it now lists the gate and its exit-4
+#   branch text is no longer F4c-specific). Superseded revision
+#   720149b2bbf2172d143857454e4d3df1591d36b6df86f33d60e87bcd9a5e214a stays recoverable
+#   from git history at be39798; src/ is untouched and keeps its entry-24 seals.
+#   Nothing already published was rewritten: the F10 block above keeps its bytes, and
+#   every path sealed before this entry still hashes to the value recorded for it.
+#   The first run of this gate caught a real stale seal — the one tests/run_all.py had
+#   just acquired by being edited to add the gate.
+fcd641b020356153d014d23dee5d97b5f4036f2c686fc0e74d158f32ba3a17a7  evidence/verify_seal_manifest.py

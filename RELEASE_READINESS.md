@@ -152,3 +152,34 @@ machine. Readiness effect, stated narrowly:
   not vendored, so on a fresh clone the script exits 3 (`NOT_DEMONSTRATED`) rather than
   substituting an input. Details: `docs/HONESTY_LEDGER.md` entry 29,
   `evidence/F10_QUINE_EPOCHAL_20261018.hashes.json`.
+
+---
+
+## Anexo 2026-10-18 (segundo) — S1: el sello pasa a ser gate; el recuento pasa de 49 a 50
+
+Hasta hoy `SHA256SUMS.txt` solo lo comprobaba a mano quien sellaba. CI podía publicar
+bytes que ya no coincidían con sus hashes y seguir dando verde. Nuevo gate
+`S1 seal manifest (SHA256SUMS.txt)` → `evidence/verify_seal_manifest.py`: re-hashing de
+cada ruta listada con `hashlib` (Python puro: los runners de Windows no tienen
+`sha256sum`), exit **4** si algo deriva, falta, está mal formado, está duplicado o escapa
+del repositorio. No hay rama de exit 3 a propósito: no hay entrada externa que pueda
+faltar, así que un clon **o tiene su sello o falla**.
+
+- Medido localmente: `50 PASS / 0 FAIL / 0 SKIP`, `entries=35 checked=35 ok=35`,
+  `manifest_sha256=9140d359…`, harness rc=0.
+- Ramas de fallo medidas en una copia aparte del repo (no en el árbol sellado): byte
+  añadido a un fichero sellado → `SEAL_DRIFT` rc 4; fichero sellado borrado →
+  `SEAL_MISSING` rc 4; línea truncada → `SEAL_MALFORMED_LINE` rc 4; ruta `../` →
+  `SEAL_PATH_ESCAPE` rc 4; ruta listada dos veces → `SEAL_DUPLICATE` rc 4; manifiesto
+  ausente → `SEAL_MANIFEST_ABSENT` rc 4. Convertir un fichero sellado a CRLF — la clase
+  exacta de defecto que la entrada 26 cazó en el oráculo vendorizado — también da
+  `SEAL_DRIFT` rc 4.
+- **Primera ejecución real del gate cazó un sello obsoleto de verdad**: `tests/run_all.py`,
+  por editarlo para añadir el propio gate. Eso es el working, no un falso positivo.
+- Consecuencia para el release: las cifras de 49 arriba (`harness 49/49`,
+  `49 PASS / 0 SKIP`) son HISTÓRICAS hasta `be39798`. La lista de gates actual son 50, y
+  la afirmación de paridad canónica (entrada 28) no cambia: sigue siendo 10 casos × 2
+  cores × 1 oráculo vendorizado = 20 comparaciones por runner.
+- No se tocó `src/`; ningún artefacto ya publicado se reescribió. El manifiesto actualiza
+  la línea de `tests/run_all.py` in situ y anexa la del verifier, con el hash sustituido
+  declarado en el bloque fechado (entrada 30 del ledger).

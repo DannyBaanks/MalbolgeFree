@@ -25,6 +25,9 @@ in `docs/HONESTY_LEDGER.md`, not here.
 - F10: Lutter's quine under `classic` / `pure_fixed` / `epochal` — Classic row
   reproduces it byte-for-byte (69,547,437 steps), the two unbounded rows do not;
   frontier crossed at step 1230 by pointer assignment. Evidence only, not a gate.
+- S1: `SHA256SUMS.txt` is now verified in the harness (`evidence/verify_seal_manifest.py`),
+  so every CI run on both runners checks the published bytes against their seals.
+  Gate count 49 → 50.
 
 ## 2026-09-24 and earlier
 

@@ -189,6 +189,12 @@ GATES = [
     ("dense representation differential", zig_test("tests/t_dense_differential.zig")),
     ("epochal invariants", zig_test("tests/t_epochal.zig")),
     ("frontier 10 to 12", zig_run("tests/t_frontier_moment.zig")),
+    # S1 seal gate: SHA256SUMS.txt is a claim about the published bytes, and
+    # until now only the sealing machine ever checked it. This makes the seal a
+    # per-run measurement on every runner, in Python because Windows runners
+    # have no `sha256sum`. Integrity failure -> exit 4, which the loop below
+    # counts as FAIL; exit 3 is unreachable (there is no external input to miss).
+    ("S1 seal manifest (SHA256SUMS.txt)", [sys.executable, str(ROOT / "evidence" / "verify_seal_manifest.py")]),
 ]
 
 
@@ -216,10 +222,12 @@ def main() -> int:
             skipped.append(name)
             print(f"SKIP (NOT_DEMONSTRATED, missing external input): {name}")
         elif completed.returncode == 4:
-            # Corpus divergence between runtime and oracle: a parity verdict
-            # would be meaningless, so this is a hard failure, never a skip.
+            # Exit 4 is reserved for integrity failures: corpus divergence
+            # between runtime and oracle (F4c) or a seal that does not match the
+            # bytes on disk (S1). A verdict resting on either would be
+            # meaningless, so this is a hard failure, never a skip.
             failures += 1
-            print(f"FAIL: {name} (corpus divergence, exit 4)")
+            print(f"FAIL: {name} (integrity failure, exit 4)")
         elif completed.returncode != 0:
             failures += 1
             print(f"FAIL: {name} (exit {completed.returncode})")

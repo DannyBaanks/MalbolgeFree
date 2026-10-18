@@ -253,3 +253,16 @@ aquí porque re-hostear bytes de terceros es una decisión de licencia, no una m
   MalDOOM al lado, el script sale con código 3 (`NOT_DEMONSTRATED`) en lugar de
   sustituir el programa. Detalle: `docs/HONESTY_LEDGER.md` entrada 29 y
   `evidence/F10_QUINE_EPOCHAL_20261018.hashes.json`.
+
+## Anexo 2026-10-18 — S1: el sello como gate (anexo; no reescribe los anteriores)
+
+M2 pedía un harness reproducible; le faltaba comprobar su propia afirmación de bytes.
+Desde hoy `tests/run_all.py` incluye `S1 seal manifest (SHA256SUMS.txt)`
+(`evidence/verify_seal_manifest.py`), que re-hashía las 35 rutas selladas en Python y
+sale con código 4 ante deriva, ruta ausente, línea mal formada, duplicado o ruta que
+escapa del repo. Local: `50 PASS / 0 FAIL / 0 SKIP`, `manifest_sha256=9140d359…`.
+Las seis ramas de fallo se midieron en una copia aparte, incluido el caso CRLF que la
+entrada 26 documentó para el oráculo vendorizado. Las cifras de 49 de la tabla y del
+anexo anterior quedan como medición histórica de la lista de gates hasta `be39798`.
+M2 no sube de estado por esto: sigue PASS, ahora con una comprobación más. Detalle en
+`docs/HONESTY_LEDGER.md` entrada 30.

@@ -23,6 +23,19 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > Scheffer 1999) — see [Turing Completeness Status](#turing-completeness-status).
 > What is *not* claimed (unbounded growth, Unshackled parity, Ouroboros
 > self-hosting, a new TC proof) is listed explicitly in that section.
+>
+> **Appended 2026-10-18 — the gate count moved 49 → 50.** The seal itself is now a
+> gate: `evidence/verify_seal_manifest.py` (S1) re-hashes every path listed in
+> `SHA256SUMS.txt` with `hashlib` (pure Python, because Windows runners have no
+> `sha256sum`) and exits 4 on drift, a missing path, a malformed line, a duplicate or
+> a path escaping the repository. Before this, the seal was verified only by hand on
+> the sealing machine, so CI could publish bytes that no longer matched their recorded
+> hashes. Measured on this machine at 50 PASS / 0 FAIL / 0 SKIP (manifest sha256
+> `9140d359…`, 35 sealed paths, all matching); the CI figure is stated only after it
+> is read from each runner's own log. Every "49" in this repository is the gate list
+> as it stood through commit `be39798` — a historical measurement, not a stale claim.
+> Its first run caught a real stale seal, which happened to be `tests/run_all.py`
+> having just been edited to add the gate. Ledger entry 30.
 
 ## What this is, in one minute
 
@@ -405,6 +418,13 @@ py malbolge_cli.py assemble "in,out,rot,movd,opr,nop,end"
 # MALFREE_REFERENCE_CLASSIC when Olmstead's C is reachable; exit 3 = no usable
 # oracle at all, exit 4 = the vendored oracle drifted from its pin)
 py evidence/compare_f4_canonical.py
+
+# seal integrity (gate S1, also run in CI): every path listed in SHA256SUMS.txt
+# against the bytes actually on disk. Pure Python, so it behaves identically on
+# Windows runners, which have no `sha256sum`. exit 4 = drift, missing path,
+# malformed line or path escaping the repository — integrity failures, never a
+# skip; there is no exit 3 branch because this gate has no external input.
+py evidence/verify_seal_manifest.py
 
 # old F4 measurement (engine.zig oracle — kept as a record, no longer a gate)
 py evidence/compare_f4.py

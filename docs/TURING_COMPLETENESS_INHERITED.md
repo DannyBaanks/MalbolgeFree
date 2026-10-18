@@ -132,3 +132,13 @@ backend is a convenience tool, not part of the claim.
   15(1):1-40, 2004. (Cyclic tag systems are TC.)
 - The 86-instruction cyclic tag system compiler for Malbolge, described in
   the esolangs wiki's "Malbolge" article under "Computational class".
+
+## Gate-count note (2026-10-18) — appended
+
+Two lines above say `harness: 49/49 PASS`. That was the gate list at the time of
+sealing and stays true as a historical measurement. The list is 50 now: the seal
+manifest itself became a gate (`S1`, `evidence/verify_seal_manifest.py`), so the
+published hashes of the runtime, corpus, fixtures and evidence are re-verified on
+every harness run instead of only on the machine that sealed them. Nothing in the
+inherited claim changes — Step 1 rests on F4c plus the F10 Classic row, and Step 2 is
+literature. Ledger entry 30 records the count move.
