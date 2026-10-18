@@ -73,6 +73,14 @@ in `docs/HONESTY_LEDGER.md`, not here.
   in Region 2) in formula sampling (150 000 pairs, 0 mismatches) and in execution traces jumping
   into Region 1 (`b"(aO"` and `b"'&B"`). Gate count 53 → 54, sealed paths 60 → 65, identity
   `ad581d0a…` → `7e3c9a09…`; `src/` untouched. Ledger entry 40.
+- `evidence(F15): measure encryption cascade and domain guard divergence V3 against deterministic reference`
+  — 21 pre-registered expectations (D1–D5, P1–P4, R1_C1_*, R2_C5_*, R3_C7_*, R4_SUB33_*), 21 MATCH,
+  0 FALSIFIED, exit 0, comparing `MalbolgeFree` against `MalbolgeLispSlop/src/bolge19.zig`. Demonstrates
+  canonical table alignment and 100% cycle isomorphism across all 6 orbits (`[68, 9, 6, 5, 4, 2]`) over
+  $[33, 126]$, exact divergence set $[0, 32] \cup [127, 140]$ (47 values) between canonical guard
+  `33 <= mc <= 126` and reference guard `cv < 141`, multi-cell encryption cascade match (`C1`, `C5`, `C7`),
+  and sub-33 domain guard divergence under real execution (`C_SUB33`). Gate count 54 → 55, sealed paths
+  65 → 70, identity `7e3c9a09…` → `85780c370d81e160a2f06ef2ba9c8ad94664dc118e8d762bd962cfbb7ad40025`; `src/` untouched. Ledger entry 42.
 
 ## 2026-09-24 and earlier
 
