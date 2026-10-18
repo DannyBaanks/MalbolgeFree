@@ -13,6 +13,16 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > interpreter is now **vendored** (`vendor/canonical_malbolge_py/`, hash-pinned),
 > so a fresh clone measures that parity instead of skipping it. See
 > [Canonical parity](#canonical-parity-2026-10-17) and ledger entries 24, 25, 26, 27, 28.
+> **Patch 2026-10-18** — the corpus gained a published **self-reproducing** program
+> (`corpus/classic/quine_m281.mal`, hash-pinned, vendored byte-for-byte from its own
+> public record) and the harness gained two gates that run on it with no external
+> input: **F11** frontier + width-relative `in` at EOF, **F12** the real
+> 62 239 852-step byte-ex halt. Current measurement: **52 PASS / 0 FAIL / 0 SKIP** with
+> `SHA256SUMS.txt` sealing **53** paths, verified by gate S1 on both CI runners of run
+> `39129462270` (ledger entries 33, 34, 35). The consequence for the language is in the
+> F11/F12 section below and in ledger entry 34: under the unbounded profiles EOF is
+> **width-relative** (`59048` at `w = 10`, `177146` at `w = 11`), which is a second way
+> those profiles are not Classic, next to the removed address wrap.
 > Harness 49/49 PASS on the machine that produced the sealed evidence, and 49 PASS /
 > 0 SKIP on both CI runners, where F4c measures 10 cases × 2 cores × 1 vendored oracle
 > = 20 comparisons (run `39108877995`, entry 28). Where no
@@ -151,6 +161,13 @@ A: No. We have shown a finite ladder: `10 -> 11 -> 12` in the committed
 witness, and every rung up to `19` measured on the real VM loop. Each rung
 costs three times the steps and memory of the previous one, so this is a
 measured ladder, not a proof of unbounded growth.
+
+**Q: Then is a program written for Classic portable onto the unbounded profiles?**
+A: No, and not only because the address wrap is gone. `in` at end of input returns
+`3^w - 1`, so the *sentinel itself moves with the width*: `59048` while `w = 10`,
+`177146` once the core has widened to `w = 11`. Measured on both cores, and on both CI
+runners, against a real self-reproducing program (gate F11, ledger entry 34) — which is
+why a Classic program's hard-coded EOF test stops meaning "end of input" there.
 
 ## The machine
 
@@ -317,7 +334,9 @@ What that measures, and what it does not:
   `SHA256SUMS.txt`, and `PROVENANCE.md` there says which falsifications are budget
   artifacts rather than behavioural results. Nothing in the annex adds a claim, and
   F10 remains evidence rather than a gate, so it also does not move the count: the
-  `49/49` above stays a historical measurement and the gate list is 50.
+  `49/49` above stays a historical measurement and the gate list was 50 at that
+  commit. It is **52** now, because F11 and F12 re-run this same class of
+  experiment on a vendored program (entries 33-35).
 
 - **Not claimed**: that one program generalises to the corpus; that `epochal` is or
   is not Turing-complete (the claim is compatibility with Classic); CI reproducibility
@@ -327,6 +346,72 @@ What that measures, and what it does not:
   the `49/49` figure at the top of this file is unchanged by it. Full facts:
   `docs/HONESTY_LEDGER.md` entry 29 and
   `evidence/F10_QUINE_EPOCHAL_20261018.hashes.json`.
+
+## Appended 2026-10-18 — the same frontier on a self-authored program, re-executed by CI (F11/F12)
+
+The section above ends with a limitation: F10's input is third-party, so a clean clone
+exits 3. The honest way to close it was not to relax the gate but to bring a program this
+repository's own authors published. `corpus/classic/quine_m281.mal` — 53 562 bytes,
+SHA-256 `96b670b825372a0f41fa3b574d47457f92654b76411e5d5be4c438003087610e` — is a
+`cmp`-identical copy of `DannyBaanks/Malbolge-MB-Database:quine/quine_53562_m281.mb`, the
+same git blob as `DannyBaanks/BolgeForge@5a55b9b:artifacts/candidate_m281_53562b.mal`, and
+`corpus/classic/PROVENANCE.md` records that the *public* synthesizer reproduces these
+bytes (`python3 synthesize.py 281`, sha `e401dec1…`). Two gates now run on it, both
+without external input, so their exit-3 branch is unreachable by construction:
+
+**EOF IS WIDTH-RELATIVE** (gate F11, `evidence/compare_f11_frontier_eof.py`, 15
+preregistered expectations). On the program that outlives the Classic frontier — the
+crossing itself happens at step **1229**, and `epochal` widens `10 -> 11` at step
+**1230**:
+
+```
+  pure_fixed py status=HALTED steps=9718 padwidth=10 growth=0 out=0B in=[[7541, 59048]]  max_addr=59048
+             zg status=HALTED steps=9718 padwidth=10 growth=0 out=0B in=[[7541, 59048]]  max_addr=59050
+  epochal    py status=HALTED steps=25729 padwidth=11 growth=1 out=3B in=[[25687, 177146], [25702, 177146]] max_addr=177036
+             zg status=HALTED steps=25729 padwidth=11 growth=1 out=3B in=[[25687, 177146], [25702, 177146]] max_addr=177037
+```
+
+`in` at end of input is `3^w - 1`, so the sentinel *moves with the width*: **59048** at
+`w = 10`, **177146** at `w = 11`. Both cores agree. That is a second, independent reason
+the unbounded profiles are not Classic — the identity BolgeForge documents for EOF,
+`crazy(crazy(59048,x),29524) == 0 iff x == 59048`, simply stops selecting end-of-input
+once the machine has widened. Controls rule out an artifact of this program's shape:
+`corpus/classic/reproducer.mal` (1948 steps, 96 B) and `corpus/classic/hello.mal`
+(40 steps, 12 B) are identical across all three profiles and both cores.
+
+**CLASSIC SELF-REPRODUCTION, KNOWN ANSWER ON BOTH CORES** (gate F12,
+`evidence/compare_f12_selfreproduction.py`, 7 expectations). The real halt, not a budget
+cut:
+
+```
+  classic    zg status=HALTED steps=62239852 pw=10 g=0 out=53562B sha=96b670b825372a0f eq=True
+             py status=HALTED steps=62239852 pw=10 g=0 out=53562B sha=96b670b825372a0f eq=True
+F12 EXP K5_step_count_matches_the_external_engines: MATCH (zg=62239852 py=62239852 external=62239852)
+```
+
+`eq=True` means stdout equals the program's own bytes. The step count is the one three
+engines outside this repository published on 2026-10-17 (the native C runner, `mb_ref`,
+and `mb_classic_indep.c`), so F12 is a *known-answer* parity gate: two cores here reach an
+answer already agreed on outside here. The wrap-free profiles do not reproduce (K6:
+`pure_fixed` 0 B, `epochal` 3 B), and `source_eq_stdout` selects `classic` alone (K7).
+
+**Measured on CI, same day** (run `39129462270`, ledger entry 35): 52 PASS / 0 FAIL /
+0 SKIP on both runners, `F11 EXPECTATIONS=15 MATCH=15 FALSIFIED=0` and `F12 EXPECTATIONS=7
+MATCH=7 FALSIFIED=0`, with the numbers above unchanged. F12 costs ~3 minutes there, which
+is why `tests/run_all.py` accepts a per-gate timeout and gives it 900 s; the other 50
+gates keep the 180 s default.
+
+**Disclosed, not averaged**: `max_addr_touched` is *not* a compared field. Python updates
+it only on writes (`src/malbolge_core.py:156-161`), Zig on reads and writes
+(`src/malbolge_free.zig:337-338`) — the 50/50 and 177036/177037 pairs above are that
+definitional gap. Cite it only with the core that measured it.
+
+**Not claimed**: that `epochal` can reproduce a quine (it emitted 3 bytes here, and
+nothing on Lutter's); that two programs generalize to the corpus; anything about Turing
+completeness; smallest-quine or ranking, which lives in MB-Database with its enumerated
+sweep; and F10 is still not a gate — its third-party input stays unvendored, by licensing
+decision rather than technical necessity. Full facts: `docs/HONESTY_LEDGER.md` entries 33,
+34, 35.
 
 ## E10 -> E19 epoch ladder (toy)
 
@@ -512,6 +597,21 @@ py evidence/f8_check.py
 
 # epochal invariants (halting programs never widen)
 zig test tests/t_epochal.zig
+
+# frontier + width-relative EOF on a real self-reproducing program (gate F11;
+# ~1 s, no external input — the program is vendored under corpus/classic/ and both
+# gates pin its SHA-256, exiting 4 rather than measuring drifted bytes)
+py evidence/compare_f11_frontier_eof.py
+
+# the real halt: byte-exact self-reproduction on both cores against a known answer
+# published by three engines outside this repo (gate F12; ~2 min locally, ~3 min on
+# CI, which is why run_all.py gives it 900 s instead of the 180 s default)
+py evidence/compare_f12_selfreproduction.py
+
+# F10 does the same on Lutter's third-party quine. It is deliberately NOT a gate and
+# its bytes are deliberately NOT vendored (licensing decision, not a technical one),
+# so on a clone without MALDOOM beside it, it exits 3 = NOT_DEMONSTRATED.
+py evidence/compare_quine_epochal.py
 ```
 
 Every evidence file prints its own verdict. All raw bytes are in `evidence/`.
