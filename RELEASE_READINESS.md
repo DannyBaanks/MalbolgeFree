@@ -201,3 +201,12 @@ entrada sigue siendo un quine de terceros que no se vendoriza, así que un clon 
 MalDOOM sigue saliendo con 3 (`NOT_DEMONSTRATED, missing external input`). Lo que gana el
 repo es que las mediciones negativas —los dos trials acotados con sus expectativas
 FALSIFIED— dejan de vivir solo como prosa del bloque `trial`.
+
+**Cerrado en CI el mismo día:** empujado `8b97437..2b57e9d`, run `39118092762` `success`;
+en el log de cada runner (ubuntu `117647889202`, windows `117647889354`) aparecen
+`SEAL manifest_sha256=d45319d1… entries=40 checked=40 ok=40 drift=0 missing=0 escaping=0
+duplicate=0 malformed=0`, `SEAL VERDICT: PASS` y `50 PASS / 0 FAIL / 0 SKIP`, con el mismo
+conjunto de 50 gates en ambos. La identidad `d45319d1…` deja de ser una cifra local: un
+clone limpio integrity-checka ya las 5 capturas anexadas. Esto no re-ejecuta F10 en CI
+(no está en `GATES`; sin MalDOOM, exit 3) ni añade gates: la lista sigue en 50. Ledger
+entrada 32.

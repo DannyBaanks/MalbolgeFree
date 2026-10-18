@@ -31,6 +31,9 @@ in `docs/HONESTY_LEDGER.md`, not here.
 - F10 raw captures annexed (`evidence/F10_QUINE_EPOCHAL_20261018/`): sealed-run console
   output, its `time` report, and both bounded trials kept as bytes with a `PROVENANCE.md`
   separating budget artifacts from behavioural results. Adds no claim; sealed paths 35 → 40.
+- The moved seal measured in CI: run `39118092762` on `2b57e9d` prints
+  `manifest_sha256=d45319d1… entries=40 ok=40` with 50 PASS / 0 FAIL / 0 SKIP on both
+  ubuntu and windows runners — documentation only, no sealed byte changed.
 
 ## 2026-09-24 and earlier
 

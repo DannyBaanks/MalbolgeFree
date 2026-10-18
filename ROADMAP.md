@@ -283,3 +283,10 @@ ok=40`, `SEAL VERDICT: PASS`, `sha256sum -c --quiet` rc 0 por separado, harness
 `50 PASS / 0 FAIL / 0 SKIP` y rc 0. Ninguna de las 5 rutas nuevas es un gate, así que
 la lista sigue en 50. El número `9140d359…` citado arriba y en la entrada 30 es el
 manifiesto tal como estaba en `8b97437`. Ledger entrada 31.
+
+**CI, el mismo día:** empujado `8b97437..2b57e9d`; run `39118092762` `success`; leído del
+log de cada runner (ubuntu `117647889202`, windows `117647889354`), los dos imprimen
+`SEAL manifest_sha256=d45319d1… entries=40 checked=40 ok=40 drift=0 missing=0 escaping=0
+duplicate=0 malformed=0` con `50 PASS / 0 FAIL / 0 SKIP` y el mismo conjunto de 50 gates.
+Un clon limpio comprueba por tanto las 5 capturas anexadas. F10 sigue sin re-ejecutarse en
+CI: no está en `GATES` y sin MalDOOM sale con 3. Ledger entrada 32.

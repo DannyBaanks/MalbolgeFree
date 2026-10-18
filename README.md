@@ -44,6 +44,14 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > `9140d359…` → `d45319d1…` (`entries=40 ok=40`, harness still `50 PASS / 0 FAIL / 0
 > SKIP`). Every `9140d359…` quoted above and in the ledger is the manifest as of commit
 > `8b97437`, not a stale claim. Ledger entry 31.
+>
+> **Appended 2026-10-18 (CI) — `d45319d1…` is measured green on both runners** (run
+> `39118092762`, commit `2b57e9d`): ubuntu job `117647889202` and windows job
+> `117647889354` each print `entries=40 checked=40 ok=40 … malformed=0`,
+> `SEAL VERDICT: PASS` and `50 PASS / 0 FAIL / 0 SKIP`, over the same 50 gate names, so a
+> clean clone integrity-checks the annexed captures too. Ledger entry 32. What CI still
+> does *not* do is re-run F10: its checker is not in `GATES` and exits 3 without the
+> third-party quine.
 
 ## What this is, in one minute
 
