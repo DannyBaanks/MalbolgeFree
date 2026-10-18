@@ -93,3 +93,23 @@ c4d1697bbbb18151432e7ca989157258c6f5b18859de0be5ad9820221f78e528  evidence/compa
 #   The first run of this gate caught a real stale seal — the one tests/run_all.py had
 #   just acquired by being edited to add the gate.
 fcd641b020356153d014d23dee5d97b5f4036f2c686fc0e74d158f32ba3a17a7  evidence/verify_seal_manifest.py
+# Appended 2026-10-18T09:55:23Z (HONESTY_LEDGER entry 31): the raw captures that
+# surrounded the sealed F10 measurement are annexed to the repository, so the negative
+# results live as bytes rather than only as prose in the sealed report's `trial` block.
+# Four files were copied byte-for-byte out of the run's scratch directory
+# (console stdout and GNU `time` report for the sealed run, plus both bounded trial
+# reports at stdout budgets 15 000 and 1 000 000) and one new file, PROVENANCE.md,
+# records how each was produced and which falsifications are budget artifacts rather
+# than behavioural claims. Nothing here adds a claim: the measurement of
+# EPOCHAL_ON_REAL_QUINE remains `evidence/f10_quine_epochal_20261018.json` above, and
+# its bytes are untouched and still hash to `d9754ed8…`.
+#   The manifest therefore stops being `9140d359…`, the value gate S1 printed and entry
+#   30 recorded. That quote identifies the manifest as of commit 8b97437; from this
+#   entry on, S1 prints the new identity. A manifest cannot hash itself, which is
+#   precisely why its value is stamped in the harness log on every run and on every
+#   runner instead of being asserted here.
+7eeca749ff23e7d83f8c18e4e5f5173147eaa125f5c7f69c97246678ae8b4559  evidence/F10_QUINE_EPOCHAL_20261018/PROVENANCE.md
+5f3e78eba992d149f555a1a6392f1da2e97dcf0acbf5d567d92bdc3e16f75c93  evidence/F10_QUINE_EPOCHAL_20261018/sealed_run_console.txt
+7886ffe1a4fa11f75f867001745daf7a5d70a9b1b4ac2f5e3fc40b3a3349dbde  evidence/F10_QUINE_EPOCHAL_20261018/sealed_run_resource_usage.txt
+f4f9c6d8248f247bb9d8033ef5cf0f2b35b6c689930cde7e5fd52bf74d9772bf  evidence/F10_QUINE_EPOCHAL_20261018/trial_stdout_budget_15000.json
+0938ab9e2ec87403543379598ce27c9f7b1f88540443989036023bd2dabaca68  evidence/F10_QUINE_EPOCHAL_20261018/trial_stdout_budget_1000000.json

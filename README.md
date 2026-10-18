@@ -36,6 +36,14 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > as it stood through commit `be39798` — a historical measurement, not a stale claim.
 > Its first run caught a real stale seal, which happened to be `tests/run_all.py`
 > having just been edited to add the gate. Ledger entry 30.
+>
+> **Appended 2026-10-18 (later) — the sealed set grew to 40 paths.** The raw captures
+> around F10 (console stdout, GNU `time` report, and both bounded trial reports with
+> their falsified expectations) are annexed under
+> `evidence/F10_QUINE_EPOCHAL_20261018/`, so the manifest identity printed by S1 moved
+> `9140d359…` → `d45319d1…` (`entries=40 ok=40`, harness still `50 PASS / 0 FAIL / 0
+> SKIP`). Every `9140d359…` quoted above and in the ledger is the manifest as of commit
+> `8b97437`, not a stale claim. Ledger entry 31.
 
 ## What this is, in one minute
 
@@ -256,6 +264,16 @@ What that measures, and what it does not:
 - **Invariant P1 holds on real code**: the earliest `pure_fixed` vs `epochal` trace
   divergence is step 1246, after the widening at step 1230 — history preserved until
   the first `WIDEN`.
+- **The raw captures are preserved, including the false starts** (appended
+  2026-10-18, ledger entry 31): `evidence/F10_QUINE_EPOCHAL_20261018/` holds the
+  sealed run's console output, its GNU `time` report, and both bounded trial reports
+  that were run before it — the 15 000-step one with 5 falsified expectations of 9,
+  the 1 000 000-step one with 2 of 10. They are byte-for-byte copies, sealed in
+  `SHA256SUMS.txt`, and `PROVENANCE.md` there says which falsifications are budget
+  artifacts rather than behavioural results. Nothing in the annex adds a claim, and
+  F10 remains evidence rather than a gate, so it also does not move the count: the
+  `49/49` above stays a historical measurement and the gate list is 50.
+
 - **Not claimed**: that one program generalises to the corpus; that `epochal` is or
   is not Turing-complete (the claim is compatibility with Classic); CI reproducibility
   of F10 — the input is third-party and deliberately not vendored, so a fresh clone of

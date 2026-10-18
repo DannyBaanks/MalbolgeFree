@@ -1,0 +1,323 @@
+{
+  "phase": "F10",
+  "format": "quine-epochal-differential/1",
+  "claim": "EPOCHAL_ON_REAL_QUINE",
+  "question": "does the epochal profile agree with Classic on a program that outlives the Classic frontier 3^10 = 59049?",
+  "program": {
+    "citation": "DannyBaanks/MalDOOM:vendor/quines/quine_lutter.malbolge",
+    "sha256": "dca8476f8b70c8462c32f661f63c5f8b1ad6c33946b3c7a9a35186c824117d98",
+    "bytes": 59852,
+    "vendored_here": false,
+    "note": "third-party source (Matthias Lutter), pinned by hash, read from a sibling repository; the path recorded here is a public remote citation, never a local absolute path"
+  },
+  "runtime": {
+    "zig": "src/malbolge_free.zig",
+    "python": "src/malbolge_core.py"
+  },
+  "profiles": {
+    "classic": "width 10, mem_limit 3^10 (wrap), growth fixed",
+    "pure_fixed": "width 10, mem_limit None, growth fixed",
+    "epochal": "width 10, mem_limit None, growth epochal (widen at the frontier)"
+  },
+  "budgets": {
+    "zig_trace": 60000,
+    "zig_stdout": 15000,
+    "cross_core": 20000
+  },
+  "pilot": {
+    "note": "measured on this machine before the expectations above were written; stdout budget 1 000 000, traces 600 steps",
+    "classic": {
+      "status": "MAX_STEPS",
+      "steps": 1000000,
+      "stdout_len": 837,
+      "stdout_sha256": "515b00731d4b4eb78f3ee8d766d1b4048d413d25da7002aa9bdd1bf1355bc0d1"
+    },
+    "pure_fixed": {
+      "status": "HALTED",
+      "steps": 6521,
+      "stdout_len": 1
+    },
+    "epochal": {
+      "status": "HALTED",
+      "steps": 8761,
+      "growth_events": 1,
+      "padwidth": 11,
+      "stdout_len": 0
+    }
+  },
+  "pre_execution_images": {
+    "stored_sha256": {
+      "classic": "c455d2888bbb0922c60eead8de6b045ae072604cade3bf9dbc386892288702f1",
+      "pure_fixed": "c455d2888bbb0922c60eead8de6b045ae072604cade3bf9dbc386892288702f1",
+      "epochal": "c455d2888bbb0922c60eead8de6b045ae072604cade3bf9dbc386892288702f1"
+    },
+    "addressed_sha256": {
+      "classic": "c455d2888bbb0922c60eead8de6b045ae072604cade3bf9dbc386892288702f1",
+      "pure_fixed": "c455d2888bbb0922c60eead8de6b045ae072604cade3bf9dbc386892288702f1",
+      "epochal": "c455d2888bbb0922c60eead8de6b045ae072604cade3bf9dbc386892288702f1"
+    },
+    "program_len": 59032,
+    "addressed_first_diff": {
+      "classic_vs_pure_fixed": "null",
+      "classic_vs_epochal": "null",
+      "pure_fixed_vs_epochal": "null"
+    }
+  },
+  "zig_full": {
+    "classic": {
+      "status": "MAX_STEPS",
+      "steps": 15000,
+      "padwidth": 10,
+      "growth_events": 0,
+      "final_c": 15115,
+      "final_d": 153,
+      "max_addr_touched": 59048,
+      "cells_materialized": 59047,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_equals_program": false
+    },
+    "pure_fixed": {
+      "status": "HALTED",
+      "steps": 6521,
+      "padwidth": 10,
+      "growth_events": 0,
+      "final_c": 22847,
+      "final_d": 44,
+      "max_addr_touched": 59051,
+      "cells_materialized": 59048,
+      "stdout_len": 1,
+      "stdout_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "stdout_equals_program": false
+    },
+    "epochal": {
+      "status": "HALTED",
+      "steps": 8761,
+      "padwidth": 11,
+      "growth_events": 1,
+      "final_c": 8875,
+      "final_d": 173868,
+      "max_addr_touched": 176134,
+      "cells_materialized": 59419,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_equals_program": false
+    },
+    "epochal_widen": {
+      "growth_events": 1,
+      "final_padwidth": 11
+    }
+  },
+  "zig_bounded": {
+    "classic": {
+      "status": "MAX_STEPS",
+      "steps": 20000,
+      "padwidth": 10,
+      "growth_events": 0,
+      "final_c": 20115,
+      "final_d": 29491,
+      "max_addr_touched": 59048,
+      "cells_materialized": 59047,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_equals_program": false
+    },
+    "pure_fixed": {
+      "status": "HALTED",
+      "steps": 6521,
+      "padwidth": 10,
+      "growth_events": 0,
+      "final_c": 22847,
+      "final_d": 44,
+      "max_addr_touched": 59051,
+      "cells_materialized": 59048,
+      "stdout_len": 1,
+      "stdout_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "stdout_equals_program": false
+    },
+    "epochal": {
+      "status": "HALTED",
+      "steps": 8761,
+      "padwidth": 11,
+      "growth_events": 1,
+      "final_c": 8875,
+      "final_d": 173868,
+      "max_addr_touched": 176134,
+      "cells_materialized": 59419,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_equals_program": false
+    }
+  },
+  "python_bounded": {
+    "classic": {
+      "status": "MAX_STEPS",
+      "steps": 20000,
+      "padwidth": 10,
+      "growth_events": 0,
+      "growth_event_list": [],
+      "max_addr_touched": 59048,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pure_fixed": {
+      "status": "HALTED",
+      "steps": 6521,
+      "padwidth": 10,
+      "growth_events": 0,
+      "growth_event_list": [],
+      "max_addr_touched": 59050,
+      "stdout_len": 1,
+      "stdout_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "epochal": {
+      "status": "HALTED",
+      "steps": 8761,
+      "padwidth": 11,
+      "growth_events": 1,
+      "growth_event_list": [
+        {
+          "from": 10,
+          "to": 11,
+          "step": 1230,
+          "c": 1344,
+          "d": 59049
+        }
+      ],
+      "max_addr_touched": 176133,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "frontier": {
+    "boundary_3_pow_10": 59049,
+    "widening_step_from_python_event_log": 1230,
+    "event_log": [
+      {
+        "from": 10,
+        "to": 11,
+        "step": 1230,
+        "c": 1344,
+        "d": 59049
+      }
+    ],
+    "first_classic_vs_pure_fixed_trace_divergence_step": "1229",
+    "first_pure_fixed_vs_epochal_trace_divergence_step": "1274",
+    "note": "the widening step comes from the Python core's event log because the Zig core counts WIDEN events without timestamping them; cores_agree_on_the_bounded_budget is what makes that number usable for the Zig trace comparison"
+  },
+  "divergence": {
+    "trace_op": {
+      "classic_vs_epochal": "3165",
+      "classic_vs_pure_fixed": "3047",
+      "pure_fixed_vs_epochal": "3047"
+    },
+    "trace_a_after": {
+      "classic_vs_epochal": "1246",
+      "classic_vs_pure_fixed": "1246",
+      "pure_fixed_vs_epochal": "1246"
+    },
+    "trace_c_after": {
+      "classic_vs_epochal": "8761",
+      "classic_vs_pure_fixed": "6358",
+      "pure_fixed_vs_epochal": "6358"
+    },
+    "trace_d_after": {
+      "classic_vs_epochal": "1229",
+      "classic_vs_pure_fixed": "1229",
+      "pure_fixed_vs_epochal": "1274"
+    },
+    "trace_cell_before": {
+      "classic_vs_epochal": "3165",
+      "classic_vs_pure_fixed": "3047",
+      "pure_fixed_vs_epochal": "3047"
+    },
+    "trace_stdout_prefix_len": {
+      "classic_vs_epochal": "0",
+      "classic_vs_pure_fixed": "0",
+      "pure_fixed_vs_epochal": null
+    },
+    "stdout_first_byte": {
+      "classic_vs_epochal": "null",
+      "classic_vs_pure_fixed": "0",
+      "pure_fixed_vs_epochal": null
+    }
+  },
+  "timing_seconds": {
+    "zig_full": 1.24,
+    "cross_core_bounded": 0.57,
+    "python_bounded": 0.05
+  },
+  "verdicts": [
+    {
+      "claim": "classic_reproduces_the_quine",
+      "expected": true,
+      "measured": false,
+      "verdict": "FALSIFIED"
+    },
+    {
+      "claim": "pre_execution_images_are_profile_independent",
+      "expected": true,
+      "measured": false,
+      "verdict": "FALSIFIED"
+    },
+    {
+      "claim": "epochal_diverges_from_classic_in_stdout",
+      "expected": true,
+      "measured": false,
+      "verdict": "FALSIFIED"
+    },
+    {
+      "claim": "unbounded_alone_diverges_from_classic",
+      "expected": true,
+      "measured": true,
+      "verdict": "MATCH"
+    },
+    {
+      "claim": "a_real_program_triggers_at_least_one_widening",
+      "expected": true,
+      "measured": true,
+      "verdict": "MATCH"
+    },
+    {
+      "claim": "divergence_begins_at_the_frontier_step",
+      "expected": true,
+      "measured": true,
+      "verdict": "MATCH"
+    },
+    {
+      "claim": "prefix_preservation_holds_before_the_frontier",
+      "expected": true,
+      "measured": false,
+      "verdict": "FALSIFIED"
+    },
+    {
+      "claim": "free_profiles_halt_before_classic",
+      "expected": true,
+      "measured": false,
+      "verdict": "FALSIFIED"
+    },
+    {
+      "claim": "cores_agree_on_the_bounded_budget",
+      "expected": true,
+      "measured": true,
+      "verdict": "MATCH"
+    }
+  ],
+  "all_match": false,
+  "counts_are_explicit": {
+    "profiles": 3,
+    "cores": 2,
+    "programs": 1,
+    "verdicts": 9,
+    "cross_core_profile_comparisons": 6,
+    "trace_fields_compared": 5
+  },
+  "scope": "one program (Lutter's quine: 59 852 bytes on disk, 59032 loaded cells), width 10 boot, empty stdin, this machine; each profile is bounded by its own HALT or by the budget recorded in `budgets`",
+  "not_claimed": [
+    "that epochal is Turing-complete or not: the claim is about compatibility with Classic",
+    "that the quine would print correctly under any other growth policy",
+    "CI reproducibility: the pinned program is not vendored, so a fresh clone exits 3",
+    "any statement about Unshackled or the assisted BF backend",
+    "a general bound for when a real program reaches the frontier: one witness only"
+  ]
+}

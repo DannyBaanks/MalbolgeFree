@@ -28,6 +28,9 @@ in `docs/HONESTY_LEDGER.md`, not here.
 - S1: `SHA256SUMS.txt` is now verified in the harness (`evidence/verify_seal_manifest.py`),
   so every CI run on both runners checks the published bytes against their seals.
   Gate count 49 → 50.
+- F10 raw captures annexed (`evidence/F10_QUINE_EPOCHAL_20261018/`): sealed-run console
+  output, its `time` report, and both bounded trials kept as bytes with a `PROVENANCE.md`
+  separating budget artifacts from behavioural results. Adds no claim; sealed paths 35 → 40.
 
 ## 2026-09-24 and earlier
 

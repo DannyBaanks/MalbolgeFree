@@ -1,0 +1,15 @@
+== F10 quine-under-epochal differential ==
+  MATCH: classic_reproduces_the_quine (expected True)
+  MATCH: pre_execution_images_are_profile_independent (expected True)
+  MATCH: epochal_stdout_is_not_classic_stdout (expected True)
+  MATCH: epochal_diverges_from_classic_from_the_first_byte (expected True)
+  MATCH: unbounded_alone_diverges_from_classic (expected True)
+  MATCH: a_real_program_triggers_at_least_one_widening (expected True)
+  MATCH: the_frontier_crossing_explains_the_divergence (expected True)
+  MATCH: prefix_preservation_holds_before_the_frontier (expected True)
+  MATCH: free_profiles_halt_before_classic (expected True)
+  MATCH: cores_agree_on_the_bounded_budget (expected True)
+  all_match=True  verdicts=10  report=f10_quine_epochal_20261018.json
+  classic     status=HALTED    steps=  69547437 w=10 growth=0  stdout_len= 59852
+  pure_fixed  status=HALTED    steps=      6521 w=10 growth=0  stdout_len=     1
+  epochal     status=HALTED    steps=      8761 w=11 growth=1  stdout_len=     0

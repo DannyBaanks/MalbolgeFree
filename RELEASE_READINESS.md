@@ -183,3 +183,21 @@ faltar, así que un clon **o tiene su sello o falla**.
 - No se tocó `src/`; ningún artefacto ya publicado se reescribió. El manifiesto actualiza
   la línea de `tests/run_all.py` in situ y anexa la del verifier, con el hash sustituido
   declarado en el bloque fechado (entrada 30 del ledger).
+
+## Anexo 2026-10-18 (2) — las capturas crudas de F10 entran en el sellado
+
+El gate S1 pasó de 35 a **40 rutas** y el harness sigue `50 PASS / 0 FAIL / 0 SKIP` con
+rc 0, medido tras anexar: `SEAL manifest_sha256=d45319d1fed042d39fa660c7137d03c6166975a2c6570c7ce1659ecd8c437e4e entries=40 checked=40 ok=40 drift=0 missing=0 escaping=0 duplicate=0 malformed=0`.
+`sha256sum -c --quiet SHA256SUMS.txt` da rc 0 con la implementación de GNU, aparte del
+verifier propio. La identidad citada en el anexo anterior (`9140d359…`) corresponde al
+manifiesto tal como estaba en `8b97437`; desde este anexo S1 imprime la nueva. Lo anexado
+son cuatro capturas literales del run de F10 más `PROVENANCE.md`, todas bajo
+`evidence/F10_QUINE_EPOCHAL_20261018/`. Ledger entrada 31.
+
+Esto **no** cambia el release readiness: sigue sin haber gate nuevo (50), no se añade
+ninguna afirmación sobre el lenguaje, y el medido de F10 sigue siendo
+`evidence/f10_quine_epochal_20261018.json`, intacto. Tampoco cambia el alcance de F10: su
+entrada sigue siendo un quine de terceros que no se vendoriza, así que un clon limpio sin
+MalDOOM sigue saliendo con 3 (`NOT_DEMONSTRATED, missing external input`). Lo que gana el
+repo es que las mediciones negativas —los dos trials acotados con sus expectativas
+FALSIFIED— dejan de vivir solo como prosa del bloque `trial`.

@@ -266,3 +266,20 @@ entrada 26 documentó para el oráculo vendorizado. Las cifras de 49 de la tabla
 anexo anterior quedan como medición histórica de la lista de gates hasta `be39798`.
 M2 no sube de estado por esto: sigue PASS, ahora con una comprobación más. Detalle en
 `docs/HONESTY_LEDGER.md` entrada 30.
+
+## Anexo 2026-10-18 (2) — capturas crudas de F10 anexadas (anexo; no añade afirmaciones)
+
+Las mediciones negativas de F10 vivían solo como prosa dentro del bloque `trial` del
+artefacto sellado. Desde hoy están como bytes: `evidence/F10_QUINE_EPOCHAL_20261018/`
+guarda la stdout de consola del run sellado, su informe `/usr/bin/time` y los dos
+informes acotados previos (presupuesto de stdout 15 000 con 5 expectativas FALSIFIED de
+9; 1 000 000 con 2 de 10), más `PROVENANCE.md`, que separa qué falsaciones son artefacto
+del presupuesto y cuál era un defecto propio del checker. Copias literales: el
+medido sigue siendo `evidence/f10_quine_epochal_20261018.json`, intacto.
+
+Efecto sobre S1: el manifiesto pasa de 35 a 40 rutas y su identidad impresa por el
+gate cambia `9140d359…` → `d45319d1…`. Medido tras anexar: `entries=40 checked=40
+ok=40`, `SEAL VERDICT: PASS`, `sha256sum -c --quiet` rc 0 por separado, harness
+`50 PASS / 0 FAIL / 0 SKIP` y rc 0. Ninguna de las 5 rutas nuevas es un gate, así que
+la lista sigue en 50. El número `9140d359…` citado arriba y en la entrada 30 es el
+manifiesto tal como estaba en `8b97437`. Ledger entrada 31.
