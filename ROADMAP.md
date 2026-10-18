@@ -290,3 +290,68 @@ log de cada runner (ubuntu `117647889202`, windows `117647889354`), los dos impr
 duplicate=0 malformed=0` con `50 PASS / 0 FAIL / 0 SKIP` y el mismo conjunto de 50 gates.
 Un clon limpio comprueba por tanto las 5 capturas anexadas. F10 sigue sin re-ejecutarse en
 CI: no está en `GATES` y sin MalDOOM sale con 3. Ledger entrada 32.
+
+## Anexo 2026-10-18 (3) — el experimento de frontera se vendoriza y se re-ejecuta en CI (anexo; no reescribe los anteriores)
+
+El anexo de F10 terminaba con una limitación incómoda: CI no re-ejecutaba F10 porque
+el programa de entrada vive en otro repo. Danny eligió exactamente ese cierre
+(«F10: que se re-ejecute en CI»), y la forma honesta de hacerlo no era relajar el gate
+sino traer un programa propio. `corpus/classic/quine_m281.mal` (`96b670b8…`, 53 562 B)
+es copia literal — `cmp` sin diferencias — del registro publicado en
+`DannyBaanks/Malbolge-MB-Database:quine/quine_53562_m281.mb`, y el mismo blob
+(`e5b6a1a9…`) que `DannyBaanks/BolgeForge@5a55b9b:artifacts/candidate_m281_53562b.mal`.
+`corpus/classic/PROVENANCE.md` documenta además que la autoría es reproducible con la
+herramienta **publicada**: `python3 synthesize.py 281` (`e401dec1…`, commit `5a55b9b`)
+escribió aquí mismo bytes con ese mismo hash.
+
+Dos gates nuevos, ninguno con entrada externa (su rama de salida 3 es inalcanzable por
+construcción):
+
+- **F11** `evidence/compare_f11_frontier_eof.py` + `evidence/run_f11_observations.zig`:
+  frontera y EOF relativo al ancho en ambos cores. 15 expectativas preregistradas,
+  `MATCH=15 FALSIFIED=0`, pared 1,26 s.
+- **F12** `evidence/compare_f12_selfreproduction.py`: el halt real de 62 239 852 pasos,
+  autorreproducción byte-exacta en ambos cores, contra la respuesta conocida que
+  publicaron tres motores externos. `MATCH=7 FALSIFIED=0`, pared 1:52.97
+  (Zig 63,1 s + Python 49,8 s), RSS pico 84 044 kB.
+
+Recuento: `tests/run_all.py` re-sellado en su sitio (`e49210fa…`; el `246e9041…`
+sustituido queda nombrado en el bloque fechado del manifiesto). Harness local completo:
+`52 PASS / 0 FAIL / 0 SKIP`, rc 0, 2:08.21. S1 en ese mismo run imprime
+`manifest_sha256=298fe800… entries=53 checked=53 ok=53 drift=0 missing=0 escaping=0
+duplicate=0 malformed=0`; `sha256sum -c --quiet` coincide. La identidad del manifiesto
+se movió `d45319d1…` → `298fe800…` por las 13 rutas de evidencia nuevas; las citas
+anteriores corresponden al manifiesto de sus commits respectivos. F12 recibe timeout
+propio de 900 s porque 62 M de pasos en dos cores no caben en los 180 s del default;
+los otros 50 gates conservan 180 s sin cambio.
+
+**F10 sigue como estaba**: su checker continúa fuera de `GATES` y sigue saliendo con 3
+sin el quine de Lutter al lado; sus bytes sellados no se tocaron. Lo que cambia es la
+mitad prospectiva de la frase anterior: un clon limpio ya puede re-ejecutar *esta clase*
+de experimento por su cuenta.
+
+## Hallazgo medido aquí — el EOF es relativo al ancho (entra en el límite del claim)
+
+Bajo `pure_fixed`, `in` en EOF devuelve **59 048** (`3**10-1`, paso 7 541). Bajo
+`epochal`, el core ensancha `10 → 11` en el paso **1 230** y `in` devuelve **177 146**
+(`3**11-1`, pasos 25 687 y 25 702). Ambos cores coinciden en los 8 observables
+comparados, y los controles `reproducer.mal` y `hello.mal` son idénticos en los tres
+perfiles, así que no es artefacto de la forma del programa.
+
+Consecuencia para la compatibilidad: la identidad documentada en BolgeForge
+`crazy(crazy(59048,x),29524) == 0` iff `x == 59048` deja de señalar EOF una vez
+ensanchado el ancho. Es una **segunda** incompatibilidad con Classic, distinta de la
+frontera/ausencia de wrap que midió F10; el límite del claim «otro Malbolge» se anota
+con las dos, no con una. No se afirma nada de Turing-completitud: son dos programas
+medidos, no un corpus.
+
+Se corrige por anexo la nota (c) de la entrada 24, que razonaba «estos quines no leen
+stdin, así que EOF no les afecta»: bajo `classic` se mide 0 eventos `in` dentro del
+presupuesto de 60 000 pasos, pero bajo los perfiles sin wrap el programa **sí** ejecuta
+op 23 y recibe un valor relativo al ancho. La fila de la entrada 24 queda intacta.
+
+**Defecto definitorio entre cores, nombrado en vez de promediado:** `max_addr_touched`
+es «mayor dirección ESCRITA» en Python (`src/malbolge_core.py:156-161`) y «mayor
+dirección LEÍDA O ESCRITA» en Zig (`src/malbolge_free.zig:337-338`); deltas medidos
+`classic` 0, `pure_fixed` +2, `epochal` +1. No es campo comparado y el gate lo imprime
+así. Detalle en `docs/HONESTY_LEDGER.md` entradas 33 y 34.

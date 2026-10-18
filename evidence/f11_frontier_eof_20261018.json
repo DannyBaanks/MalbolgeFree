@@ -1,0 +1,256 @@
+{
+  "gate": "F11",
+  "program": "corpus/classic/quine_m281.mal",
+  "program_sha256": "96b670b825372a0f41fa3b574d47457f92654b76411e5d5be4c438003087610e",
+  "budget": 60000,
+  "cores": {
+    "python": "src/malbolge_core.py",
+    "zig": "src/malbolge_free.zig"
+  },
+  "python": {
+    "classic": {
+      "status": "MAX_STEPS",
+      "steps": 60000,
+      "padwidth": 10,
+      "growth": 0,
+      "max_addr_touched": 59048,
+      "stdout_len": 29,
+      "stdout_sha256": "80fd6d1646ef110f74d85635ca6d9f7ece89e52b012a726701ec935882277363",
+      "in_events": [],
+      "first_addr_ge_3pow10_step": null,
+      "widen_events": []
+    },
+    "pure_fixed": {
+      "status": "HALTED",
+      "steps": 9718,
+      "padwidth": 10,
+      "growth": 0,
+      "max_addr_touched": 59048,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "in_events": [
+        [
+          7541,
+          59048
+        ]
+      ],
+      "first_addr_ge_3pow10_step": 1229,
+      "widen_events": []
+    },
+    "epochal": {
+      "status": "HALTED",
+      "steps": 25729,
+      "padwidth": 11,
+      "growth": 1,
+      "max_addr_touched": 177036,
+      "stdout_len": 3,
+      "stdout_sha256": "b2c7a7594b4378e61c2d9c9536ff93f630272c45f0622baea98cf5d0db1a6766",
+      "in_events": [
+        [
+          25687,
+          177146
+        ],
+        [
+          25702,
+          177146
+        ]
+      ],
+      "first_addr_ge_3pow10_step": 1229,
+      "widen_events": [
+        {
+          "from": 10,
+          "to": 11,
+          "step": 1230,
+          "c": 1344,
+          "d": 59049
+        }
+      ]
+    }
+  },
+  "zig": {
+    "classic": {
+      "status": "MAX_STEPS",
+      "steps": 60000,
+      "padwidth": 10,
+      "growth": 0,
+      "max_addr_touched": 59048,
+      "stdout_len": 29,
+      "stdout_sha256": "80fd6d1646ef110f74d85635ca6d9f7ece89e52b012a726701ec935882277363",
+      "in_events": [],
+      "first_addr_ge_3pow10_step": null
+    },
+    "pure_fixed": {
+      "status": "HALTED",
+      "steps": 9718,
+      "padwidth": 10,
+      "growth": 0,
+      "max_addr_touched": 59050,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "in_events": [
+        [
+          7541,
+          59048
+        ]
+      ],
+      "first_addr_ge_3pow10_step": 1229
+    },
+    "epochal": {
+      "status": "HALTED",
+      "steps": 25729,
+      "padwidth": 11,
+      "growth": 1,
+      "max_addr_touched": 177037,
+      "stdout_len": 3,
+      "stdout_sha256": "b2c7a7594b4378e61c2d9c9536ff93f630272c45f0622baea98cf5d0db1a6766",
+      "in_events": [
+        [
+          25687,
+          177146
+        ],
+        [
+          25702,
+          177146
+        ]
+      ],
+      "first_addr_ge_3pow10_step": 1229
+    }
+  },
+  "python_trace_first_diff": {
+    "op": {
+      "classic_vs_epochal": 6470,
+      "classic_vs_pure_fixed": 3156
+    },
+    "a_after": {
+      "classic_vs_epochal": 1246,
+      "classic_vs_pure_fixed": 1246
+    },
+    "c_after": {
+      "classic_vs_epochal": 25452,
+      "classic_vs_pure_fixed": 9718
+    },
+    "d_after": {
+      "classic_vs_epochal": 1229,
+      "classic_vs_pure_fixed": 1229
+    }
+  },
+  "zig_trace_first_diff": {
+    "op": {
+      "classic_vs_epochal": 6470,
+      "classic_vs_pure_fixed": 3156
+    },
+    "a_after": {
+      "classic_vs_epochal": 1246,
+      "classic_vs_pure_fixed": 1246
+    },
+    "c_after": {
+      "classic_vs_epochal": 25452,
+      "classic_vs_pure_fixed": 9718
+    },
+    "d_after": {
+      "classic_vs_epochal": 1229,
+      "classic_vs_pure_fixed": 1229
+    },
+    "cell_before": {
+      "classic_vs_epochal": 6470,
+      "classic_vs_pure_fixed": 3156
+    },
+    "stdout_prefix_len": {
+      "classic_vs_epochal": 0,
+      "classic_vs_pure_fixed": 0
+    }
+  },
+  "compared_fields": [
+    "status",
+    "steps",
+    "padwidth",
+    "growth",
+    "stdout_len",
+    "stdout_sha256",
+    "in_events",
+    "first_addr_ge_3pow10_step"
+  ],
+  "expectations": [
+    {
+      "name": "E1_program_pin",
+      "ok": true,
+      "measured": "96b670b825372a0f"
+    },
+    {
+      "name": "E2_classic_is_bounded_here",
+      "ok": true,
+      "measured": "py=MAX_STEPS@60000 zg=MAX_STEPS@60000"
+    },
+    {
+      "name": "E3_classic_never_reaches_the_frontier_by_address",
+      "ok": true,
+      "measured": "py=None zg=None"
+    },
+    {
+      "name": "E4_classic_reads_no_input_within_budget",
+      "ok": true,
+      "measured": "py=0 zg=0 `in` events"
+    },
+    {
+      "name": "E5_pure_fixed_halts_at_9718_with_no_output",
+      "ok": true,
+      "measured": "py=9718 steps @ 0B zg=9718 steps @ 0B"
+    },
+    {
+      "name": "E6_pure_fixed_never_widens",
+      "ok": true,
+      "measured": "py pw=10 g=0 | zg pw=10 g=0"
+    },
+    {
+      "name": "E7_pure_fixed_eof_is_3pow10_minus_1",
+      "ok": true,
+      "measured": "py=[[7541, 59048]] zg=[[7541, 59048]] (3**10-1 = 59048)"
+    },
+    {
+      "name": "E8_epochal_halts_at_25729_with_3_bytes",
+      "ok": true,
+      "measured": "py=25729@3B zg=25729@3B"
+    },
+    {
+      "name": "E9_epochal_widens_once_to_padwidth_11",
+      "ok": true,
+      "measured": "py pw=11 g=1 | zg pw=11 g=1 | py widen_events=[{'from': 10, 'to': 11, 'step': 1230, 'c': 1344, 'd': 59049}]"
+    },
+    {
+      "name": "E10_frontier_crossing_step_is_1229",
+      "ok": true,
+      "measured": "py=1229 zg=1229"
+    },
+    {
+      "name": "E11_epochal_eof_is_3pow11_minus_1",
+      "ok": true,
+      "measured": "py=[[25687, 177146], [25702, 177146]] zg=[[25687, 177146], [25702, 177146]] (3**11-1 = 177146)"
+    },
+    {
+      "name": "E12_wrap_free_stdout_differs_from_byte_0",
+      "ok": true,
+      "measured": "first differing byte index classic_vs={'pure_fixed': 0, 'epochal': 0}"
+    },
+    {
+      "name": "E13_p1_no_difference_before_the_crossing",
+      "ok": true,
+      "measured": "py={'op': 6470, 'a_after': 1246, 'c_after': 25452, 'd_after': 1229} zg={'op': 6470, 'a_after': 1246, 'c_after': 25452, 'd_after': 1229, 'cell_before': 6470} excluded_non_step_fields=['stdout_prefix_len']"
+    },
+    {
+      "name": "E14_cross_core_agreement_on_compared_observables",
+      "ok": true,
+      "measured": "8 fields x 3 profiles; disagreements=none"
+    },
+    {
+      "name": "E15_no_crossing_controls_are_profile_independent",
+      "ok": true,
+      "measured": "corpus/classic/reproducer.mal: 1948 steps, 96B, sha d94a327593e239b8, three profiles identical, cross-core agrees; corpus/classic/hello.mal: 40 steps, 12B, sha 7f83b1657ff1fc53, three profiles identical, cross-core agrees"
+    }
+  ],
+  "max_addr_delta_zg_minus_py": {
+    "classic": 0,
+    "pure_fixed": 2,
+    "epochal": 1
+  },
+  "verdict": "PASS"
+}

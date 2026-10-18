@@ -1,0 +1,133 @@
+{
+  "gate": "F12",
+  "program": "corpus/classic/quine_m281.mal",
+  "program_sha256": "96b670b825372a0f41fa3b574d47457f92654b76411e5d5be4c438003087610e",
+  "cited_as_published_to": [
+    "DannyBaanks/Malbolge-MB-Database:quine/quine_53562_m281.mb",
+    "DannyBaanks/BolgeForge@5a55b9b:artifacts/candidate_m281_53562b.mal"
+  ],
+  "budgets": {
+    "zig_trace": 2000,
+    "zig_stdout": 200000000,
+    "python": 200000000
+  },
+  "measured_wall_seconds": {
+    "zig": 63.1,
+    "python": 49.8
+  },
+  "zig": {
+    "classic": {
+      "status": "HALTED",
+      "steps": 62239852,
+      "padwidth": 10,
+      "growth": 0,
+      "stdout_len": 53562,
+      "stdout_sha256": "96b670b825372a0f41fa3b574d47457f92654b76411e5d5be4c438003087610e",
+      "source_eq_stdout": true
+    },
+    "pure_fixed": {
+      "status": "HALTED",
+      "steps": 9718,
+      "padwidth": 10,
+      "growth": 0,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_eq_stdout": false
+    },
+    "epochal": {
+      "status": "HALTED",
+      "steps": 25729,
+      "padwidth": 11,
+      "growth": 1,
+      "stdout_len": 3,
+      "stdout_sha256": "b2c7a7594b4378e61c2d9c9536ff93f630272c45f0622baea98cf5d0db1a6766",
+      "source_eq_stdout": false
+    }
+  },
+  "python": {
+    "classic": {
+      "status": "HALTED",
+      "steps": 62239852,
+      "padwidth": 10,
+      "growth": 0,
+      "stdout_len": 53562,
+      "stdout_sha256": "96b670b825372a0f41fa3b574d47457f92654b76411e5d5be4c438003087610e",
+      "source_eq_stdout": true
+    },
+    "pure_fixed": {
+      "status": "HALTED",
+      "steps": 9718,
+      "padwidth": 10,
+      "growth": 0,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_eq_stdout": false
+    },
+    "epochal": {
+      "status": "HALTED",
+      "steps": 25729,
+      "padwidth": 11,
+      "growth": 1,
+      "stdout_len": 3,
+      "stdout_sha256": "b2c7a7594b4378e61c2d9c9536ff93f630272c45f0622baea98cf5d0db1a6766",
+      "source_eq_stdout": false
+    }
+  },
+  "external_known_answer": {
+    "steps": 62239852,
+    "stdout_len": 53562
+  },
+  "compared_fields": [
+    "status",
+    "steps",
+    "padwidth",
+    "growth",
+    "stdout_len",
+    "stdout_sha256",
+    "source_eq_stdout"
+  ],
+  "expectations": [
+    {
+      "name": "K1_program_pin_is_the_published_record",
+      "ok": true,
+      "measured": "96b670b825372a0f"
+    },
+    {
+      "name": "K2_zig_classic_halts_reproducing_the_program",
+      "ok": true,
+      "measured": "status=HALTED steps=62239852 out=53562B eq=True"
+    },
+    {
+      "name": "K3_python_classic_halts_reproducing_the_program",
+      "ok": true,
+      "measured": "status=HALTED steps=62239852 out=53562B eq=True"
+    },
+    {
+      "name": "K4_cross_core_agreement",
+      "ok": true,
+      "measured": "7 fields x 3 profiles; disagreements=none"
+    },
+    {
+      "name": "K5_step_count_matches_the_external_engines",
+      "ok": true,
+      "measured": "zg=62239852 py=62239852 external=62239852 (MB-Database 2026-10-17: native runner, mb_ref, mb_classic_indep.c)"
+    },
+    {
+      "name": "K6_wrap_free_profiles_do_not_reproduce",
+      "ok": true,
+      "measured": "zg pure_fixed=0B epochal=3B"
+    },
+    {
+      "name": "K7_source_eq_stdout_selects_only_classic",
+      "ok": true,
+      "measured": "classic=True pure_fixed=False epochal=False"
+    }
+  ],
+  "scope": [
+    "proves: this repository's two cores reach a known answer published by three engines outside it, on a 53 562-byte self-reproducing Classic program",
+    "does NOT prove: that epochal can reproduce a quine (F11 shows it emits 3 bytes here, and F10 shows the same on a third-party quine)",
+    "does NOT prove: smallest-quine or any ranking claim; those live in MB-Database with its enumerated-universe sweep",
+    "byte-exact self-reproduction is asserted about stdout bytes only; max_addr_touched is not compared (the two cores measure it by different rules, see F11's disclosure)"
+  ],
+  "verdict": "PASS"
+}

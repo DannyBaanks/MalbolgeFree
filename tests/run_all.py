@@ -68,6 +68,14 @@ GATES = [
     ("F4c canonical Classic parity", [sys.executable, str(ROOT / "evidence" / "compare_f4_canonical.py")]),
     ("M2 Classic trace differential", [sys.executable, str(ROOT / "evidence" / "compare_m2.py")]),
     ("EPOCHAL Python parity differential", [sys.executable, str(ROOT / "evidence" / "compare_epochal.py")]),
+    # F11/F12 read the vendored corpus/classic/quine_m281.mal, so unlike F10 they
+    # need no sibling checkout: their exit-3 (NOT_DEMONSTRATED) branch is
+    # unreachable from a fresh clone, which is what lets the frontier/EOF and
+    # self-reproduction claims be affirmed by CI rather than by one machine.
+    # F12 halts the real 62 239 852-step program on both cores (~115 s measured on
+    # Linux), so it carries an explicit timeout instead of the 180 s default.
+    ("F11 epochal frontier and width-relative EOF differential", [sys.executable, str(ROOT / "evidence" / "compare_f11_frontier_eof.py")], 600),
+    ("F12 Classic self-reproduction known answer (both cores)", [sys.executable, str(ROOT / "evidence" / "compare_f12_selfreproduction.py")], 900),
     ("M1 numeric and EOF", zig_test("tests/t_m1_contract.zig")),
     ("negative contracts", zig_test("tests/t_negative.zig")),
     ("execution profiles", zig_test("tests/t_profiles.zig")),
@@ -201,7 +209,11 @@ GATES = [
 def main() -> int:
     failures = 0
     skipped: list[str] = []
-    for name, command in GATES:
+    for entry in GATES:
+        name, command = entry[:2]
+        # A gate may carry a third element: its own timeout in seconds. The 180 s
+        # default fits everything that does not halt a real Classic program.
+        timeout = entry[2] if len(entry) > 2 else 180
         print(f"\n== {name} ==")
         print("$ " + " ".join(str(part) for part in command))
         completed = subprocess.run(
@@ -211,7 +223,7 @@ def main() -> int:
             text=True,
             encoding="utf-8",
             errors="replace",
-            timeout=180,
+            timeout=timeout,
         )
         output = completed.stdout + completed.stderr
         safe_print(output.rstrip())

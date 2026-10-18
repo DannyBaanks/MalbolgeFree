@@ -1,0 +1,24 @@
+F12 program=corpus/classic/quine_m281.mal bytes=53562 sha=96b670b825372a0f41fa3b574d47457f92654b76411e5d5be4c438003087610e
+F12 cited_as_published_to=DannyBaanks/Malbolge-MB-Database:quine/quine_53562_m281.mb and DannyBaanks/BolgeForge@5a55b9b:artifacts/candidate_m281_53562b.mal
+F12 budgets zig_trace=2000 zig_stdout=200000000 python=200000000
+F12 measured_wall_seconds zig=63.1 python=49.8
+  classic    zg status=HALTED steps=62239852 pw=10 g=0 out=53562B sha=96b670b825372a0f eq=True
+             py status=HALTED steps=62239852 pw=10 g=0 out=53562B sha=96b670b825372a0f eq=True
+  pure_fixed zg status=HALTED steps=9718 pw=10 g=0 out=0B sha=e3b0c44298fc1c14 eq=False
+             py status=HALTED steps=9718 pw=10 g=0 out=0B sha=e3b0c44298fc1c14 eq=False
+  epochal    zg status=HALTED steps=25729 pw=11 g=1 out=3B sha=b2c7a7594b4378e6 eq=False
+             py status=HALTED steps=25729 pw=11 g=1 out=3B sha=b2c7a7594b4378e6 eq=False
+F12 EXP K1_program_pin_is_the_published_record: MATCH (96b670b825372a0f)
+F12 EXP K2_zig_classic_halts_reproducing_the_program: MATCH (status=HALTED steps=62239852 out=53562B eq=True)
+F12 EXP K3_python_classic_halts_reproducing_the_program: MATCH (status=HALTED steps=62239852 out=53562B eq=True)
+F12 EXP K4_cross_core_agreement: MATCH (7 fields x 3 profiles; disagreements=none)
+F12 EXP K5_step_count_matches_the_external_engines: MATCH (zg=62239852 py=62239852 external=62239852 (MB-Database 2026-10-17: native runner, mb_ref, mb_classic_indep.c))
+F12 EXP K6_wrap_free_profiles_do_not_reproduce: MATCH (zg pure_fixed=0B epochal=3B)
+F12 EXP K7_source_eq_stdout_selects_only_classic: MATCH (classic=True pure_fixed=False epochal=False)
+F12 EXPECTATIONS=7 MATCH=7 FALSIFIED=0
+F12 SCOPE proves: this repository's two cores reach a known answer published by three engines outside it, on a 53 562-byte self-reproducing Classic program
+F12 SCOPE does NOT prove: that epochal can reproduce a quine (F11 shows it emits 3 bytes here, and F10 shows the same on a third-party quine)
+F12 SCOPE does NOT prove: smallest-quine or any ranking claim; those live in MB-Database with its enumerated-universe sweep
+F12 SCOPE byte-exact self-reproduction is asserted about stdout bytes only; max_addr_touched is not compared (the two cores measure it by different rules, see F11's disclosure)
+F12 SELF_REPRODUCTION_KNOWN_ANSWER=PASS
+F12_RC=0

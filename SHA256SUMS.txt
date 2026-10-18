@@ -13,7 +13,7 @@ c365c50089d72a6859d33619f7c1987419f4d90c35efa7f1fc59a1683b0376d5  src/bfir1_back
 d7d6d1e34e70210ef2939828ec6593efcaa52f32edf51122eff2638c92efe598  corpus/free/cross_3pow19.mal
 5f6e11aebc6801b4fb89908c5ae4bb13a871e9422793fab1f9cb0a5a4ed0790c  malbolge_cli.py
 8ecbd8a286144e6178bb9fdde0c78a2f8e1ecbd81c537ba8228528719f3a271a  GUIA.md
-246e904117e795d509f2e88b329b4259d9c3c140e7fcb33a6d3e12408a1e8a65  tests/run_all.py
+e49210fafc8d4ea3fcf9386fb87435ce5db021b2e20a527baef651aa6c4d390c  tests/run_all.py
 44157cc8bdd6de4bdd7578f8ba19e3b16d6f5d030f768de29475dcb4764b9557  evidence/f4_classic_parity.json
 c8fd681f739fbb88f31ecb6d52e2d7cdee81d7b0e7c4cb5fec7327901378d5ca  evidence/f9_repeated_frontier.json
 b523e463980c9a265f5f18567856b60027d93fdabcc1491b0fe248be7f5b7dc5  tests/fixtures/free_pure/vertical_slice.hell
@@ -113,3 +113,35 @@ fcd641b020356153d014d23dee5d97b5f4036f2c686fc0e74d158f32ba3a17a7  evidence/verif
 7886ffe1a4fa11f75f867001745daf7a5d70a9b1b4ac2f5e3fc40b3a3349dbde  evidence/F10_QUINE_EPOCHAL_20261018/sealed_run_resource_usage.txt
 f4f9c6d8248f247bb9d8033ef5cf0f2b35b6c689930cde7e5fd52bf74d9772bf  evidence/F10_QUINE_EPOCHAL_20261018/trial_stdout_budget_15000.json
 0938ab9e2ec87403543379598ce27c9f7b1f88540443989036023bd2dabaca68  evidence/F10_QUINE_EPOCHAL_20261018/trial_stdout_budget_1000000.json
+# Appended 2026-10-18T12:43:45Z (HONESTY_LEDGER entries 33 and 34): the F10-class
+# experiment is re-executed from a fresh clone. corpus/classic/quine_m281.mal is the
+# published 53 562-byte
+# self-reproducing Classic program (sha256 96b670b8...) copied byte-for-byte from
+# DannyBaanks/Malbolge-MB-Database:quine/quine_53562_m281.mb, identical to
+# DannyBaanks/BolgeForge@5a55b9b:artifacts/candidate_m281_53562b.mal; the authorship
+# tool is public (BolgeForge/synthesize.py, sha256 e401dec1..., and `python3
+# synthesize.py 281` reproduced these exact bytes here on 2026-10-18). Provenance:
+# corpus/classic/PROVENANCE.md. Two new gates use it, so neither has an external
+# input to miss and exit 3 is unreachable for either:
+#   F11 evidence/compare_f11_frontier_eof.py + evidence/run_f11_observations.zig -
+#     frontier crossing and width-relative EOF on both cores;
+#   F12 evidence/compare_f12_selfreproduction.py - the full 62 239 852-step halt,
+#     byte-exact self-reproduction, both cores, known answer from three engines.
+# tests/run_all.py is updated in place above (it now lists both gates and accepts a
+# per-gate timeout). Superseded revision 246e904117e795d509f2e88b329b4259d9c3c140e7fcb33a6d3e12408a1e8a65
+# stays recoverable from git history at 2b57e9d.
+#   src/malbolge_free.zig and src/malbolge_core.py are untouched: both cores still
+#   hash to the entry-24 seals above, and nothing already published was rewritten.
+96b670b825372a0f41fa3b574d47457f92654b76411e5d5be4c438003087610e  corpus/classic/quine_m281.mal
+337c035e224644e292e5342862a103496619650b721d129eb15ca6dd2162c0e0  corpus/classic/PROVENANCE.md
+fee4a9b79afc78bec765516337b026d11ba96e86007cff6342a14c332c5fa31c  evidence/run_f11_observations.zig
+a108097c067a9bd703dd4b7ea061770e0adf689ede89860c0158f7a4c6ac24b0  evidence/compare_f11_frontier_eof.py
+191573bdb93c2ce00d03dfaa7ea1e2b98421745441d543e249080f6ef3b0aa29  evidence/compare_f12_selfreproduction.py
+8b9e896317a7954802208ba1b7c82d1dc1e3c16a6758db59d6832bfef7e83c65  evidence/f11_frontier_eof_20261018.json
+7518ef601af888174ad27a912ee24e552e2f4f0968eb00464483af9d5c157dc1  evidence/f12_selfreproduction_20261018.json
+d2c9253faf6d23df9ba4b261f4096ff51515801ba07fb370fe52bab3fcdfb382  evidence/F11_FRONTIER_EOF_20261018/PROVENANCE.md
+f50692bea41d02b70afc12419803c126c5d4e7129ae30e3e6f889f649b22fffe  evidence/F11_FRONTIER_EOF_20261018/console.txt
+f9eaf930d36d80169c7ce40493d1ddc6e5928778f6dca9e7406d633b041f0bea  evidence/F11_FRONTIER_EOF_20261018/resource_usage.txt
+f8409f5c0eeba77734068038052a822435830e1cd07369d27e974a2578a71699  evidence/F12_SELF_REPRODUCTION_20261018/PROVENANCE.md
+8b98089d72cc328080e27d2a3ae32ee754f14b911d3bb873cd22fad844563e27  evidence/F12_SELF_REPRODUCTION_20261018/console.txt
+eecd6d055d50e2befdd3a19929317ed54efd99541f4db32227a11045f2aef9d9  evidence/F12_SELF_REPRODUCTION_20261018/resource_usage.txt

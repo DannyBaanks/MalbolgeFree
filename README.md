@@ -52,6 +52,30 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > clean clone integrity-checks the annexed captures too. Ledger entry 32. What CI still
 > does *not* do is re-run F10: its checker is not in `GATES` and exits 3 without the
 > third-party quine.
+>
+> **Appended 2026-10-18 (vendored) — that last sentence is now closed by new gates, not
+> by editing it: the gate count moves 50 → 52.** `corpus/classic/quine_m281.mal` is the
+> published 53 562-byte self-reproducing Classic program (`96b670b8…`), vendored
+> byte-for-byte from `DannyBaanks/Malbolge-MB-Database:quine/quine_53562_m281.mb` —
+> identical to `DannyBaanks/BolgeForge@5a55b9b:artifacts/candidate_m281_53562b.mal`,
+> with `corpus/classic/PROVENANCE.md` recording that `python3 synthesize.py 281`
+> reproduces these exact bytes from the *public* synthesizer. On it, two gates that need
+> no external input: **F11** (frontier crossing + width-relative EOF, both cores, 15
+> expectations, 1.26 s) and **F12** (the real 62 239 852-step halt, byte-exact
+> self-reproduction on both cores, agreeing with the three engines that published that
+> answer, 1:52.97). Measured locally: `52 PASS / 0 FAIL / 0 SKIP`, rc 0, and S1 prints
+> `manifest_sha256=298fe800…`, `entries=53 … ok=53`. The CI figure is stated only after it
+> is read from each runner's own log. F10's own checker is still deliberately outside
+> `GATES` and still exits 3 without the Lutter quine; entries 29 and 32 stand as measured,
+> and what changed is the *forward-looking* half: a clean clone can now re-execute this
+> class of experiment for itself. Ledger entries 33 and 34.
+>
+> **What F11 says about the language (appended 2026-10-18).** `in` at end of input returns
+> `3^padwidth - 1`: **59 048** under `pure_fixed` and **177 146** under `epochal` once the
+> core has widened `10 → 11` at step 1 230 — same value on both cores. A Classic program's
+> hard-coded EOF detector therefore stops meaning "end of input" under the unbounded
+> profiles: `epochal` is not input-compatible with Classic, on top of the removed address
+> wrap. Two programs measured, no claim about Turing completeness.
 
 ## What this is, in one minute
 

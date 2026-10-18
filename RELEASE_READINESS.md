@@ -210,3 +210,48 @@ conjunto de 50 gates en ambos. La identidad `d45319d1…` deja de ser una cifra 
 clone limpio integrity-checka ya las 5 capturas anexadas. Esto no re-ejecuta F10 en CI
 (no está en `GATES`; sin MalDOOM, exit 3) ni añade gates: la lista sigue en 50. Ledger
 entrada 32.
+
+## Anexo 2026-10-18 (3) — dos gates nuevos sobre un quine vendorizado: la lista pasa de 50 a 52
+
+Cierre de la limitación que los anexos de F10 dejaron abierta en su mitad prospectiva:
+CI no podía re-ejecutar el experimento de frontera porque la entrada vivía en otro repo.
+Se resuelve trayendo un programa **propio y publicado**, no relajando el gate.
+
+- `corpus/classic/quine_m281.mal` (`96b670b8…`, 53 562 B): copia literal (`cmp` sin
+  diferencias) del registro de `DannyBaanks/Malbolge-MB-Database`, mismo blob que el
+  artefacto de `DannyBaanks/BolgeForge@5a55b9b`. Licencia MIT idéntica a la de este repo;
+  `* -text` en `.gitattributes` ya evita el re-endline que la entrada 26 documentó.
+  Procedencia completa, incluida la reproducción con el sintetizador público
+  (`python3 synthesize.py 281` → los mismos bytes), en `corpus/classic/PROVENANCE.md`.
+- **F11** `evidence/compare_f11_frontier_eof.py`: frontera + EOF relativo al ancho, ambos
+  cores, 15 expectativas preregistradas. Local: `MATCH=15 FALSIFIED=0`, 1,26 s.
+- **F12** `evidence/compare_f12_selfreproduction.py`: halt completo de 62 239 852 pasos y
+  autorreproducción byte-exacta en ambos cores, más el paso conocido de tres motores
+  externos. Local: `MATCH=7 FALSIFIED=0`, 1:52.97.
+
+Medido en este árbol tras sellar: harness **`52 PASS / 0 FAIL / 0 SKIP`**, rc 0, 2:08.21,
+y en ese mismo run `SEAL manifest_sha256=298fe8008fbdd9e596c337f56f2e144be39cf0d37736e7777394bc76d31b4217
+entries=53 checked=53 ok=53 drift=0 missing=0 escaping=0 duplicate=0 malformed=0`.
+GNU `sha256sum -c --quiet` coincide. El manifiesto creció de 40 a 53 rutas (13 de
+evidencia nueva) y `tests/run_all.py` se re-selló in situ (`e49210fa…`; sustituido
+`246e9041…` declarado en el bloque fechado).
+
+**Coste assumptiondo explícitamente:** F12 lleva timeout propio de 900 s porque el halt
+real en dos cores no cabe en los 180 s del default; el harness acepta ahora un tercer
+elemento opcional por gate y los otros 50 mantienen 180 s. Con 2:08 locales y los
+runners de CI en ~3', el margen contra `timeout-minutes: 30` es amplio, pero la
+cifra de CI se afirma solo tras leer el log de cada runner, no del verde global.
+
+**Lo que esto sí cambia para el release:** la afirmación de frontera y de
+autorreproducción byte-exacta pasa de «medido en una máquina» a «re-ejecutable por
+cualquiera desde un clon limpio, con el programa dentro del repo y sellado». Los gates
+nuevos no tienen rama de exit 3 por construcción.
+
+**Lo que no cambia:** F10 sigue fuera de `GATES` y sigue saliendo con 3 sin el quine de
+Lutter; sus bytes sellados están intactos y las entradas 29 y 32 se leen como se
+midieron. No se publica release, no se empuja nada sin pedido expreso, `src/` no se tocó
+(ambos cores conservan los sellos de la entrada 24) y docs/ledger siguen sin estar
+sellados, por lo que redactar este anexo no puede mover la identidad del manifiesto.
+Nada de esto asciende una etiqueta de claim: `epochal` no reproduce el quine aquí ni en
+F10 (3 bytes / 0 bytes), y la afirmación de compatibilidad con Classic queda acotada por
+dos incompatibilidades medidas, no por una. Ledger entradas 33 y 34.
