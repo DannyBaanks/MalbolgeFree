@@ -65,6 +65,14 @@ in `docs/HONESTY_LEDGER.md`, not here.
   and CI shows `SKIP (NOT_DEMONSTRATED, missing external input)` while local reads
   `53 PASS / 0 FAIL / 0 SKIP`. Gate count 52 → 53, sealed paths 54 → 60, identity
   `a39adde9…` → `ad581d0a…`; `src/` untouched. Ledger entry 39.
+- `evidence(F14): measure regional dispatch divergence V1 against deterministic reference`
+  — 17 pre-registered expectations (D1–D5, P1–P3, R0, R1_*, R2_*), 17 MATCH, 0 FALSIFIED,
+  exit 0, comparing `MalbolgeFree` against `MalbolgeLispSlop/src/bolge19.zig` across
+  Region 0, Region 1 ($c \ge 3^{18}$) and Region 2 ($c \ge 2 \cdot 3^{18}$). Demonstrates
+  exact regional offset divergence ($+117 \equiv 23 \pmod{94}$ in Region 1, $+140 \equiv 46 \pmod{94}$
+  in Region 2) in formula sampling (150 000 pairs, 0 mismatches) and in execution traces jumping
+  into Region 1 (`b"(aO"` and `b"'&B"`). Gate count 53 → 54, sealed paths 60 → 65, identity
+  `ad581d0a…` → `7e3c9a09…`; `src/` untouched. Ledger entry 40.
 
 ## 2026-09-24 and earlier
 
