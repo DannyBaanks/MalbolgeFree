@@ -13,10 +13,13 @@ intérpretes canónicos (`evidence/f4c_canonical_parity_20261017.json`; re-medid
 el oráculo vendorizado en `evidence/f4c_canonical_parity_vendored_20261017.json`),
 4/6 con el oráculo viejo (`evidence/f4_engine_zig_divergence_20261017.json`),
 harness 49/49. El oráculo canónico de Python está vendorizado y fijado por SHA-256
-(`vendor/canonical_malbolge_py/`), así que CI mide la paridad en vez de saltarla — y el
-primer run la midió **fallando** en windows-latest porque el runner re-end-lineaba el
-oráculo: el pin lo detectó (exit 4) y se corrigió con `.gitattributes`; ver entrada 26
-y `evidence/F4C_WINDOWS_EOL_DRIFT_20261018.json`. Ver
+(`vendor/canonical_malbolge_py/`), así que CI mide la paridad en vez de saltarla — y
+tardó dos runs en conseguirla: el primero falló porque el runner re-end-lineaba el
+oráculo (el pin lo detectó, exit 4; `.gitattributes`), y en el segundo F4c dio MISMATCH
+por un `\r` que el manifest del gate metía como byte de entrada en el núcleo Zig —
+defecto del arnés, no de Classic. Ver entradas 26 y 27,
+`evidence/F4C_WINDOWS_EOL_DRIFT_20261018.json` y
+`evidence/F4C_WINDOWS_MANIFEST_CRLF_20261018.json`. Ver
 `docs/HONESTY_LEDGER.md` entrada 24.
 
 ---

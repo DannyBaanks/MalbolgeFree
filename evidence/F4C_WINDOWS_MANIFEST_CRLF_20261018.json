@@ -1,0 +1,68 @@
+{
+  "format": "malbolge-free-evidence-hashes/1",
+  "generated_utc": "2026-10-18T07:58:00Z",
+  "phase": "F4c-vendored-manifest-CRLF",
+  "claim": "The F4c MISMATCH measured on windows-latest was a harness line-ending defect, NOT a divergence of the Zig core: the case manifest was written in text mode, so its \\r\\n separators left a 0x0d at the end of the stdin field and the Zig core was handed input it should not have had.",
+  "event": {
+    "workflow": "ci",
+    "run_id": 39108163931,
+    "commit": "971f04b4445452723c1adaf49d2f4299e74e78ed",
+    "harness (ubuntu-latest)": "completed success",
+    "harness (windows-latest)": "completed failure (job 117618400798): F4c ran for real this time -- vendored oracle hash matched the pin, so the .gitattributes fix of entry 26 worked -- and the gate then reported MISMATCH, exit 1",
+    "measured_counts_on_windows": {
+      "cases": 10,
+      "cores": 2,
+      "oracles_used": 1,
+      "verdicts": 20,
+      "hash_comparisons": 20,
+      "all_match": false,
+      "mismatching_verdicts": 4,
+      "all_four_are": "side=zig, the empty-stdin EOF cases; every fed-input case matched",
+      "zig_got_vs_expected": {
+        "echo.mal/eof": "0d vs a8",
+        "echo1.mal/eof": "0d vs a8",
+        "echo2.mal/eof": "0da8 vs a8a8",
+        "echo3.mal/eof": "0da8a8 vs a8a8a8"
+      },
+      "python_side": "matched the oracle in all 10 cases, which localises the defect to the path that feeds the Zig driver, not to Classic semantics"
+    }
+  },
+  "mechanism": "evidence/compare_f4_canonical.py built evidence/_f4c_cases.tsv with Path.write_text(), which on Windows translates \\n to \\r\\n. evidence/run_f4c.zig splits the manifest on '\\n' only, so each line kept a trailing CR on its LAST field -- the stdin field. A case declared with empty stdin therefore reached the core as one byte 0x0d (13), and the machine echoed 13 instead of taking the canonical EOF branch (3^10-1 = 59048 -> out 0xa8). Cases with fed input matched because their programs consume fewer bytes than the CR-padded field holds.",
+  "reproduced_locally": {
+    "method": "A/B on this machine, no Windows needed: the pre-fix driver (git show HEAD:evidence/run_f4c.zig) and the post-fix driver, each fed the same three EOF cases through a LF manifest and through a CRLF manifest",
+    "old_driver_with_CRLF_manifest": {
+      "echo.mal/eof": "9d1e0e2d9459d06523ad13e28a4093c2316baafe7aec5b25f30eba2e113599c4 [0d]",
+      "echo2.mal/eof": "e285fdca633ac14346e948c813e71bdc7a57c9d677e77a40543f87311e57db2c [0da8]",
+      "echo3.mal/eof": "3ae89302a67fd02a9da7c2b992b35c9b7e5ce1837081ccaf0c66fa9e771f3627 [0da8a8]"
+    },
+    "identity_with_ci": "those three hashes are byte-for-byte the 'got' values in the windows-latest report, so the explanation is measured, not inferred",
+    "old_driver_with_LF_manifest": "identical to the post-fix rows below (the leak needs the CRLF manifest)",
+    "new_driver_with_CRLF_or_LF_manifest": {
+      "echo.mal/eof": "74e1ade320c66075468e17cfab33f41e8e0eaca45edb6dd7b086c49a358d2a69 [a8]",
+      "echo2.mal/eof": "ee1e877713365238452c2b5fcd9aebc27f9868350395a48c1cfe5a4743d85ba3 [a8a8]",
+      "echo3.mal/eof": "c9095d8ba2ada64f9d6c529236714a13a5c919568e9ec168bd074ce77472165d [a8a8a8]"
+    },
+    "expected_side_reference": "the post-fix hashes equal the canonical oracle's expected hashes recorded in the windows report, i.e. the Zig core now agrees with the oracle on both manifest flavours"
+  },
+  "fix": {
+    "evidence/compare_f4_canonical.py": "manifest written with write_bytes(...encode('utf-8')) instead of write_text(), so the separator is LF on every platform",
+    "evidence/run_f4c.zig": "each manifest line is trimEnd(u8, line, \"\\\\r\")'d before parsing, so a CRLF manifest cannot inject 0x0d into stdin even if one appears",
+    "why_both": "the writer fixes this gate; the reader fixes the class of mistake. Only the writer change would leave the driver fragile, and only the reader change would leave a manifest whose declared stdin is a lie"
+  },
+  "artifacts": {
+    "evidence/compare_f4_canonical.py": "07715f7963157a1553f57320c63716a1d1eacad6d562041d3a1fa1a07151d90d",
+    "evidence/run_f4c.zig": "8ab1739e99faa88c1ac22ed88a9aaab034e97f8695c6bb05785dee7db77509b2",
+    "evidence/f4c_canonical_parity_vendored_20261017.json": "04ef041432ddc2462c4b64b5aa48ac3f4c42b47af6e7ddf5fb6d222a5812d926",
+    "vendor/canonical_malbolge_py/malbolge.py": "e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b"
+  },
+  "local_remeasurement_after_fix": {
+    "command": "python3 evidence/compare_f4_canonical.py",
+    "verdict_line": "=> PASS (11 cases x 2 cores x 2 oracle(s) = 44 stdout-hash comparisons)",
+    "all_match": true,
+    "note": "Linux was never affected (its text-mode write is LF), so this fix is invisible locally -- which is exactly why it needed the Windows runner to surface."
+  },
+  "not_rewritten": "the entry-25 and entry-26 artifacts keep their published bytes; the earlier reports were correct measurements of what each side actually received, including the wrong 0x0d input.",
+  "scope": "the F4c harness plumbing on windows-latest. Nothing about Classic semantics changed: src/malbolge_free.zig and src/malbolge_core.py are untouched and still hash to the entry-24 seals.",
+  "not_claimed": "Windows CI green is not claimed here. This file records the diagnosis and the fix; the run that decides it is verified with gh run watch --exit-status and reported in the ledger.",
+  "why_it_matters": "a parity verdict is only about the machine under test if the input it received is the input the case declares. A CR smuggled in by a line-ending default turned a correct core into a 'mismatch', and the honest reading of that is a bug in the harness -- not a licence to touch the core."
+}

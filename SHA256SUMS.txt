@@ -37,8 +37,8 @@ bc6d1b36f39cedb81414e49ea658e75656b1e7673c27bcbf9dee18e6e5f4983d  evidence/f4c_c
 # published was rewritten: the v1 F4c report and its hashes doc keep their recorded
 # bytes, and the new report is checked case-by-case against the published one in
 # evidence/F4C_VENDORED_ORACLE_20261017.hashes.json.
-7d3374b86e08659113300637fd20e32d4b4075318a13f31326ea8cdbd3bbcc2c  evidence/compare_f4_canonical.py
-585d83fd224848b1b57a081b2b530f22fcd471b1b58d25cdd620d092e30df87e  evidence/run_f4c.zig
+07715f7963157a1553f57320c63716a1d1eacad6d562041d3a1fa1a07151d90d  evidence/compare_f4_canonical.py
+8ab1739e99faa88c1ac22ed88a9aaab034e97f8695c6bb05785dee7db77509b2  evidence/run_f4c.zig
 3ed8c1ea1643bf9cc57b9b0854e8368e74b447a2dc4bdc519a6676a85eb0a6fd  evidence/f4_engine_zig_divergence_20261017.json
 e64af4f0d51712e99fdf205e1a102587e4e52c863302384b5d2599f6edf3222b  vendor/canonical_malbolge_py/malbolge.py
 ff30e8fa500073ea1adbf4d40104480094c90154fbac7de109756c786c2b2962  vendor/canonical_malbolge_py/PROVENANCE.md
@@ -51,3 +51,11 @@ ff30e8fa500073ea1adbf4d40104480094c90154fbac7de109756c786c2b2962  vendor/canonic
 # byte-exact fresh-clone run (10 x 2 x 1 = 20 comparisons, all_match true). The
 # published entry-25 artifacts above are untouched.
 4a4b6623693596af6c6e85141417e5dbd9b96291b20cc8e96c99ba7a0b1aff09  evidence/F4C_WINDOWS_EOL_DRIFT_20261018.json
+# Appended 2026-10-18T08:05:00Z (HONESTY_LEDGER entry 27): the windows-latest F4c
+# MISMATCH was our manifest, not the core -- text-mode write left a \r in the stdin
+# field, so the Zig core was handed 0x0d. evidence/compare_f4_canonical.py and
+# evidence/run_f4c.zig above therefore carry post-fix hashes (pre-fix:
+# 7d3374b86e08659113300637fd20e32d4b4075318a13f31326ea8cdbd3bbcc2c and
+# 585d83fd224848b1b57a081b2b530f22fcd471b1b58d25cdd620d092e30df87e, both in git
+# history). src/ is untouched and still hashes to the entry-24 seals.
+b69f2d22cccfc21c5f93f544801f9832cb4d502cd9b125a7967408a2444ab8c5  evidence/F4C_WINDOWS_MANIFEST_CRLF_20261018.json

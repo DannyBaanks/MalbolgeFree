@@ -211,8 +211,12 @@ guía.
   (`all_match: true`). El primer run con el oráculo vendorizado **falló en
   windows-latest**: el runner re-end-lineaba el fichero (`core.autocrlf=true`), el pin
   no cuadraba y el gate salió con código 4 — el defecto lo cazó el sello, no la
-  prosa; se corrigió con `.gitattributes` (`* -text`). Ver
-  `evidence/F4C_WINDOWS_EOL_DRIFT_20261018.json` y ledger entrada 26. El pin es un
+  prosa; se corrigió con `.gitattributes` (`* -text`). En el run siguiente el oráculo
+  ya cuadraba, pero F4c dio MISMATCH en 4 veredictos: el manifest de casos se escribía
+  en modo texto y el `\r` sobrante llegaba al núcleo Zig como byte de entrada `0x0d`
+  (era un defecto de nuestro arnés, no de Classic; el núcleo no se tocó). Ver
+  `evidence/F4C_WINDOWS_EOL_DRIFT_20261018.json`,
+  `evidence/F4C_WINDOWS_MANIFEST_CRLF_20261018.json` y ledger entradas 26 y 27. El pin es un
   SHA-256: si el
   fichero vendorizado deriva, el gate falla con código 4; si se quita y no queda ningún
   oráculo, sale con código 3 (`NOT_DEMONSTRATED`), que CI reporta como skip explícito,

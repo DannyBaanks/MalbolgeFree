@@ -21,7 +21,10 @@ pub fn main(init: std.process.Init) !void {
     );
 
     var lines = std.mem.splitScalar(u8, manifest, '\n');
-    while (lines.next()) |line| {
+    while (lines.next()) |raw_line| {
+        // A CRLF manifest would otherwise leak 0x0d into the last field (stdin),
+        // which is what made the Zig core look wrong on windows-latest 2026-10-18.
+        const line = std.mem.trimEnd(u8, raw_line, "\r");
         if (line.len == 0 or line[0] == '#') continue;
         var fields = std.mem.splitScalar(u8, line, '\t');
         const name = fields.next() orelse continue;

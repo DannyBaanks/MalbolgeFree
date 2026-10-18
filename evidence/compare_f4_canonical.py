@@ -144,7 +144,11 @@ if EXTERNAL_HELLO.is_file():
 # --- our Zig core, through evidence/run_f4c.zig --------------------------------
 manifest = ROOT / "evidence" / "_f4c_cases.tsv"
 lines = ["{}\t{}\t{}".format(c["case"], c["path"], c["stdin"]) for c in CASES]
-manifest.write_text("\n".join(lines) + "\n", encoding="utf-8")
+# write_bytes, not write_text: on Windows text mode turns \n into \r\n, and the
+# driver splits on \n only, so the trailing \r landed in the stdin field and the
+# Zig core was handed a 0x0d input byte. Measured on windows-latest 2026-10-18
+# (evidence/F4C_WINDOWS_MANIFEST_CRLF_20261018.json).
+manifest.write_bytes(("\n".join(lines) + "\n").encode("utf-8"))
 zig_proc = subprocess.run(
     ["zig", "run", "--dep", "malbolge_free=malbolge_free",
      "-Mroot=evidence/run_f4c.zig",

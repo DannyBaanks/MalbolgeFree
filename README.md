@@ -282,7 +282,10 @@ month, so drift is a hard failure — never a skip, never a PASS.
 That pin is also why `.gitattributes` says `* -text`: the Windows runners default to
 `core.autocrlf=true`, and at `7e6eb5d` they handed the gate a CRLF copy of the oracle.
 The pin disagreed and CI failed loudly instead of certifying a program nobody reviewed
-(ledger entry 26).
+(ledger entry 26). The same default then corrupted the gate's own case manifest — a
+stray `\r` reached the Zig core as an input byte, producing a `MISMATCH` that was our
+harness rather than Classic, and was fixed by writing the manifest as bytes and trimming
+a trailing CR in the driver. Neither time was the core touched (ledger entry 27).
 
 Comparisons are on stdout bytes only: the C oracle exposes no step count.
 
