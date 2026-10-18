@@ -56,6 +56,15 @@ in `docs/HONESTY_LEDGER.md`, not here.
   runners of run `39145896988` still print `a39adde9… entries=54 ok=54` with 52 PASS / 0 FAIL /
   0 SKIP. Four job-runs on identical images show the fast job swapping platforms (ubuntu then
   `48.9 + 47.0` s, windows then `68.2 + 94.3` s): the variance is per run, not per platform.
+- `evidence(F13): measure scoped fixed-3^19 parity against a deterministic external machine`
+  (`f097db0`) — 20 pre-registered expectations, 20 MATCH, 0 FALSIFIED, exit 0, three machines
+  per case (external `MalbolgeLispSlop/src/bolge19.zig`, our Python core, our Zig core),
+  region 0 only, ≤4-cell programs. Two expectations assert disagreement on purpose: `rot`
+  (`0x9e` ours vs `0x92` reference) and the halt counter (`ours = reference + 1`). The
+  reference is **not vendored** (licensing), so the gate exits 3 without the sibling checkout
+  and CI shows `SKIP (NOT_DEMONSTRATED, missing external input)` while local reads
+  `53 PASS / 0 FAIL / 0 SKIP`. Gate count 52 → 53, sealed paths 54 → 60, identity
+  `a39adde9…` → `ad581d0a…`; `src/` untouched. Ledger entry 39.
 
 ## 2026-09-24 and earlier
 
@@ -72,8 +81,10 @@ in `docs/HONESTY_LEDGER.md`, not here.
 ## Explicitly NOT in any release
 
 - Turing completeness as a new claim (`NO_NEW_CLAIM`, see M6 docs).
-- Unshackled bit-parity (`NOT_DEMONSTRABLE`: the original uses
-  `srand(time(NULL))`).
+- Unshackled bit-parity as such (`NOT_DEMONSTRABLE`: the original uses
+  `srand(time(NULL))`, so the reference cannot agree with itself). Gate F13 measures a
+  different claim — agreement with a deterministic fixed-3^19 machine over region 0 —
+  and is not offered as Lutter parity.
 - Unbounded width growth (finite ladder by construction; dense bounded at
   `w=20`).
 - Ouroboros self-hosting (blocked on measured input capacity + brackets).
