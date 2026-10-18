@@ -255,3 +255,16 @@ sellados, por lo que redactar este anexo no puede mover la identidad del manifie
 Nada de esto asciende una etiqueta de claim: `epochal` no reproduce el quine aquí ni en
 F10 (3 bytes / 0 bytes), y la afirmación de compatibilidad con Classic queda acotada por
 dos incompatibilidades medidas, no por una. Ledger entradas 33 y 34.
+
+**CI, el mismo día (mismo push):** run `39129462270` `success`; ubuntu `117681459124`
+3 m 56 s, windows `117681459098` 7 m 05 s. Cada log imprime la identidad sellada
+`298fe800…` con `entries=53 checked=53 ok=53 drift=0 missing=0 escaping=0 duplicate=0
+malformed=0`, `SEAL VERDICT: PASS`, `52 PASS / 0 FAIL / 0 SKIP` y el mismo conjunto de 52
+nombres de gate en ambas plataformas. Los gates nuevos no dependen de nada externo y no
+faltaron: `F11 EXPECTATIONS=15 MATCH=15 FALSIFIED=0`, `F12 EXPECTATIONS=7 MATCH=7
+FALSIFIED=0`, con los mismos pasos, sha y bytes de stdout que el run local sellado. El
+class de defecto de la entrada 26 (re-endline en Windows) se prueba ahora contra el corpus
+nuevo: si `quine_m281.mal` hubiera llegado con CRLF, F11 y F12 habrían salido con 4 en vez
+de medir. Timings: F12 ~3 min en CI contra sus 900 s de timeout — con el default de 180 s
+no habría pasado. Queda igual: F10 sigue sin re-ejecutarse en CI (fuera de `GATES`, exit 3
+sin el quine de Lutter). No hay release, tag ni PR; `src/` intacto. Ledger entrada 35.

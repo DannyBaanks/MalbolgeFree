@@ -355,3 +355,18 @@ es «mayor dirección ESCRITA» en Python (`src/malbolge_core.py:156-161`) y «m
 dirección LEÍDA O ESCRITA» en Zig (`src/malbolge_free.zig:337-338`); deltas medidos
 `classic` 0, `pure_fixed` +2, `epochal` +1. No es campo comparado y el gate lo imprime
 así. Detalle en `docs/HONESTY_LEDGER.md` entradas 33 y 34.
+
+**CI, el mismo día:** empujado `b80e28e..318aa9b`; run `39129462270` `success`; leído del
+log de cada runner (ubuntu `117681459124`, 3 m 56 s; windows `117681459098`, 7 m 05 s). Los
+dos imprimen `SEAL manifest_sha256=298fe800… entries=53 checked=53 ok=53 drift=0 missing=0
+escaping=0 duplicate=0 malformed=0`, `SEAL VERDICT: PASS`, 52 líneas `PASS:` y ninguna
+`FAIL`/`SKIP`, con el mismo conjunto de 52 gates (tras quitar el `\r` que el propio log de
+Windows lleva, el `diff` de los dos conjuntos es vacío). Los números coinciden con el run
+local sellado: EOF 59 048 / 177 146, halt de 62 239 852 pasos emitiendo 53 562 bytes con el
+sha del propio programa. El coste real de F12 en CI (zig 65,1 s + python 94,8 s en windows;
+zig 85,4 s + python 94,8 s en ubuntu; local fue 63,1 s + 49,8 s) confirma que los 180 s del
+default no lo habrían contenido. Las dos cifras de Python idénticas son coincidencia a la
+resolución de 0,1 s que imprime el gate: se anota como se midió, sin explicar. **Aviso de
+entorno:** GitHub anuncia que `ubuntu-latest` migra a Ubuntu 26 el 2026-10-19, así que los
+tiempos de CI pueden moverse sin que cambie ni un byte nuestro; lo que separa un cambio de
+entorno de una deriva real son los pins y S1. Ledger entrada 35.

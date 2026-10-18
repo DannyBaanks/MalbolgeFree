@@ -76,6 +76,19 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > hard-coded EOF detector therefore stops meaning "end of input" under the unbounded
 > profiles: `epochal` is not input-compatible with Classic, on top of the removed address
 > wrap. Two programs measured, no claim about Turing completeness.
+>
+> **Appended 2026-10-18 (CI) — the two new gates are measured green on both runners.**
+> Push `b80e28e..318aa9b`, run `39129462270`: ubuntu job `117681459124` (3 m 56 s) and
+> windows job `117681459098` (7 m 05 s) each print `SEAL manifest_sha256=298fe800…
+> entries=53 … ok=53`, `SEAL VERDICT: PASS`, `52 PASS / 0 FAIL / 0 SKIP` over the same
+> 52 gate names, `F11 EXPECTATIONS=15 MATCH=15 FALSIFIED=0` and `F12 EXPECTATIONS=7
+> MATCH=7 FALSIFIED=0`. The numbers match the sealed local run on both platforms: EOF
+> `59048` under `pure_fixed` and `177146` under `epochal`, and the 62 239 852-step halt
+> emitting 53 562 bytes whose sha equals the program's. F12 peaked near 3 minutes on CI,
+> which is why it carries its own 900 s timeout. Ledger entry 35. Note for anyone reading
+> CI later: GitHub flags that `ubuntu-latest` migrates to Ubuntu 26 on 2026-10-19, so
+> timings may move with no change in these bytes.
+
 
 ## What this is, in one minute
 
