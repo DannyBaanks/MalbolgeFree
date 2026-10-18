@@ -223,3 +223,33 @@ guía.
   fichero vendorizado deriva, el gate falla con código 4; si se quita y no queda ningún
   oráculo, sale con código 3 (`NOT_DEMONSTRATED`), que CI reporta como skip explícito,
   nunca como PASS inventado.
+
+## Anexo 2026-10-18 — F10: la frontera con un programa real (anexo; no reescribe nada)
+
+`evidence/f10_quine_epochal_20261018.json` responde lo que los testigos sintéticos de
+M5 no pueden: si `epochal` se comporta como Classic sobre un programa real que
+sobrevive más allá de `3^10`. El programa es el quine de Matthias Lutter, ajeno a este
+repo y fijado por hash (`DannyBaanks/MalDOOM:vendor/quines/quine_lutter.malbolge`,
+sha256 `dca8476f…`, 59 852 bytes en disco, 59 032 celdas cargadas); no se vendoriza
+aquí porque re-hostear bytes de terceros es una decisión de licencia, no una medición.
+
+- **M5/M6 paso 1 (positivo)**: bajo `classic` el núcleo Zig reproduce el quine
+  byte a byte — `HALTED` en 69 547 437 pasos, stdout de 59 852 bytes cuyo SHA-256 es
+  el del propio programa. Esto **supera la nota (c) de la entrada 24**, que decía que
+  este run de 69M de pasos no se había repetido aquí.
+- **Frontera**: se cruza en el paso **1230**, no en 59050. `d` es *asignado* a
+  `3^10` (primera divergencia Zig en traza: paso 1229), así que la frase "el puntero
+  debe caminar hasta `3^(w-1)`" describe el coste de los testigos, no una exigencia de
+  la regla. La invariante P1 sí se cumple: la divergencia `pure_fixed` vs `epochal`
+  aparece en el paso 1246, después del ensanche.
+- **Límite del claim "otro Malbolge"**: `pure_fixed` (sin política de crecimiento
+  alguna, solo sin wrap) halta en 6 521 pasos emitiendo 1 byte; `epochal` halta en
+  8 761 sin emitir nada. La diferencia con Classic la produce **quitar el wrap de
+  direcciones**, que forma parte de la definición de Classic, no el ensanche. Las
+  imágenes de memoria pre-ejecución son idénticas en los tres perfiles (`c455d288…`),
+  así que no es un efecto de `load`.
+- **No es gate**: `compare_quine_epochal.py` no entra en la lista `GATES` de
+  `tests/run_all.py`, así que el recuento publicado de 49 gates queda igual. Sin
+  MalDOOM al lado, el script sale con código 3 (`NOT_DEMONSTRATED`) en lugar de
+  sustituir el programa. Detalle: `docs/HONESTY_LEDGER.md` entrada 29 y
+  `evidence/F10_QUINE_EPOCHAL_20261018.hashes.json`.

@@ -22,6 +22,9 @@ in `docs/HONESTY_LEDGER.md`, not here.
 - Dense representation: ladder measured to `w=19` (was 16).
 - CI on ubuntu + windows; manual epochal-ladder workflow.
 - Fixed Zig 0.16.0 Debug miscompile of u128 switch (if-chain).
+- F10: Lutter's quine under `classic` / `pure_fixed` / `epochal` — Classic row
+  reproduces it byte-for-byte (69,547,437 steps), the two unbounded rows do not;
+  frontier crossed at step 1230 by pointer assignment. Evidence only, not a gate.
 
 ## 2026-09-24 and earlier
 

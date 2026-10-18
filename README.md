@@ -211,6 +211,47 @@ sharper reason than "we stopped measuring": the ladder is finite by
 construction, and in the dense representation it is bounded at `w = 20` by the
 element type.
 
+## Appended 2026-10-18 — the same frontier on a real program (F10)
+
+Everything in the section above widens on witnesses that walk `c` one cell at a
+time, so their crossing lands exactly on `3^w`. That is a property of those
+witnesses, not of the policy. `evidence/f10_quine_epochal_20261018.json` runs a
+program nobody here wrote — Matthias Lutter's Classic quine, cited as
+`DannyBaanks/MalDOOM:vendor/quines/quine_lutter.malbolge` and pinned by sha256
+`dca8476f…`, 59 852 bytes on disk, 59 032 cells loaded — through three profiles
+of the same core:
+
+| profile | `mem_limit` | growth | status | steps | stdout |
+|---|---|---|---|---:|---|
+| `classic` | `3^10` (wrap) | `fixed` | `HALTED` | 69 547 437 | 59 852 bytes whose sha256 equals the program's: it reproduces itself |
+| `pure_fixed` | `null` | `fixed` | `HALTED` | 6 521 | 1 byte |
+| `epochal` | `null` | `epochal` | `HALTED` | 8 761 | nothing; widened `10 -> 11` once |
+
+What that measures, and what it does not:
+
+- **The frontier is reached at step 1230, not at 59050.** `d` is *assigned*
+  `3^10 = 59049` (the earliest Zig trace divergence `classic` vs `pure_fixed` is
+  step 1229). The sentence above the ladder table — "to reach `w` the pointer must
+  walk to `3^(w-1)`" — therefore describes the cost of the synthetic witnesses, not
+  a requirement of the rule. That text stays as published; this bullet is the
+  correction, appended.
+- **Removing the address wrap is alone enough to stop being Classic.** `pure_fixed`
+  has no growth policy whatsoever and the quine no longer reproduces, so the epochal
+  widening is not what silenced it. Stored and addressed memory images are identical
+  for all three profiles before execution (`c455d288…`, no first difference), so the
+  divergence is addressing during execution, not `load`.
+- **Invariant P1 holds on real code**: the earliest `pure_fixed` vs `epochal` trace
+  divergence is step 1246, after the widening at step 1230 — history preserved until
+  the first `WIDEN`.
+- **Not claimed**: that one program generalises to the corpus; that `epochal` is or
+  is not Turing-complete (the claim is compatibility with Classic); CI reproducibility
+  of F10 — the input is third-party and deliberately not vendored, so a fresh clone of
+  this repository exits 3 (`NOT_DEMONSTRATED, missing external input`). F10 is
+  evidence, not a gate: it is absent from the `GATES` list in `tests/run_all.py`, so
+  the `49/49` figure at the top of this file is unchanged by it. Full facts:
+  `docs/HONESTY_LEDGER.md` entry 29 and
+  `evidence/F10_QUINE_EPOCHAL_20261018.hashes.json`.
+
 ## E10 -> E19 epoch ladder (toy)
 
 `epoch_ladder/` carries a separate, smaller experiment that *does* reach 19.

@@ -1,0 +1,99 @@
+{
+  "format": "malbolge-free-evidence-hashes/1",
+  "generated_utc": "2026-10-18T08:39:33Z",
+  "phase": "F10",
+  "claim": "EPOCHAL_ON_REAL_QUINE — measured, not asserted; docs/EPOCHAL_FRONTIER_ANALYSIS.md and docs/FREE_SEMANTICS.md carry the prose",
+  "path_base": "repository root (MalbolgeFree); ../ is a sibling checkout next to this repository",
+  "environment": {
+    "zig": "0.16.0",
+    "python": "3.12.3",
+    "kernel": "Linux 7.0.0-38-generic",
+    "location": "one machine (Danny's Ubuntu workstation); no CI runner executes this script",
+    "wall_seconds": 74.69,
+    "peak_rss_kb": 110276
+  },
+  "input_program": {
+    "role": "the only program run; third-party (Matthias Lutter's Classic quine), NOT vendored into this repository",
+    "citation": "DannyBaanks/MalDOOM:vendor/quines/quine_lutter.malbolge",
+    "public_remote": "https://github.com/DannyBaanks/MalDOOM.git",
+    "commit": "faf65bc94f62e4184b470867476ae345d60835b5",
+    "commit_date": "2026-09-03",
+    "git_blob_id": "498de46660955bc5694166e15f831e44f396bd18",
+    "sha256_at_that_commit": "dca8476f8b70c8462c32f661f63c5f8b1ad6c33946b3c7a9a35186c824117d98",
+    "sha256_measured_on_the_sibling_checkout": "dca8476f8b70c8462c32f661f63c5f8b1ad6c33946b3c7a9a35186c824117d98",
+    "bytes_on_disk": 59852,
+    "cells_loaded_by_our_cores": 59032,
+    "reproducibility_note": "the pins agree, so anyone holding the public MalDOOM repo at faf65bc can feed the identical bytes to this driver. A fresh clone of MalbolgeFree alone does NOT contain the program: evidence/compare_quine_epochal.py exits 3 (NOT_DEMONSTRATED, missing external input) rather than inventing a substitute."
+  },
+  "artifacts": {
+    "evidence/f10_quine_epochal_20261018.json": "d9754ed8275918125d087d6b2d56ec600333a0db183a246f8fb9648dae02d71d",
+    "evidence/run_quine_epochal.zig": "22d6ac260ecfc90402cf3a92a2b75581a8eb56e305b88d90b3d8d80239789fb4",
+    "evidence/compare_quine_epochal.py": "c4d1697bbbb18151432e7ca989157258c6f5b18859de0be5ad9820221f78e528"
+  },
+  "runtime_untouched_by_this_experiment": {
+    "src/malbolge_free.zig": "8eba78b433d8847138b583fb029eb278afd65a07a8e9ab7de8ad9347a4391236",
+    "src/malbolge_core.py": "7c53f53d460a763a458a94867b3ccc2908c9f458772e32808928d676fc3d963e",
+    "meaning": "both equal the seals recorded under HONESTY_LEDGER entry 24, so no runtime was edited to produce a verdict. The two expectation corrections made during this experiment were to evidence/compare_quine_epochal.py (a parsing bug and the direction of the prefix-preservation comparison); both are recorded inside the sealed report's `trial` block."
+  },
+  "measurement": {
+    "classic": {
+      "status": "HALTED",
+      "steps": 69547437,
+      "padwidth": 10,
+      "growth_events": 0,
+      "stdout_len": 59852,
+      "stdout_sha256": "dca8476f8b70c8462c32f661f63c5f8b1ad6c33946b3c7a9a35186c824117d98",
+      "reads_as": "the Zig core reproduces Lutter's quine byte-for-byte: stdout hash == the input program hash. Positive control, and the superseding of HONESTY_LEDGER entry 24 note (c), which said this 69M-step run had not been re-executed here."
+    },
+    "pure_fixed": {
+      "status": "HALTED",
+      "steps": 6521,
+      "padwidth": 10,
+      "growth_events": 0,
+      "stdout_len": 1,
+      "stdout_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "reads_as": "decomposition control: removing the address wrap ALONE, with no growth policy at all, already breaks self-reproduction (one byte of stdout, halt at 6 521 steps)."
+    },
+    "epochal": {
+      "status": "HALTED",
+      "steps": 8761,
+      "padwidth": 11,
+      "growth_events": 1,
+      "stdout_len": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reads_as": "the empty-stdout SHA-256: the epochal profile halts without emitting a single byte on this program. Widening is not the only cause, but the frontier is crossed and the machine diverges from Classic at the first output byte."
+    },
+    "frontier": {
+      "boundary": 59049,
+      "widening_event_python_core": { "from": 10, "to": 11, "step": 1230, "c": 1344, "d": 59049 },
+      "earliest_trace_divergence_classic_vs_pure_fixed": 1229,
+      "earliest_trace_divergence_pure_fixed_vs_epochal": 1246,
+      "reads_as": "on a real program the frontier is reached at step 1229/1230 by POINTER ASSIGNMENT (D is set to 3^10), not at step 59050 by a linear pointer walk. The synthetic F9 witnesses' step therefore does not generalise; the invariant does."
+    },
+    "pre_execution_images": {
+      "stored_sha256_all_three_profiles": "c455d2888bbb0922c60eead8de6b045ae072604cade3bf9dbc386892288702f1",
+      "addressed_sha256_all_three_profiles": "c455d2888bbb0922c60eead8de6b045ae072604cade3bf9dbc386892288702f1",
+      "first_addressed_difference": null,
+      "reads_as": "the divergence is not a load effect. 59032 loaded cells < 59049, so the program does not alias itself under the Classic wrap either; every difference below is produced during execution."
+    }
+  },
+  "gates_and_honesty": {
+    "verdicts": "10 expectations, all MATCH, all_match true, exit code 0",
+    "cross_core": "6 (profile, core) comparisons at the bounded 20 000-step budget; Zig and Python cores agree on status, steps and stdout hash for every profile, which is what licenses using the Python event log for the widening step.",
+    "corrections_recorded_in_the_report": "the `trial` block keeps both bounded trials, the falsified strict reading of prefix preservation (1274 on `d_after` alone, 1246 over all five fields, both AFTER the widening) and the `{?d}`-prints-`null` parsing bug. Nothing was deleted to make the run look clean.",
+    "not_a_published_gate": "evidence/compare_quine_epochal.py is NOT added to the GATES list in tests/run_all.py, so the published '49 gates PASS' claim is unchanged by F10 and still needs its own re-verification.",
+    "path_never_reused": "evidence/f10_quine_epochal_20261018.json is a new path; the driver refuses to overwrite an existing output.",
+    "no_absolute_paths": "the sealed report and this document record the sibling repository as a public remote citation plus SHA-256, never as a local filesystem path. Checked by grepping both files for the machine's home-directory prefix: absent (this sentence is worded so the grep pattern itself does not appear here)."
+  },
+  "what_this_changes": "the phrase 'Malbolge Free is a new Malbolge' now has a measured referent and a limit. Measured: with mem_limit=null the machine stops being Classic on a real program (pure_fixed halts in 6 521 steps emitting one byte; epochal emits nothing). Limit: that is the effect of removing the address wrap, which the Classic definition includes; the epochal growth policy itself is not what broke the quine, and pure_fixed is the control that proves it.",
+  "scope": "one program, width 10 boot, empty stdin, this machine, budgets recorded in the report; Classic's 69 547 437 steps are an upper bound observed for this witness, not a bound on epochal behaviour (an unbounded epochal run of that length would grow memory with the pointer and was not attempted).",
+  "not_claimed": [
+    "that epochal is or is not Turing-complete: the claim is about compatibility with Classic",
+    "that the quine would print correctly under any other growth policy",
+    "that one program generalises to the whole corpus; the corpus F4/F9 rounds are separate evidence",
+    "CI reproducibility of F10: the input is external by choice, so a fresh clone exits 3",
+    "any statement about Unshackled or the assisted BF backend"
+  ],
+  "ledger_entry": "docs/HONESTY_LEDGER.md entry 29 (appended 2026-10-18): F10 measured; supersedes entry 24 note (c) by re-running the 69.5M-step Classic quine here, and appends to docs/EPOCHAL_FRONTIER_ANALYSIS.md the F9 repeated-widening status plus the pointer-assignment finding.",
+  "reproduce": "cd <MalbolgeFree root> && python3 evidence/compare_quine_epochal.py --output evidence/<new-path>.json   (the driver needs ../MALDOOM/vendor/quines/quine_lutter.malbolge; cheaper trials: MALFREE_F10_STDOUT_BUDGET / MALFREE_F10_TRACE_BUDGET / MALFREE_F10_CORE_BUDGET)"
+}

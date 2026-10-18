@@ -60,6 +60,32 @@ We do NOT reproduce the proof; we cite it as an external result about Classic.
 to Classic on every tested program, so any computation Classic can perform,
 `fixed` can perform identically. The literature result transfers.
 
+## Step 1 addendum (2026-10-18) — appended; the identity now holds on a long real
+program too, and the parameter it depends on is measured
+
+Step 1 was evidenced on short cases (F4c: 22 verdicts locally / 20 comparisons per CI
+runner). `evidence/f10_quine_epochal_20261018.json` adds a much longer and much less
+controlled input: Matthias Lutter's Classic quine, third-party bytes pinned by sha256
+`dca8476f…` and cited as `DannyBaanks/MalDOOM:vendor/quines/quine_lutter.malbolge`,
+59 852 bytes on disk, 59 032 loaded cells. Under
+`MalbolgeCore(width=10, mem_limit=3^10, growth_policy=fixed)` our Zig core halts at
+**69 547 437 steps** and emits **59 852 bytes whose SHA-256 equals the input program's**
+— it reproduces itself, byte for byte, on a program nobody in this repository wrote
+(ledger entry 29; it also supersedes entry 24's note (c), which recorded that this
+quine had not been re-run here).
+
+The same run measures the *other* direction, which matters for this document: with
+`mem_limit = null` and no growth policy at all (`pure_fixed`) the identical program
+halts at 6 521 steps having emitted 1 byte. So `mem_limit = 3^10` in the line above is
+not decoration — it is load-bearing, measured on a real program. The inheritance chain
+therefore stays exactly as parameterised in Step 1: `fixed` **with the Classic wrap**,
+which is why the transfer of Scheffer's result is legitimate, and any unbounded profile
+is a different machine that inherits nothing from this argument.
+
+This is still not a new proof, and F10 is not a gate: `compare_quine_epochal.py` is
+deliberately outside `tests/run_all.py`'s list because the input program is not vendored,
+so a fresh clone exits 3 (`NOT_DEMONSTRATED`) rather than claiming it.
+
 ## Step 3: The claim
 
 ```

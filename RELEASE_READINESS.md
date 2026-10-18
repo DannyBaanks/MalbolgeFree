@@ -126,3 +126,29 @@ malbolge-free/
 ---
 
 *Generated 2026-09-09 — ^w^*
+
+---
+
+## Anexo 2026-10-18 — F10 (evidence, not a gate; nothing above is rewritten)
+
+`evidence/f10_quine_epochal_20261018.json` runs Lutter's Classic quine (third-party,
+hash-pinned, **not** vendored) through `classic`, `pure_fixed` and `epochal` on this
+machine. Readiness effect, stated narrowly:
+
+- **Strengthens M6 step 1 / "Classic-compatible"**: under `classic` our Zig core
+  reproduces the quine byte-for-byte — `HALTED`, 69 547 437 steps, stdout sha256 equal
+  to the input program's. The DECISION POINT above said "Classic-compatible (6/6)";
+  that row is HISTÓRICA, and the current evidence is F4c (22 verdicts / 44 hash
+  comparisons locally, 20 comparisons per CI runner) **plus** this 69M-step program.
+  Ledger entries 24–28 and 29.
+- **Constrains how "unbounded" may be advertised**: `pure_fixed` — no growth policy at
+  all, only the address wrap removed — halts at 6 521 steps emitting 1 byte, and
+  `epochal` halts at 8 761 emitting nothing. So no release text may claim that a
+  `mem_limit = null` profile runs Classic programs unchanged; the wrap is part of the
+  definition, measured. `epochal` widening is not the cause, which is exactly what the
+  `pure_fixed` control proves.
+- **No effect on the gate count**: `compare_quine_epochal.py` is deliberately outside
+  `tests/run_all.py`'s `GATES`, so `49 PASS / 0 SKIP` stays as published. The quine is
+  not vendored, so on a fresh clone the script exits 3 (`NOT_DEMONSTRATED`) rather than
+  substituting an input. Details: `docs/HONESTY_LEDGER.md` entry 29,
+  `evidence/F10_QUINE_EPOCHAL_20261018.hashes.json`.

@@ -125,3 +125,48 @@ definitions changed — 2026-09-05, when the old omega-based names were retired.
   behavior beyond `12` remains unclaimed.
 - That epochs are equivalent views of each other: rotate breaks any
   simultaneous-equivalence reading (C6); the claim is sequential only.
+
+## Addendum (2026-10-18) — appended; supersedes the count in the `epochal` table row,
+and adds a measured compatibility statement per policy
+
+The growth-policy table above says `epochal` is defended with "one transition
+measured (C7)". That row is left as written and superseded by C8, which the claims
+block below already carries: `evidence/f9_repeated_frontier.json` measures **two**
+transitions on one witness — `10 -> 11` at step 59050 and `11 -> 12` at step 177148,
+`final_width: 12`. Nothing beyond `w = 12` is claimed.
+
+`evidence/f10_quine_epochal_20261018.json` (ledger entry 29) then asks the question
+the policy table cannot answer: does each policy *behave* like Classic on a real
+program? One program, Lutter's quine (`DannyBaanks/MalDOOM:vendor/quines/quine_lutter.malbolge`,
+sha256 `dca8476f…`, 59 852 bytes on disk / 59 032 loaded cells), empty stdin, our own
+Zig core with the Python core as cross-check:
+
+| profile | `mem_limit` | growth | outcome on the quine |
+|---|---|---|---|
+| `classic` | `3^10` (wrap) | `fixed` | `HALTED` at 69 547 437 steps, 59 852 bytes of stdout, sha256 equal to the program: it reproduces itself |
+| `pure_fixed` | `null` | `fixed` | `HALTED` at 6 521 steps, **1 byte** of stdout |
+| `epochal` | `null` | `epochal` | `HALTED` at 8 761 steps, **0 bytes**; widened `10 -> 11` once, at step 1230 |
+
+Three readings follow, and the artifact is written so each is separable:
+
+1. **The wrap is the load-bearing parameter.** `pure_fixed` changes nothing except
+   `mem_limit`, and the quine stops self-reproducing. So the two lower rows are not
+   evidence against frontier growth; they are evidence that removing address wrapping
+   already leaves Classic.
+2. **The frontier is reachable on real code, and earlier than the synthetic witnesses
+   suggest.** `d` is *assigned* to `3^10` at step 1229 rather than walked to it at
+   step 59050. The witnesses' step does not generalise; invariant P1 (history
+   preserved until the first `WIDEN`) does — the earliest `pure_fixed` vs `epochal`
+   trace divergence is step 1246, after the widening at 1230.
+3. **Pre-execution state is not the cause.** Stored and addressed memory images are
+   byte-identical across all three profiles (`c455d288…`, no first difference), so the
+   divergence is produced during execution by addressing, not by `load`.
+
+Not claimed here: that one program generalises to the corpus; that `epochal` is or is
+not Turing-complete (see `docs/TURING_COMPLETENESS_INHERITED.md`, and `TURING_COMPLETENESS_NEW_CLAIM`
+stays `NOT_DEMONSTRATED`); that F10 is reproducible on a fresh clone — the quine is
+third-party and deliberately not vendored, so `compare_quine_epochal.py` exits 3
+(`NOT_DEMONSTRATED, missing external input`) when MalDOOM is not beside this repository.
+F10 is **not** in `tests/run_all.py`'s gate list, so the published gate count is
+unchanged by it.
+

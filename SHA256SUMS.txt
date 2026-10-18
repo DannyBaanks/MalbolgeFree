@@ -59,3 +59,20 @@ ff30e8fa500073ea1adbf4d40104480094c90154fbac7de109756c786c2b2962  vendor/canonic
 # 585d83fd224848b1b57a081b2b530f22fcd471b1b58d25cdd620d092e30df87e, both in git
 # history). src/ is untouched and still hashes to the entry-24 seals.
 b69f2d22cccfc21c5f93f544801f9832cb4d502cd9b125a7967408a2444ab8c5  evidence/F4C_WINDOWS_MANIFEST_CRLF_20261018.json
+# Appended 2026-10-18T08:39:33Z (HONESTY_LEDGER entry 29): F10 — Lutter's quine run under
+# classic / pure_fixed / epochal on this machine. Under classic the quine reproduces
+# byte-exactly (HALTED, 69 547 437 steps, stdout sha256 == program sha256), which supersedes
+# entry 24 note (c) that it had not been re-run here. pure_fixed halts at 6 521 steps with 1
+# byte of stdout and epochal at 8 761 with none: the divergence is the removed address wrap,
+# proven by the pure_fixed control, and the epochal frontier crossing is reached at step 1230
+# by pointer assignment (d = 3^10), not at step 59 050 by a linear walk.
+# The input program is third-party and is NOT vendored: it stays in
+# DannyBaanks/MalDOOM:vendor/quines/quine_lutter.malbolge at commit faf65bc9, pinned by
+# sha256 dca8476f. A fresh clone of this repository alone therefore exits 3 (NOT_DEMONSTRATED)
+# for this script. src/ is untouched: both cores still hash to the entry-24 seals above.
+# evidence/compare_quine_epochal.py is deliberately NOT in tests/run_all.py's GATES list, so
+# the published 49-gate count of entry 28 is unchanged by these four paths.
+d9754ed8275918125d087d6b2d56ec600333a0db183a246f8fb9648dae02d71d  evidence/f10_quine_epochal_20261018.json
+22d6ac260ecfc90402cf3a92a2b75581a8eb56e305b88d90b3d8d80239789fb4  evidence/run_quine_epochal.zig
+c4d1697bbbb18151432e7ca989157258c6f5b18859de0be5ad9820221f78e528  evidence/compare_quine_epochal.py
+3fefa898c05defd006f581a001078f3260f55a6d20b1f5e54eae61049fe3d372  evidence/F10_QUINE_EPOCHAL_20261018.hashes.json
