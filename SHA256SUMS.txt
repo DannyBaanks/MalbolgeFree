@@ -13,7 +13,7 @@ c365c50089d72a6859d33619f7c1987419f4d90c35efa7f1fc59a1683b0376d5  src/bfir1_back
 d7d6d1e34e70210ef2939828ec6593efcaa52f32edf51122eff2638c92efe598  corpus/free/cross_3pow19.mal
 5f6e11aebc6801b4fb89908c5ae4bb13a871e9422793fab1f9cb0a5a4ed0790c  malbolge_cli.py
 0f143886b9fc6f43f0d5e41b0ea3176890bab361bdd9e75a580c469b65379ead  GUIA.md
-f742568369207082294fab313f6adba97b89c17dcd0fe0f54323e6591dc5e299  tests/run_all.py
+ee56dfcd5d31154257c5009d8308114dc1e457e9039f2906cb408d20a27b1c86  tests/run_all.py
 44157cc8bdd6de4bdd7578f8ba19e3b16d6f5d030f768de29475dcb4764b9557  evidence/f4_classic_parity.json
 c8fd681f739fbb88f31ecb6d52e2d7cdee81d7b0e7c4cb5fec7327901378d5ca  evidence/f9_repeated_frontier.json
 b523e463980c9a265f5f18567856b60027d93fdabcc1491b0fe248be7f5b7dc5  tests/fixtures/free_pure/vertical_slice.hell
@@ -212,4 +212,23 @@ a0e59679ad5e2ca5f68bcf2a77c96073c0b4d257dd063a148400c57bf3c6021b  evidence/compa
 69bcd8693648566cc65bdcac5cef69935658ebf9c817345028d377a5be4b4c76  evidence/F14_REGION_OFFSETS_20261018/console.txt
 22c78af3c87728ac4224963cc5be2980b0abc27fced6950d3acb1a3f6abfab5b  evidence/F14_REGION_OFFSETS_20261018/resource_usage.txt
 9e8df224eb569f4042aced105bc78984429c74b6bb1a6eb22fb0373f70006cbd  evidence/F14_REGION_OFFSETS_20261018/PROVENANCE.md
+# Appended 2026-10-18T20:15:00Z (HONESTY_LEDGER entry 42): gate F15 opens, measuring
+# the encryption cascade and domain guard divergence V3 against the same deterministic
+# third-party fixed-3^19 reference as F13 and F14. Demonstrates 100% cycle isomorphism
+# on canonical [33, 126] across all 6 cycles, direct indexing equivalence via the 33-byte
+# prefix of XLAT_CONCAT, finite convergence of [0, 140] into [33, 126] in <= 2 steps,
+# multi-step linear cascades (C1, C5, C7), and sub-33 domain guard divergence on real
+# execution (C_SUB33: skips cell 0 encryption on ours).
+# One already-published line moves because its bytes changed:
+#   tests/run_all.py  supersedes f742568369207082294fab313f6adba97b89c17dcd0fe0f54323e6591dc5e299
+#                     (one GATES entry added; gate count 54 -> 55)
+# Checked-sealed paths go from 65 to 70. src/, corpus/ and vendor/ bytes are
+# untouched. docs/ remains unsealed by construction, including
+# docs/F15_ENCRYPTION_CASCADE_V3_PREGISTRATION.md.
+f671fc9f78f7124e7ead218c95fc9e693d29bde8f27ef5f5422d42d66e3f1847  evidence/compare_f15_encryption_cascade.py
+b06edcbce14780b451d1451f08958fcd0f98a78a83efac1b4ff32e7286bdf8bf  evidence/f15_encryption_cascade_20261018.json
+959b2a130df6c91b0c71ed6836b739c4e078c6b73ba2f16cd557f3cd6f9df725  evidence/F15_ENCRYPTION_CASCADE_20261018/console.txt
+28925a28fe9b1254cf4c1a3055d979940449aace1ba2697670a350b32c97f4f3  evidence/F15_ENCRYPTION_CASCADE_20261018/resource_usage.txt
+7f8170e357f5bf350be5ef807e28e1d2caa0744f6a9b406e23da1991009e151d  evidence/F15_ENCRYPTION_CASCADE_20261018/PROVENANCE.md
+
 

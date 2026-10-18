@@ -1,0 +1,298 @@
+{
+  "gate": "F15",
+  "pre_registration": "docs/F15_ENCRYPTION_CASCADE_V3_PREGISTRATION.md",
+  "elapsed_seconds": 0.1778,
+  "reference": {
+    "source": "MalbolgeLispSlop/src/bolge19.zig",
+    "source_sha256": "47758a3f667f4089f6029d86130b94f14f082d4c113a212b8ff571d84113e8a3",
+    "profile": "MalbolgeLispSlop/profiles/fixed19.json",
+    "profile_sha256": "6cc0afa10b050a36673e131b2efc69fa29e9589136f52b5f27a7dabe23b6ac1f",
+    "binary": "MalbolgeLispSlop/build/bolge19",
+    "binary_sha256": "04b294d37f8f200ea30ba1b301424d4c0358551817cdd94db12a7235ddd10c4e"
+  },
+  "expectations_total": 21,
+  "expectations_matched": 21,
+  "expectations_falsified": 0,
+  "verdict": "PASS",
+  "expectations": {
+    "D1_CANONICAL_TABLE": {
+      "match": true,
+      "details": {
+        "length": 94,
+        "first": "5",
+        "last": "@"
+      }
+    },
+    "D2_REFERENCE_TABLE": {
+      "match": true,
+      "details": {
+        "len_total": 141,
+        "len_prefix": 27,
+        "len_mid": 100,
+        "len_suffix": 14
+      }
+    },
+    "D3_CANONICAL_SLICE_IDENTITY": {
+      "match": true,
+      "details": {
+        "slice_len": 94,
+        "first_char": "5",
+        "last_char": "@",
+        "equal": true
+      }
+    },
+    "D4_DISAGREEMENT_SET": {
+      "match": true,
+      "details": {
+        "disagreements_count": 47,
+        "sub33_count": 33,
+        "highbyte_count": 14,
+        "upper_matches_exact": true
+      }
+    },
+    "D5_FINITE_CONVERGENCE": {
+      "match": true,
+      "details": {
+        "max_steps": 2,
+        "one_step_count": 41,
+        "two_step_count": 6,
+        "zero_step_count": 94
+      }
+    },
+    "P1_CYCLE_ISOMORPHISM": {
+      "match": true,
+      "details": {
+        "cycle_lengths": [
+          68,
+          9,
+          6,
+          5,
+          4,
+          2
+        ],
+        "cycle_count": 6,
+        "multi_depth_orbits_match": true,
+        "tested_depths": [
+          1,
+          2,
+          5,
+          10,
+          50,
+          100
+        ]
+      }
+    },
+    "P2_SUB33_DIVERGENCE": {
+      "match": true,
+      "details": {
+        "diverged": 33,
+        "total": 33,
+        "percentage": 100.0
+      }
+    },
+    "P3_HIGHBYTE_DIVERGENCE": {
+      "match": true,
+      "details": {
+        "diverged": 14,
+        "total": 14,
+        "percentage": 100.0
+      }
+    },
+    "P4_RANDOM_GRID_CANONICAL": {
+      "match": true,
+      "details": {
+        "samples": 100000,
+        "seed": 20261018,
+        "mismatches": 0
+      }
+    },
+    "R1_C1_STATUS": {
+      "match": true,
+      "details": {
+        "ref": {
+          "status": "HALTED",
+          "steps": 2,
+          "c": 2,
+          "stdout": "da"
+        },
+        "py": {
+          "status": "HALTED",
+          "steps": 3,
+          "c": 2,
+          "stdout": "da"
+        },
+        "zg": {
+          "status": "HALTED",
+          "steps": 3,
+          "c": 2
+        }
+      }
+    },
+    "R1_C1_ENCRYPTED_COUNT": {
+      "match": true,
+      "details": {
+        "expected": 2,
+        "py_encrypted": 2,
+        "zg_encrypted": 2
+      }
+    },
+    "R1_C1_ENCRYPTED_VALUES": {
+      "match": true,
+      "details": {
+        "expected_values": [
+          111,
+          84
+        ],
+        "actual_values": [
+          111,
+          84
+        ]
+      }
+    },
+    "R2_C5_STATUS": {
+      "match": true,
+      "details": {
+        "ref": {
+          "status": "HALTED",
+          "steps": 4,
+          "c": 4,
+          "stdout": "4142"
+        },
+        "py": {
+          "status": "HALTED",
+          "steps": 5,
+          "c": 4,
+          "stdout": "4142"
+        },
+        "zg": {
+          "status": "HALTED",
+          "steps": 5,
+          "c": 4
+        }
+      }
+    },
+    "R2_C5_ENCRYPTED_COUNT": {
+      "match": true,
+      "details": {
+        "expected": 4,
+        "py_encrypted": 4,
+        "zg_encrypted": 4
+      }
+    },
+    "R2_C5_ENCRYPTED_VALUES": {
+      "match": true,
+      "details": {
+        "expected_values": [
+          111,
+          84,
+          82,
+          60
+        ],
+        "actual_values": [
+          111,
+          84,
+          82,
+          60
+        ]
+      }
+    },
+    "R3_C7_STATUS": {
+      "match": true,
+      "details": {
+        "ref": {
+          "status": "HALTED",
+          "steps": 6,
+          "c": 6,
+          "stdout": "58595a"
+        },
+        "py": {
+          "status": "HALTED",
+          "steps": 7,
+          "c": 6,
+          "stdout": "58595a"
+        },
+        "zg": {
+          "status": "HALTED",
+          "steps": 7,
+          "c": 6
+        }
+      }
+    },
+    "R3_C7_ENCRYPTED_COUNT": {
+      "match": true,
+      "details": {
+        "expected": 6,
+        "py_encrypted": 6,
+        "zg_encrypted": 6
+      }
+    },
+    "R3_C7_ENCRYPTED_VALUES": {
+      "match": true,
+      "details": {
+        "expected_values": [
+          111,
+          84,
+          82,
+          60,
+          108,
+          57
+        ],
+        "actual_values": [
+          111,
+          84,
+          82,
+          60,
+          108,
+          57
+        ]
+      }
+    },
+    "R4_SUB33_STATUS": {
+      "match": true,
+      "details": {
+        "ref": {
+          "status": "HALTED",
+          "steps": 2,
+          "stdout": "0d"
+        },
+        "py": {
+          "status": "HALTED",
+          "steps": 3,
+          "stdout": "0d"
+        },
+        "zg": {
+          "status": "HALTED",
+          "steps": 3
+        }
+      }
+    },
+    "R4_SUB33_SKIP_ENCRYPT": {
+      "match": true,
+      "details": {
+        "py_encrypted_cells": 1,
+        "zg_encrypted_cells": 1,
+        "py_cell_0_after_step": 13,
+        "expected_encrypted_cells": 1,
+        "expected_cell_0": 13,
+        "ref_cell_0_would_be": 32
+      }
+    },
+    "R4_SUB33_CROSS_CORE": {
+      "match": true,
+      "details": {
+        "py": {
+          "status": "HALTED",
+          "steps": 3,
+          "c": 2,
+          "d": 2
+        },
+        "zg": {
+          "status": "HALTED",
+          "steps": 3,
+          "c": 2,
+          "d": 2
+        }
+      }
+    }
+  }
+}

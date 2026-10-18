@@ -349,3 +349,17 @@ Las expectativas se pre-registraron en `docs/F14_REGION_OFFSETS_V1_PREGISTRATION
 
 **Evento de integridad:** cinco rutas selladas nuevas (`evidence/compare_f14_region_offsets.py` `a0e59679…`, `evidence/f14_region_offsets_20261018.json` `1ee0de13…`, y las tres capturas crudas `69bcd869…` / `22c78af3…` / `9e8df224…`) y una línea movida por bytes propios: `tests/run_all.py` (`6ba737c8…` -> `f7425683…`). Identidad del manifiesto `ad581d0a…` -> `7e3c9a09…`, rutas verificadas 60 -> 65, S1 `SEAL VERDICT: PASS`. `src/`, `corpus/` y `vendor/` intactos. Ledger entrada 40.
 
+**Anexo 2026-10-18 (7) — F15 formaliza y mide la divergencia de cascada del cifrado y guarda de dominio V3 y sube el recuento a 55 gates.**
+F13 midió paridad en región 0 y F14 divergencia de dispatch regional V1 en regiones 1 y 2. F15 aborda la divergencia V3: el alfabeto y la guarda de dominio de la operación de cifrado que se ejecuta al final de cada paso de la VM. En Malbolge canónico (`MalbolgeFree` y `canonical_malbolge_py`), la tabla `TRANSLATED` contiene 94 caracteres imprimibles y está protegida por la guarda estricta `33 <= mc <= 126`, indexándose por `mc - 33`. En la referencia externa (`MalbolgeLispSlop/src/bolge19.zig`), la tabla `XLAT_CONCAT` contiene 141 caracteres concatenados (`"SOMEBODY MAKE ME FEEL ALIVE"` + 100 caracteres intermedios + `"AND SHATTER ME"`) y está protegida por `cv < 141`, indexándose directamente por `cv`.
+
+Las expectativas se pre-registraron en `docs/F15_ENCRYPTION_CASCADE_V3_PREGISTRATION.md` y se midieron en `evidence/f15_encryption_cascade_20261018.json` (`b06edcbc…`):
+- `F15 EXPECTATIONS=21 MATCH=21 FALSIFIED=0`, exit 0 (0.25 s wall, RSS 31 556 kB).
+- D1–D5: alineación exacta del segmento intermedio `XLAT_CONCAT[33:127] == TRANSLATED` (94 bytes, 0 diferencias); isomorfismo total de ciclos en las 6 órbitas disjuntas (`[68, 9, 6, 5, 4, 2]`); conjunto de desacuerdo exacto $[0, 32] \cup [127, 140]$ (47 valores); convergencia al dominio canónico en $\le 2$ pasos para cualquier valor en $[0, 140]$.
+- P1–P4: 100 000 muestras estadísticas con 0 discrepancias en el dominio $[33, 126]$ y en valores $\ge 141$; 100% de divergencia en sub-33 $[0, 32]$ y bytes altos $[127, 140]$.
+- R1–R4: confirmación en ejecución real sobre programas de longitud creciente con cascada de cifrado activa (`C1`, `C5`, `C7`), donde todas las celdas cifradas en $[33, 126]$ coinciden byte a byte; y caso `C_SUB33` (`b"'bO"`), donde una rotación deposita 13 en celda 0: `MalbolgeFree` deja la celda intacta mientras `bolge19` la cifra en 32 (`' '`).
+
+**Consecuencia operativa para CI:** al igual que F13 y F14, F15 lee el checkout hermano `../MalbolgeLispSlop` y sale con código 3 cuando no está presente, imprimiendo `SKIP (NOT_DEMONSTRATED, missing external input)`. En CI se verá `52 PASS / 0 FAIL / 3 SKIP` con el manifiesto sellado pasando en ambos runners con 70 rutas verificadas.
+
+**Evento de integridad:** seis rutas selladas nuevas (`docs/F15_ENCRYPTION_CASCADE_V3_PREGISTRATION.md` `69dcfd66…`, `evidence/compare_f15_encryption_cascade.py` `b1bcab15…`, `evidence/f15_encryption_cascade_20261018.json` `b06edcbc…`, y las tres capturas crudas `959b2a13…` / `28925a28…` / `7f8170e3…`) y una línea movida por bytes propios: `tests/run_all.py` (`f7425683…` -> `ee56dfcd…`). Identidad del manifiesto `7e3c9a09…` -> `85780c370d81e160a2f06ef2ba9c8ad94664dc118e8d762bd962cfbb7ad40025`, rutas verificadas 65 -> 70, S1 `SEAL VERDICT: PASS`. `src/`, `corpus/` y `vendor/` intactos. Ledger entrada 42.
+
+

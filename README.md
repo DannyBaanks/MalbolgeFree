@@ -167,6 +167,19 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > sample pairs across all three regions and execution traces jumping into Region 1 (`b"(aO"` and `b"'&B"`).
 > Five sealed paths joined the manifest and one moved (`tests/run_all.py`): identity went
 > `ad581d0a…` -> `7e3c9a09…`, checked paths 60 -> 65, S1 `SEAL VERDICT: PASS`. Ledger entry 40.
+>
+> **Appended 2026-10-18 (F15) — gate count moves 54 → 55; encryption cascade and domain guard divergence V3 measured.**
+> Gate F15 formalizes and measures the encryption alphabet and domain guard divergence V3 against
+> `MalbolgeLispSlop/src/bolge19.zig`. Over the canonical domain $[33, 126]$, `TRANSLATED` and
+> `XLAT_CONCAT[33:127]` are byte-identical with 100% cycle isomorphism across all 6 disjoint orbits
+> (`[68, 9, 6, 5, 4, 2]`). The divergence is in the domain guard: canonical `33 <= mc <= 126` leaves
+> values in $[0, 32] \cup [127, 3^{19}-1]$ untouched, while `bolge19`'s `cv < 141` encrypts values
+> $< 33$ into prefix characters and $[127, 140]$ into suffix characters. Expectations pre-registered in
+> `docs/F15_ENCRYPTION_CASCADE_V3_PREGISTRATION.md` matched 100%: `F15 EXPECTATIONS=21 MATCH=21 FALSIFIED=0`,
+> exit 0, confirming multi-cell encryption cascades (`C1`, `C5`, `C7`) and real execution divergence on
+> sub-33 cell values (`C_SUB33`). Six sealed paths joined the manifest and one moved (`tests/run_all.py`):
+> identity went `7e3c9a09…` -> `85780c370d81e160a2f06ef2ba9c8ad94664dc118e8d762bd962cfbb7ad40025`, checked paths 65 -> 70,
+> S1 `SEAL VERDICT: PASS`. Ledger entry 42.
 
 
 ## What this is, in one minute

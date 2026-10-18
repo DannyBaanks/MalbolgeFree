@@ -1,0 +1,31 @@
+== F15 Definitional Table & Geometry Proofs ==
+  D1_CANONICAL_TABLE             MATCH
+  D2_REFERENCE_TABLE             MATCH
+  D3_CANONICAL_SLICE_IDENTITY    MATCH
+  D4_DISAGREEMENT_SET            MATCH
+  D5_FINITE_CONVERGENCE          MATCH
+== F15 Property & Orbit Verification ==
+  P1_CYCLE_ISOMORPHISM           MATCH
+  P2_SUB33_DIVERGENCE            MATCH
+  P3_HIGHBYTE_DIVERGENCE         MATCH
+  P4_RANDOM_GRID_CANONICAL       MATCH
+== F15 Execution Cascades & Domain Divergence ==
+  R1_C1_STATUS                   MATCH
+  R1_C1_ENCRYPTED_COUNT          MATCH
+  R1_C1_ENCRYPTED_VALUES         MATCH
+  R2_C5_STATUS                   MATCH
+  R2_C5_ENCRYPTED_COUNT          MATCH
+  R2_C5_ENCRYPTED_VALUES         MATCH
+  R3_C7_STATUS                   MATCH
+  R3_C7_ENCRYPTED_COUNT          MATCH
+  R3_C7_ENCRYPTED_VALUES         MATCH
+  R4_SUB33_STATUS                MATCH
+  R4_SUB33_SKIP_ENCRYPT          MATCH
+  R4_SUB33_CROSS_CORE            MATCH
+
+F15 EXPECTATIONS=21 MATCH=21 FALSIFIED=0
+F15 DISCLOSURE: canonical domain [33, 126] exhibits 100% cycle isomorphism across all
+6 cycles; divergence V3 is strictly confined to [0, 32] (33 values) and [127, 140] (14 values).
+Elapsed: 0.18s
+Report written to MalbolgeFree/evidence/f15_encryption_cascade_20261018.json
+F15 ENCRYPTION_CASCADE_DIVERGENCE_V3=PASS

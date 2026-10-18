@@ -445,5 +445,13 @@ opcode 68 en el nuestro vs 91 en la referencia).
 Gates: 53 -> 54. Rutas selladas 60 -> 65 (checker, JSON y tres capturas crudas), y una línea
 movida en `tests/run_all.py` (`6ba737c8…` -> `f7425683…`). Identidad del manifiesto
 `ad581d0a…` -> `7e3c9a09…`; S1 `SEAL VERDICT: PASS` y suite completa rc 0 (54 PASS / 0 FAIL / 0 SKIP).
-`src/` intacto. Ledger entrada 40. Siguiente paso del roadmap: la cascada del cifrado (V3).
+`src/` intacto. Ledger entrada 40.
+
+**Anexo 2026-10-18 (7) — F15: medición de la cascada del cifrado y divergencia de guarda de dominio V3 demostrada.**
+El tercer paso queda cerrado: F15 mide la estructura del cifrado y la divergencia V3 contra `MalbolgeLispSlop/src/bolge19.zig` a través de análisis de dominio, ciclos disjuntos, muestras estadísticas y ejecución de programas reales con cascada de cifrado y sub-33. Las 21 expectativas se escribieron antes de ejecutar (`docs/F15_ENCRYPTION_CASCADE_V3_PREGISTRATION.md`). Resultado: `F15 EXPECTATIONS=21 MATCH=21 FALSIFIED=0`, exit 0.
+
+**Lo que demuestra:** en el dominio canónico $[33, 126]$, la tabla `TRANSLATED` de 94 caracteres y la tabla `XLAT_CONCAT[33:127]` de la referencia coinciden byte a byte (longitud 94, 0 diferencias), con 100% de isomorfismo de ciclos en las 6 órbitas disjuntas (`[68, 9, 6, 5, 4, 2]`) y paridad a profundidad arbitraria (hasta profundidad 100). La divergencia radica en la guarda de dominio: la canónica `33 <= mc <= 126` deja intactos los valores en $[0, 32]$ y $[127, 3^{19}-1]$; la referencia `cv < 141` cifra los valores $< 33$ en el prefijo (27+6 bytes) y los valores $[127, 140]$ en el sufijo (14 bytes), dejando intactos solo los valores $\ge 141$. El conjunto de desacuerdo es exactamente $[0, 32] \cup [127, 140]$ (47 valores). En `bolge19`, cualquier valor en $[0, 140]$ converge al dominio canónico $[33, 126]$ en a lo sumo 2 pasos. Bajo ejecución real, los programas con cascada canónica `C1` (3 celdas, 2 cifradas), `C5` (5 celdas, 4 cifradas) y `C7` (7 celdas, 6 cifradas) coinciden exactamente en todas las celdas cifradas entre ambas máquinas. En el programa `C_SUB33` (`'bO`), la rotación coloca el valor 13 en la celda 0: `MalbolgeFree` deja 13 intacto (guarda sub-33), mientras que `bolge19` lo cifra en el carácter 32 (`' '`), confirmando la divergencia de guarda bajo ejecución real.
+
+Gates: 54 -> 55. Rutas selladas 65 -> 70 (pre-registro, checker, JSON y tres capturas crudas), y una línea movida en `tests/run_all.py` (`f7425683…` -> `ee56dfcd…`). Identidad del manifiesto `7e3c9a09…` -> `85780c370d81e160a2f06ef2ba9c8ad94664dc118e8d762bd962cfbb7ad40025`; S1 `SEAL VERDICT: PASS` y suite completa rc 0 (55 PASS / 0 FAIL / 0 SKIP). `src/` intacto. Ledger entrada 42. Siguientes pasos: divergencia de representación del tail (V5) y decisión de vendorización/fixture mínimo.
+
 

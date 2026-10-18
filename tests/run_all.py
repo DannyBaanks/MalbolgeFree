@@ -90,6 +90,12 @@ GATES = [
     # and execution jumps reaching Region 1. Exits 3 if the reference is absent.
     # See docs/F14_REGION_OFFSETS_V1_PREGISTRATION.md and HONESTY_LEDGER entry 40.
     ("F14 region 1 and 2 dispatch divergence (V1)", [sys.executable, str(ROOT / "evidence" / "compare_f14_region_offsets.py")], 300),
+    # F15 measures the encryption cascade and domain guard divergence V3
+    # against the same reference: cycle isomorphism on [33, 126], divergence on
+    # [0, 32] / [127, 140], multi-step linear cascades, and sub-33 cell mutation.
+    # Exits 3 if the reference is absent. See docs/F15_ENCRYPTION_CASCADE_V3_PREGISTRATION.md
+    # and HONESTY_LEDGER entry 42.
+    ("F15 encryption cascade and domain divergence (V3)", [sys.executable, str(ROOT / "evidence" / "compare_f15_encryption_cascade.py")], 300),
     ("M1 numeric and EOF", zig_test("tests/t_m1_contract.zig")),
     ("negative contracts", zig_test("tests/t_negative.zig")),
     ("execution profiles", zig_test("tests/t_profiles.zig")),
