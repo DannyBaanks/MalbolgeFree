@@ -419,7 +419,7 @@ licencia. El gate lee el checkout hermano, se auto-pinea los dos hashes y sale c
 si falta — por eso en CI F13 aparece como `SKIP (NOT_DEMONSTRATED, missing external input)`
 mientras el local da `53 PASS / 0 FAIL / 0 SKIP`. Siguientes pasos reales, en orden de coste:
 (1) decidir licencia y vendorizar o fijar un fixture mínimo; (2) un gate para región 1/2, que
-es donde vive V1; (3) la cascada de cifrado (V3), que requiere programas más largos que 4
+es donde vive V1; (3) la cascada del cifrado (V3), que requiere programas más largos que 4
 instrucciones. Gates: 52 -> 53. Rutas selladas 54 -> 60 (checker, sonda Zig, JSON y tres
 capturas crudas), y dos líneas movidas por bytes propios: `tests/run_all.py`
 (`e49210fa…` -> `6ba737c8…`) y `GUIA.md` (`92fc4a50…` -> `0f143886…`). Identidad del

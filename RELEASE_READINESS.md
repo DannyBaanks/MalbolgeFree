@@ -334,6 +334,6 @@ crudas `1e9b8f98…` / `185c84bb…` / `cd1e8003…`) y dos líneas movidas por 
 donde la trampa `NOT_DEMONSTRATED` se parte en las dos lecturas y se añade la nota operativa
 de F13; ninguna advertencia se eliminó). Identidad del manifiesto `a39adde9…` -> `ad581d0a…`,
 rutas verificadas 54 -> 60, S1 `SEAL VERDICT: PASS` y `sha256sum -c --quiet` devolviendo 0 por
-su cuenta. `src/`, `corpus/` y `vendor/` intactos: F13 apoyan sobre los mismos cores que
+su cuenta. `src/`, `corpus/` y `vendor/` intactos: F13 se apoya sobre los mismos cores que
 sellaron F4c, F11 y F12. Sin release, sin tag, sin PR, sin push hasta que Danny lo diga.
 Ledger entrada 39.
