@@ -123,6 +123,17 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > halved (`zig=65.1 python=94.8` -> `zig=31.3 python=49.6`) on a byte-identical runner image, so
 > the two `python=94.8` figures entry 35 flagged as a coincidence were noise, as stated there.
 > Ledger entry 37.
+>
+> **Appended 2026-10-18 (control) — the same seal, read from two commits.** The next push
+> `69b69f5..8ead5e9` changed only files *outside* `SHA256SUMS.txt` (this README, `CHANGELOG.md`,
+> `RELEASE_READINESS.md`, the ledger), and both runners of run `39145896988` still print
+> `a39adde9… entries=54 … ok=54` with `52 PASS / 0 FAIL / 0 SKIP` — ubuntu 2 m 15 s, windows
+> 7 m 06 s. Together with run `39144966132` that is four job-runs on byte-identical runner
+> images, and F12's internals now read ubuntu `82.2 + 92.7` then `48.9 + 47.0` seconds, windows
+> `31.3 + 49.6` then `68.2 + 94.3`: the fast job swapped platforms, so the CI variance is per run
+> and carries no platform signature. What did not move across all four is the measured content —
+> 62 239 852 steps, 53 562 bytes whose sha is the program's, EOF `59048` vs `177146`, every
+> expectation MATCH. Ledger entry 38.
 
 
 ## What this is, in one minute

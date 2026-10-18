@@ -52,6 +52,10 @@ in `docs/HONESTY_LEDGER.md`, not here.
   ok=54 drift=0 missing=0` on ubuntu (3 m 54 s) and windows (4 m 19 s) with 52 PASS / 0 FAIL /
   0 SKIP on each; the newly sealed `tests/frontier_witness.txt` is now integrity-checked on both
   platforms. Runner F12 timings halved on windows with identical runner images, recorded as noise.
+- Control read: the very next push `69b69f5..8ead5e9` touched only unsealed docs and both
+  runners of run `39145896988` still print `a39adde9… entries=54 ok=54` with 52 PASS / 0 FAIL /
+  0 SKIP. Four job-runs on identical images show the fast job swapping platforms (ubuntu then
+  `48.9 + 47.0` s, windows then `68.2 + 94.3` s): the variance is per run, not per platform.
 
 ## 2026-09-24 and earlier
 
