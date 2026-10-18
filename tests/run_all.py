@@ -76,6 +76,15 @@ GATES = [
     # Linux), so it carries an explicit timeout instead of the 180 s default.
     ("F11 epochal frontier and width-relative EOF differential", [sys.executable, str(ROOT / "evidence" / "compare_f11_frontier_eof.py")], 600),
     ("F12 Classic self-reproduction known answer (both cores)", [sys.executable, str(ROOT / "evidence" / "compare_f12_selfreproduction.py")], 900),
+    # F13 compares the fixed-3^19 profile against a localized *deterministic*
+    # third-party reference (MalbolgeLispSlop's bolge19 + profiles/fixed19.json),
+    # which is deliberately not vendored here: its own notices say
+    # "copy-and-revalidate, never import", so vendoring is a licensing decision.
+    # Absent that sibling checkout the gate exits 3 and the harness prints the
+    # explicit NOT_DEMONSTRATED skip -- which is what CI shows until the decision
+    # is made. Locally it is measured, not skipped. See
+    # docs/F13_UNSHACKLED_K19_PREGISTRATION.md and HONESTY_LEDGER entry 39.
+    ("F13 deterministic fixed-3^19 parity differential", [sys.executable, str(ROOT / "evidence" / "compare_unshackled_k19.py")], 300),
     ("M1 numeric and EOF", zig_test("tests/t_m1_contract.zig")),
     ("negative contracts", zig_test("tests/t_negative.zig")),
     ("execution profiles", zig_test("tests/t_profiles.zig")),

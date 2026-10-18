@@ -200,8 +200,20 @@ epochal`, y no compares stdout entre perfiles sin declarar el `padwidth` final.
   auto-cifrado.
 - `tape_epoch_19.json` describe un tape de 19 celdas; no es evidencia de un
   runtime Unshackled de memoria `3^19`.
-- La paridad con un Unshackled externo permanece `NOT_DEMONSTRATED` hasta tener
-  una implementacion de referencia localizada y una ejecucion reproducible.
+- La paridad con Unshackled son dos claims, no uno. Contra el `Unshackled.c`
+  original es `NOT_DEMONSTRABLE` por construccion: ese programa llama a
+  `srand(time(NULL))` y un peer no determinista no puede refutar nada. Contra
+  una referencia determinista de ancho fijo `3^19` pasa a `DEMONSTRATED` en
+  alcance estrecho con el gate F13: `end`, EOF, wrap, los ocho opcodes de
+  dispatch y `crazy` a 19 trits coinciden con `bolge19` en tres maquinas; `rot`
+  y la tabla de auto-cifrado **no** coinciden y se reportan como divergencias
+  medidas o identificadas. No leas F13 como paridad con Lutter Unshackled.
+- F13 necesita el checkout hermano `../MalbolgeLispSlop` (fuente + perfil +
+  binario). Sin el sale con codigo 3 y el harness lo imprime como SKIP; eso es
+  lo que muestra CI mientras no se decida vendear la referencia, que es una
+  decision de licencia, no un paso tecnico. Su alcance es region 0
+  (`c < 3^18`) y programas de cuatro instrucciones: ver
+  `docs/F13_UNSHACKLED_K19_PREGISTRATION.md` antes de citar un numero.
 - Con `--growth epochal` el EOF vale `3^padwidth - 1` y cambia de valor en el
   ensanche (`59048` -> `177146` en el quine medido): un test de fin de entrada
   heredado de Classic deja de funcionar en silencio. Ver el aviso en Perfiles.

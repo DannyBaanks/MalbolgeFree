@@ -1,0 +1,371 @@
+{
+  "gate": "F13",
+  "preregistration": "docs/F13_UNSHACKLED_K19_PREGISTRATION.md",
+  "reference": {
+    "source": "MalbolgeLispSlop/src/bolge19.zig",
+    "source_sha256": "47758a3f667f4089f6029d86130b94f14f082d4c113a212b8ff571d84113e8a3",
+    "profile": "MalbolgeLispSlop/profiles/fixed19.json",
+    "profile_sha256": "6cc0afa10b050a36673e131b2efc69fa29e9589136f52b5f27a7dabe23b6ac1f",
+    "binary": "MalbolgeLispSlop/build/bolge19",
+    "binary_sha256": "04b294d37f8f200ea30ba1b301424d4c0358551817cdd94db12a7235ddd10c4e"
+  },
+  "budget": 100,
+  "scope": {
+    "region": 0,
+    "region_limit": 387420489,
+    "region_offsets": [
+      0,
+      117,
+      140
+    ],
+    "max_instructions": 4
+  },
+  "cases": [
+    {
+      "name": "C1",
+      "walk": "in out halt",
+      "image": [
+        117,
+        98,
+        79
+      ],
+      "image_sha256": "681f8033410df7a4a5d7eaa3f8c730929459de77ed4fd27cac02cd813ab36c0c",
+      "stdin_hex": "",
+      "reference": {
+        "status": "HALTED",
+        "steps": 2,
+        "c": 2,
+        "d": 2,
+        "a": 1162261466,
+        "image_cells": 3,
+        "stdout_hex": "da"
+      },
+      "python": {
+        "status": "HALTED",
+        "steps": 3,
+        "c": 2,
+        "d": 2,
+        "stdout_hex": "da"
+      },
+      "zig": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_len": 1,
+        "stdout_sha": "5d5c7d20a3aab9c158f23304df4bec3bd9d56c517db3caeaa519d4d05624d7a0",
+        "first": 218,
+        "c": 2,
+        "d": 2,
+        "encrypted": 2
+      },
+      "predicted": {
+        "ours_out": [
+          218
+        ],
+        "ref_out": [
+          218
+        ],
+        "ours_steps": 3,
+        "ref_steps": 2,
+        "halt": [
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "name": "C2",
+      "walk": "in crz out halt",
+      "image": [
+        117,
+        61,
+        97,
+        78
+      ],
+      "image_sha256": "2fb4e54a289064eb1fe7ae863dfc27ee0541adbb9ea5e1512596e367f70d724b",
+      "stdin_hex": "",
+      "reference": {
+        "status": "HALTED",
+        "steps": 3,
+        "c": 3,
+        "d": 3,
+        "a": 32,
+        "image_cells": 4,
+        "stdout_hex": "20"
+      },
+      "python": {
+        "status": "HALTED",
+        "steps": 4,
+        "c": 3,
+        "d": 3,
+        "stdout_hex": "20"
+      },
+      "zig": {
+        "status": "HALTED",
+        "steps": 4,
+        "stdout_len": 1,
+        "stdout_sha": "36a9e7f1c95b82ffb99743e0c5c4ce95d83c9a430aac59f84ef3cbfab6145068",
+        "first": 32,
+        "c": 3,
+        "d": 3,
+        "encrypted": 2
+      },
+      "predicted": {
+        "ours_out": [
+          32
+        ],
+        "ref_out": [
+          32
+        ],
+        "ours_steps": 4,
+        "ref_steps": 3,
+        "halt": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "name": "C3",
+      "walk": "nop rot out halt",
+      "image": [
+        68,
+        38,
+        97,
+        78
+      ],
+      "image_sha256": "ea979bf5a1be894cffe5044d74f8054520e27b91b64456d4b9eb2f63fb147356",
+      "stdin_hex": "",
+      "reference": {
+        "status": "HALTED",
+        "steps": 3,
+        "c": 3,
+        "d": 3,
+        "a": 258280338,
+        "image_cells": 4,
+        "stdout_hex": "92"
+      },
+      "python": {
+        "status": "HALTED",
+        "steps": 4,
+        "c": 3,
+        "d": 3,
+        "stdout_hex": "9e"
+      },
+      "zig": {
+        "status": "HALTED",
+        "steps": 4,
+        "stdout_len": 1,
+        "stdout_sha": "35af2d15ebde4d67b29569ec19749e813c76f02286afc5a2a9871c2bfbdaab32",
+        "first": 158,
+        "c": 3,
+        "d": 3,
+        "encrypted": 2
+      },
+      "predicted": {
+        "ours_out": [
+          158
+        ],
+        "ref_out": [
+          146
+        ],
+        "ours_steps": 4,
+        "ref_steps": 3,
+        "halt": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "name": "C4",
+      "walk": "in out halt",
+      "image": [
+        117,
+        98,
+        79
+      ],
+      "image_sha256": "681f8033410df7a4a5d7eaa3f8c730929459de77ed4fd27cac02cd813ab36c0c",
+      "stdin_hex": "41",
+      "reference": {
+        "status": "HALTED",
+        "steps": 2,
+        "c": 2,
+        "d": 2,
+        "a": 65,
+        "image_cells": 3,
+        "stdout_hex": "41"
+      },
+      "python": {
+        "status": "HALTED",
+        "steps": 3,
+        "c": 2,
+        "d": 2,
+        "stdout_hex": "41"
+      },
+      "zig": {
+        "status": "HALTED",
+        "steps": 3,
+        "stdout_len": 1,
+        "stdout_sha": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+        "first": 65,
+        "c": 2,
+        "d": 2,
+        "encrypted": 2
+      },
+      "predicted": {
+        "ours_out": [
+          65
+        ],
+        "ref_out": [
+          65
+        ],
+        "ours_steps": 3,
+        "ref_steps": 2,
+        "halt": [
+          2,
+          2
+        ]
+      }
+    }
+  ],
+  "primitive_sample": {
+    "seed_crazy": 20261018,
+    "seed_rot": 20261019,
+    "draws": 200000,
+    "crazy_mismatches": 0,
+    "rot_mismatches": 133230,
+    "rot_predicate_mismatches": 133230
+  },
+  "expectations": [
+    {
+      "name": "D1_end_equals_pow3_19",
+      "ok": true,
+      "measured": "json.end=1162261467 3**19=1162261467 zig pow3(19)=1162261467"
+    },
+    {
+      "name": "D2_eof_rule_value",
+      "ok": true,
+      "measured": "json.eof_value=1162261466 3^19-1=1162261466 reference a at C1 halt=1162261466 (both cores: pow3(padwidth)-1, malbolge_core.py:210 / malbolge_free.zig:517)"
+    },
+    {
+      "name": "D3_wrap_modulus",
+      "ok": true,
+      "measured": "zg mem_limit=1162261467 growth=fixed; both advance c,d modulo it (malbolge_core.py:263 / bolge19.zig:420-421)"
+    },
+    {
+      "name": "D4_dispatch_opcode_set",
+      "ok": true,
+      "measured": "json=[4, 5, 23, 39, 40, 62, 68, 81] vendored oracle _VALID_OPS=[4, 5, 23, 39, 40, 62, 68, 81]"
+    },
+    {
+      "name": "D5_trit_width",
+      "ok": true,
+      "measured": "json.trits=19 py width=19 padwidth=19 zg width=19 padwidth=19"
+    },
+    {
+      "name": "P1_mcrz_equals_crazy19",
+      "ok": true,
+      "measured": "200000 seeded pairs (random.Random(20261018)), mismatches=0"
+    },
+    {
+      "name": "P2_mrot_diverges_iff_v_mod_3",
+      "ok": true,
+      "measured": "200000 values under 3^18; divergent=133230 predicate(v%3!=0)=133230 set_equality=True"
+    },
+    {
+      "name": "R1_status_and_halt_address",
+      "ok": true,
+      "measured": "ref=HALTED@(2,2) py=(2,2) zg=(2,2)"
+    },
+    {
+      "name": "R1_stdout_equal",
+      "ok": true,
+      "measured": "ref=da py=da zg_first=218 predicted equal da"
+    },
+    {
+      "name": "R1_step_convention",
+      "ok": true,
+      "measured": "py=3 zg=3 ref=2 (V4: halt not counted)"
+    },
+    {
+      "name": "R2_status_and_halt_address",
+      "ok": true,
+      "measured": "ref=HALTED@(3,3) py=(3,3) zg=(3,3)"
+    },
+    {
+      "name": "R2_stdout_equal",
+      "ok": true,
+      "measured": "ref=20 py=20 zg_first=32 predicted equal 20"
+    },
+    {
+      "name": "R2_step_convention",
+      "ok": true,
+      "measured": "py=4 zg=4 ref=3 (V4: halt not counted)"
+    },
+    {
+      "name": "R3_status_and_halt_address",
+      "ok": true,
+      "measured": "ref=HALTED@(3,3) py=(3,3) zg=(3,3)"
+    },
+    {
+      "name": "R3_stdout_diverges_as_predicted",
+      "ok": true,
+      "measured": "py=9e zg_first=158 ref=92 predicted ours=9e ref=92 (V2/rot)"
+    },
+    {
+      "name": "R3_step_convention",
+      "ok": true,
+      "measured": "py=4 zg=4 ref=3 (V4: halt not counted)"
+    },
+    {
+      "name": "R4_status_and_halt_address",
+      "ok": true,
+      "measured": "ref=HALTED@(2,2) py=(2,2) zg=(2,2)"
+    },
+    {
+      "name": "R4_stdout_equal",
+      "ok": true,
+      "measured": "ref=41 py=41 zg_first=65 predicted equal 41"
+    },
+    {
+      "name": "R4_step_convention",
+      "ok": true,
+      "measured": "py=3 zg=3 ref=2 (V4: halt not counted)"
+    },
+    {
+      "name": "L1_raw_loader_image_length",
+      "ok": true,
+      "measured": "ref image_cells=[3, 4, 4, 3] file_bytes=[3, 4, 4, 3] py program_len=[3, 4, 4, 3]"
+    }
+  ],
+  "divergences": {
+    "V1_region_offsets": {
+      "measured": false,
+      "value": [
+        0,
+        117,
+        140
+      ]
+    },
+    "V2_rot_width": {
+      "measured": true,
+      "evidence": [
+        "C3",
+        "P2"
+      ]
+    },
+    "V3_encryption_alphabet": {
+      "measured": false,
+      "ours": "94-entry xlat indexed m-33, guard 33..126",
+      "reference": "135-entry concatenation indexed m, guard <135"
+    },
+    "V4_halt_step_convention": {
+      "measured": true,
+      "evidence": "all four cases"
+    },
+    "V5_tail_representation": {
+      "measured": false
+    }
+  },
+  "verdict": "PASS"
+}

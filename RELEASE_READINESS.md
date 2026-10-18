@@ -299,3 +299,41 @@ byte-idéntica (`20261007.264.1`), así que la coincidencia de los dos `python=9
 la entrada 35 era ruido; lo que sí se sostiene es el coste contra el timeout (los dos cores
 suman 174,9 s en ubuntu frente a los 900 s de presupuesto del gate). No hay release, tag ni
 PR. Ledger entrada 37.
+
+**Anexo 2026-10-18 (5) — F13 divide `UNSHACKLED_PARITY` y sube el recuento a 53 gates.**
+Para la readiness importa sobre todo la separación: la afirmación (a), paridad bit a bit con
+el `Unshackled` original, sigue **NOT_DEMONSTRABLE** y ya no se puede mezclar con nada — el
+`Unshackled.c:585` con `srand(time(NULL))` no es un control. La afirmación (b), acuerdo con
+una máquina externa **determinista** de 3^19 fijo, pasa a **DEMONSTRATED dentro de un alcance
+declarado**: `docs/F13_UNSHACKLED_K19_PREGISTRATION.md` se escribió antes de ejecutar y
+`evidence/f13_unshackled_k19_20261018.json` (`00c7080d…`) cierra `F13 EXPECTATIONS=20
+MATCH=20 FALSIFIED=0`, exit 0, con tres máquinas por caso (referencia, core Python, core Zig).
+Dos de esas 20 expectativas afirman desacuerdo y se miden como tal: `rot` (`0x9e` nuestro
+contra `0x92` de la referencia, y `P2` demuestra que el conjunto de divergencia es
+exactamente `{v : v % 3 != 0}`, 133 230 de 200 000) y el contador de halt, sellado como
+`ours = reference + 1` en lugar de alineado. Escalado a 19 trits, `crazy` coincide con la
+tabla base-9 de la referencia en 200 000 pares con 0 discrepancias.
+
+**Qué NO entra en una release con esto:** paridad con Lutter, completitud Turing nueva
+(C10 sigue `INHERITED`), direcciones `>= 3^18`, regiones 1/2 (offsets `0, 117, 140` — V1,
+leídas y sin testear), la cascada de cifrado (V3) y el loader canónico. El alcance lo imprime
+el propio gate en su línea `F13 DISCLOSURE`, no solo esta prosa.
+
+**Consecuencia operativa para CI:** la referencia no está vendorizada — decisión de licencia
+de Danny, no del harness — así que un clon limpio sin `../MalbolgeLispSlop` al lado obtiene
+exit 3 y el harness imprime `SKIP (NOT_DEMONSTRATED, missing external input)`. Por tanto el
+`53 PASS / 0 FAIL / 0 SKIP` que F13 produce en esta máquina (rc 0, 2:03.79, RSS 92 276 kB;
+repetido 2:11.71 / 92 228 kB) **no** es lo que van a imprimir los runners: allí se verá
+`52 PASS / 0 FAIL / 1 SKIP`. Lo primero es honesto sobre el lenguaje, lo segundo sobre el
+entorno, y ninguna de las dos se presenta como la otra.
+
+**Evento de integridad:** seis rutas selladas nuevas (`evidence/compare_unshackled_k19.py`
+`7a083791…`, `evidence/run_f13_k19.zig` `e9c6cbea…`, el JSON `00c7080d…` y las tres capturas
+crudas `1e9b8f98…` / `185c84bb…` / `cd1e8003…`) y dos líneas movidas por bytes propios:
+`tests/run_all.py` (`e49210fa…` -> `6ba737c8…`) y `GUIA.md` (`92fc4a50…` -> `0f143886…`,
+donde la trampa `NOT_DEMONSTRATED` se parte en las dos lecturas y se añade la nota operativa
+de F13; ninguna advertencia se eliminó). Identidad del manifiesto `a39adde9…` -> `ad581d0a…`,
+rutas verificadas 54 -> 60, S1 `SEAL VERDICT: PASS` y `sha256sum -c --quiet` devolviendo 0 por
+su cuenta. `src/`, `corpus/` y `vendor/` intactos: F13 apoyan sobre los mismos cores que
+sellaron F4c, F11 y F12. Sin release, sin tag, sin PR, sin push hasta que Danny lo diga.
+Ledger entrada 39.

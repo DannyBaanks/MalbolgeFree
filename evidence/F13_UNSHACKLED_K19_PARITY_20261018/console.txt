@@ -1,0 +1,33 @@
+F13 reference src=MalbolgeLispSlop/src/bolge19.zig sha=47758a3f667f4089
+F13 reference profile=MalbolgeLispSlop/profiles/fixed19.json sha=6cc0afa10b050a36
+F13 reference bin=MalbolgeLispSlop/build/bolge19 sha=04b294d37f8f200e (build product, recorded not pinned)
+F13 ours python=src/malbolge_core.py zig=src/malbolge_free.zig budget=100
+F13 scope=region 0 (c < 387420489) forward-walk images of <=4 cells; region offsets of the reference = (0, 117, 140)
+  C1 in out halt        ref status=HALTED steps=2 c=2 d=2 a=1162261466 out=da | py status=HALTED steps=3 out=da | zg status=HALTED steps=3 out_len=1 first=da
+  C2 in crz out halt    ref status=HALTED steps=3 c=3 d=3 a=32 out=20 | py status=HALTED steps=4 out=20 | zg status=HALTED steps=4 out_len=1 first=20
+  C3 nop rot out halt   ref status=HALTED steps=3 c=3 d=3 a=258280338 out=92 | py status=HALTED steps=4 out=9e | zg status=HALTED steps=4 out_len=1 first=9e
+  C4 in out halt        ref status=HALTED steps=2 c=2 d=2 a=65 out=41 | py status=HALTED steps=3 out=41 | zg status=HALTED steps=3 out_len=1 first=41
+F13 EXP D1_end_equals_pow3_19: MATCH (json.end=1162261467 3**19=1162261467 zig pow3(19)=1162261467)
+F13 EXP D2_eof_rule_value: MATCH (json.eof_value=1162261466 3^19-1=1162261466 reference a at C1 halt=1162261466 (both cores: pow3(padwidth)-1, malbolge_core.py:210 / malbolge_free.zig:517))
+F13 EXP D3_wrap_modulus: MATCH (zg mem_limit=1162261467 growth=fixed; both advance c,d modulo it (malbolge_core.py:263 / bolge19.zig:420-421))
+F13 EXP D4_dispatch_opcode_set: MATCH (json=[4, 5, 23, 39, 40, 62, 68, 81] vendored oracle _VALID_OPS=[4, 5, 23, 39, 40, 62, 68, 81])
+F13 EXP D5_trit_width: MATCH (json.trits=19 py width=19 padwidth=19 zg width=19 padwidth=19)
+F13 EXP P1_mcrz_equals_crazy19: MATCH (200000 seeded pairs (random.Random(20261018)), mismatches=0)
+F13 EXP P2_mrot_diverges_iff_v_mod_3: MATCH (200000 values under 3^18; divergent=133230 predicate(v%3!=0)=133230 set_equality=True)
+F13 EXP R1_status_and_halt_address: MATCH (ref=HALTED@(2,2) py=(2,2) zg=(2,2))
+F13 EXP R1_stdout_equal: MATCH (ref=da py=da zg_first=218 predicted equal da)
+F13 EXP R1_step_convention: MATCH (py=3 zg=3 ref=2 (V4: halt not counted))
+F13 EXP R2_status_and_halt_address: MATCH (ref=HALTED@(3,3) py=(3,3) zg=(3,3))
+F13 EXP R2_stdout_equal: MATCH (ref=20 py=20 zg_first=32 predicted equal 20)
+F13 EXP R2_step_convention: MATCH (py=4 zg=4 ref=3 (V4: halt not counted))
+F13 EXP R3_status_and_halt_address: MATCH (ref=HALTED@(3,3) py=(3,3) zg=(3,3))
+F13 EXP R3_stdout_diverges_as_predicted: MATCH (py=9e zg_first=158 ref=92 predicted ours=9e ref=92 (V2/rot))
+F13 EXP R3_step_convention: MATCH (py=4 zg=4 ref=3 (V4: halt not counted))
+F13 EXP R4_status_and_halt_address: MATCH (ref=HALTED@(2,2) py=(2,2) zg=(2,2))
+F13 EXP R4_stdout_equal: MATCH (ref=41 py=41 zg_first=65 predicted equal 41)
+F13 EXP R4_step_convention: MATCH (py=3 zg=3 ref=2 (V4: halt not counted))
+F13 EXP L1_raw_loader_image_length: MATCH (ref image_cells=[3, 4, 4, 3] file_bytes=[3, 4, 4, 3] py program_len=[3, 4, 4, 3])
+F13 EXPECTATIONS=20 MATCH=20 FALSIFIED=0
+F13 UNSHACKLED_K19_PARITY=PASS (scoped: deterministic fixed-3^19, region 0, <=4 instructions, 3 machines)
+F13 DISCLOSURE what_is_NOT_claimed: not Lutter Unshackled parity (V1 region offsets +117/+140, V2 rot width 18 vs 19, V3 encryption alphabet 27 vs 33 and guard <135 vs 33..126, V5 tail representation), not Turing completeness, not Unicode I/O, not the canonical loader, not any address >= 3^18, not the encryption cascade. V2 is MEASURED (C3 and P2); V1, V3 and V5 are identified by reading only.
+F13_RC=0

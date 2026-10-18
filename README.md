@@ -134,6 +134,29 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > and carries no platform signature. What did not move across all four is the measured content —
 > 62 239 852 steps, 53 562 bytes whose sha is the program's, EOF `59048` vs `177146`, every
 > expectation MATCH. Ledger entry 38.
+>
+> **Appended 2026-10-18 (F13) — the gate count moves 52 → 53, and `UNSHACKLED_PARITY` splits.**
+> That label had been one sentence covering two claims. Parity with the *original*
+> `Unshackled` stays out of reach for good: `MALDOOM/vendor/Unshackled.c:585` calls
+> `srand(time(NULL))`, so the reference cannot even agree with itself and has nothing to
+> falsify. The claim that was reachable is now measured: **gate F13** compares both of our
+> cores against a *deterministic* third-party fixed-3^19 machine —
+> `MalbolgeLispSlop/src/bolge19.zig` (`47758a3f…`) under `profiles/fixed19.json`
+> (`6cc0afa1…`) — with expectations written down first in
+> `docs/F13_UNSHACKLED_K19_PREGISTRATION.md`. Result: `F13 EXPECTATIONS=20 MATCH=20
+> FALSIFIED=0`, exit 0, and the two machines **disagree exactly where the pre-registration
+> said they would** (`rot`: ours `0x9e`, reference `0x92`; and the halt-step counter,
+> asserted as `ours = reference + 1` rather than quietly aligned). Scope is deliberately
+> small and is printed by the gate itself: region 0 only (`c < 3^18 = 387 420 489`),
+> programs of at most 4 cells, `raw` loader, three machines per case. This is **not** parity
+> with Lutter's `Unshackled`, and `V1`/`V3`/`V5` (region offsets, encryption alphabet, tail
+> representation) are read off the source and left untested. The reference is **not vendored**
+> — that is a licensing decision — so the gate reads the sibling checkout and exits 3 when it
+> is absent, which means CI shows `SKIP (NOT_DEMONSTRATED, missing external input)` for F13
+> while the local harness reads `53 PASS / 0 FAIL / 0 SKIP`, rc 0 (2:03.79, peak RSS 92 276 kB;
+> re-run 2:11.71 / 92 228 kB). Six sealed paths joined the manifest (checker, Zig probe, report
+> JSON, three raw captures) and two moved (`tests/run_all.py`, `GUIA.md`): the identity went
+> `a39adde9…` -> `ad581d0a…`, checked paths 54 -> 60, S1 `SEAL VERDICT: PASS`. Ledger entry 39.
 
 
 ## What this is, in one minute
@@ -488,7 +511,7 @@ its own fixed dimension.
 | `UNBOUNDED_WIDTH_GROWTH` | **NOT_DEMONSTRATED** — the ladder is finite by construction and now measured to `19`; the dense path is additionally bounded at `w = 20` by the `u32` element type |
 | `EPOCHAL_PYTHON_PARITY` | **DEMONSTRATED** (2026-10-01) — `src/malbolge_core.py` implements `epochal`; `evidence/compare_epochal.py` diffs it against the Zig core on status, steps, `padwidth`, widening count, final `c`/`d`, encrypted cells and stdout SHA-256 |
 | `E10_TO_E19_TOY_LADDER` | **DEMONSTRATED (toy)** — state transport + codec only; see `epoch_ladder/` |
-| `UNSHACKLED_PARITY` | **NOT_DEMONSTRABLE** by construction (the original uses `srand(time(NULL))`) |
+| `UNSHACKLED_PARITY` | **SPLIT (2026-10-18).** (a) vs the original `Unshackled.c`: **NOT_DEMONSTRABLE** by construction — that program calls `srand(time(NULL))`. (b) vs a deterministic fixed-3^19 reference: **DEMONSTRATED in a stated scope** by gate F13, three-way against `MalbolgeLispSlop/src/bolge19.zig`: `end`, EOF `3^19-1`, wrap modulus, the eight dispatch opcodes and 19-trit `crazy` agree (200 000 seeded pairs, 0 mismatches); `rot` diverges as predicted (the reference rotates 18 trits, we rotate 19). Region 0 only, 3-4 instruction images. Pre-registered in `docs/F13_UNSHACKLED_K19_PREGISTRATION.md`, measured in `evidence/f13_unshackled_k19_20261018.json`. The previous one-line reading of this row conflated (a) with (b) |
 | `VALUE_OVERFLOW_WIDENING` (`pad_to_padwidth`) | **DESTROYED** — rotate breaks consistency across widths |
 | `CLASSIC_PARITY_CANONICAL` (11 cases × 2 cores, 2 oracles here) | **DEMONSTRATED** (2026-10-17) — `evidence/compare_f4_canonical.py` diffs both cores byte-a-byte against canonical implementations: 22 (case × core) verdicts, **44** stdout SHA-256 comparisons on this machine (2 oracles), 20 on CI (1 vendored oracle, no external `hello_world.malbolge`). Includes the four EOF witnesses. Report: `evidence/f4c_canonical_parity_vendored_20261017.json` |
 | `CLASSIC_PARITY_ZIG` (6/6 corpus vs `engine.zig`) | **SUPERSEDED — measured divergence** (2026-10-17). The old oracle `Malbolge-Translator/zig/src/engine.zig` assigns `0xFFFF` at EOF, the same non-canonical family our core used to assign; 4/6 programs now differ. See `evidence/f4_engine_zig_divergence_20261017.json` and `docs/HONESTY_LEDGER.md` entry 24 |
@@ -778,6 +801,8 @@ OUTPUT REPRODUCTION SMOKE TEST: PASS
 ```
 
 **Explicitly NOT claimed in any release:** unbounded width growth (finite by
-construction; dense bounded at `w = 20`), Unshackled bit-parity (the reference
-uses `srand(time(NULL))`), Ouroboros self-hosting (measured ~255-byte input
+construction; dense bounded at `w = 20`), Unshackled bit-parity *as such* (the original
+`Unshackled.c` uses `srand(time(NULL))`; what gate F13 measures is agreement with a
+*deterministic* fixed-3^19 machine over region 0 — a different claim, see the
+`UNSHACKLED_PARITY` row above), Ouroboros self-hosting (measured ~255-byte input
 ceiling, unresolved brackets), and a new self-contained TC proof.

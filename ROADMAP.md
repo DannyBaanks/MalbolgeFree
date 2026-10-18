@@ -394,3 +394,34 @@ mide `entries=54 checked=54 ok=54 drift=0 missing=0 escaping=0 duplicate=0 malfo
 `sha256sum -c --quiet` devuelve 0 por su cuenta; el harness completo sigue en
 `52 PASS / 0 FAIL / 0 SKIP`, rc 0 (2:09.11, RSS pico 92 228 kB). Gates: 52, sin cambios —
 la demo de la guía no se subió a `GATES` a propósito. Ledger entrada 36.
+
+**Anexo 2026-10-18 (5) — F13: el primer gate que responde ante una máquina externa
+determinista.** `UNSHACKLED_PARITY` estaba escrito como una sola frase sobre dos
+afirmaciones distintas. La unreachable sigue siéndolo: `Unshackled.c` llama
+`srand(time(NULL))`, así que el original no puede falsificar nada porque no coincide
+siquiera consigo mismo. La alcanzable ya está medida: F13 compara nuestros dos cores contra
+`MalbolgeLispSlop/src/bolge19.zig` (`47758a3f…`) con su perfil `fixed19.json` (`6cc0afa1…`),
+y las 20 expectativas se escribieron antes de ejecutar (`docs/F13_UNSHACKLED_K19_PREGISTRATION.md`).
+Resultado: `F13 EXPECTATIONS=20 MATCH=20 FALSIFIED=0`, exit 0. Lo que hace creíble el PASS es
+que dos expectativas afirman **desacuerdo**: `rot` (nosotros `0x9e`, referencia `0x92`) y el
+contador de halt (`ours = reference + 1`), ambos medidos, no alineados en silencio.
+
+**Alcance declarado por el propio gate:** región 0 (`c < 3^18 = 387 420 489`), imágenes de
+como máximo 4 celdas, loader `raw`, tres máquinas por caso. No es paridad con el Unshackled
+de Lutter y no se vende como tal. Las divergencias V1 (offsets de región `0, 117, 140`),
+V3 (alfabeto de cifrado: nuestras 94 entradas indexadas por `m-33` con guarda `33..126`,
+frente a las 135 de la referencia indexadas por `m` con guarda `<135`) y V5 (representación del tail) están **leídas del
+código y sin testear**; V2 es la única medida.
+
+**Qué decide Danny, no el harness:** la referencia **no se vendoriza**. Sus avisos piden
+copiar-y-revalidar en lugar de importar, así que meterla en `vendor/` es una decisión de
+licencia. El gate lee el checkout hermano, se auto-pinea los dos hashes y sale con exit 3
+si falta — por eso en CI F13 aparece como `SKIP (NOT_DEMONSTRATED, missing external input)`
+mientras el local da `53 PASS / 0 FAIL / 0 SKIP`. Siguientes pasos reales, en orden de coste:
+(1) decidir licencia y vendorizar o fijar un fixture mínimo; (2) un gate para región 1/2, que
+es donde vive V1; (3) la cascada de cifrado (V3), que requiere programas más largos que 4
+instrucciones. Gates: 52 -> 53. Rutas selladas 54 -> 60 (checker, sonda Zig, JSON y tres
+capturas crudas), y dos líneas movidas por bytes propios: `tests/run_all.py`
+(`e49210fa…` -> `6ba737c8…`) y `GUIA.md` (`92fc4a50…` -> `0f143886…`). Identidad del
+manifiesto `a39adde9…` -> `ad581d0a…`; S1 `SEAL VERDICT: PASS` y suite completa rc 0
+(2:03.79, RSS 92 276 kB; repetida 2:11.71 / 92 228 kB). `src/` intacto. Ledger entrada 39.
