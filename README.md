@@ -112,6 +112,17 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > block. S1 measures `entries=54 … ok=54 drift=0`, GNU `sha256sum -c` agrees, harness
 > `52 PASS / 0 FAIL / 0 SKIP`, rc 0. No gate added, no claim about the language changed:
 > the finding stays entry 34's. Ledger entry 36.
+>
+> **Appended 2026-10-18 (CI) — that identity read back on both runners.** Push
+> `aa702f0..69b69f5`, run `39144966132`: ubuntu job `117726841165` (3 m 54 s) and windows job
+> `117726841354` (4 m 19 s) each print `SEAL manifest_sha256=a39adde9… entries=54 … ok=54
+> drift=0 missing=0 escaping=0 duplicate=0 malformed=0`, `SEAL VERDICT: PASS`, `52 PASS / 0 FAIL
+> / 0 SKIP` over the same 52 gate names, `F11 EXPECTATIONS=15 MATCH=15 FALSIFIED=0` and
+> `F12 EXPECTATIONS=7 MATCH=7 FALSIFIED=0`. The 54th path is the point: the witness the guide now
+> quotes is hash-checked in every clean clone. One honest correction — F12's windows timings
+> halved (`zig=65.1 python=94.8` -> `zig=31.3 python=49.6`) on a byte-identical runner image, so
+> the two `python=94.8` figures entry 35 flagged as a coincidence were noise, as stated there.
+> Ledger entry 37.
 
 
 ## What this is, in one minute

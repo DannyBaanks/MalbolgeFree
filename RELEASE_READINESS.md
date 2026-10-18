@@ -284,3 +284,18 @@ missing=0 escaping=0 duplicate=0 malformed=0`, `SEAL VERDICT: PASS`, rc 0; `sha2
 --quiet` coincide. Harness: `52 PASS / 0 FAIL / 0 SKIP`, rc 0. Ningún gate nuevo, ningún
 claim ascendido, `src/` intacto (los dos cores conservan los sellos de la entrada 24), sin
 release ni tag ni PR. Ledger entrada 36.
+
+**CI de la entrada 36, leído por runner (2026-10-18):** push `aa702f0..69b69f5`, run
+`39144966132` `success`; ubuntu `117726841165` (3 m 54 s) y windows `117726841354` (4 m 19 s)
+imprimen cada uno `SEAL manifest_sha256=a39adde9… entries=54 checked=54 ok=54 drift=0
+missing=0 escaping=0 duplicate=0 malformed=0`, `SEAL VERDICT: PASS`, 52 líneas `PASS:` y
+ninguna `FAIL`/`SKIP`, con el mismo conjunto de 52 gates y los mismos números sellados
+(EOF 59 048 / 177 146; halt de 62 239 852 pasos emitiendo 53 562 bytes con el sha del
+programa). Lo nuevo aquí es la ruta 54: `tests/frontier_witness.txt` entra por primera vez
+en la comprobación de integridad de un clon limpio en ambas plataformas, que es lo que hace
+reproducible la salida que la guía imprime. Corrección honesta sobre los tiempos: en windows
+F12 bajó de `zig=65.1 python=94.8` a `zig=31.3 python=49.6` con imagen de runner
+byte-idéntica (`20261007.264.1`), así que la coincidencia de los dos `python=94.8` que anotó
+la entrada 35 era ruido; lo que sí se sostiene es el coste contra el timeout (los dos cores
+suman 174,9 s en ubuntu frente a los 900 s de presupuesto del gate). No hay release, tag ni
+PR. Ledger entrada 37.

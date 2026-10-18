@@ -48,6 +48,10 @@ in `docs/HONESTY_LEDGER.md`, not here.
   integrity event: identity `298fe800…` → `a39adde9…`, sealed paths 53 → 54, because the
   fixture the guide now cites (`tests/frontier_witness.txt`) was sealed in the same block.
   No gate added.
+- That seal read back from CI: run `39144966132` on `69b69f5` prints `a39adde9… entries=54
+  ok=54 drift=0 missing=0` on ubuntu (3 m 54 s) and windows (4 m 19 s) with 52 PASS / 0 FAIL /
+  0 SKIP on each; the newly sealed `tests/frontier_witness.txt` is now integrity-checked on both
+  platforms. Runner F12 timings halved on windows with identical runner images, recorded as noise.
 
 ## 2026-09-24 and earlier
 
