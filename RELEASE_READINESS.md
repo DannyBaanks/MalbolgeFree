@@ -337,3 +337,15 @@ rutas verificadas 54 -> 60, S1 `SEAL VERDICT: PASS` y `sha256sum -c --quiet` dev
 su cuenta. `src/`, `corpus/` y `vendor/` intactos: F13 se apoya sobre los mismos cores que
 sellaron F4c, F11 y F12. Sin release, sin tag, sin PR, sin push hasta que Danny lo diga.
 Ledger entrada 39.
+
+**Anexo 2026-10-18 (6) — F14 formaliza y mide la divergencia de dispatch regional V1 y sube el recuento a 54 gates.**
+F13 midió paridad en región 0 ($c < 3^{18}$). F14 extiende la comparación determinista a regiones 1 y 2 contra la misma referencia externa (`MalbolgeLispSlop/src/bolge19.zig`). En `bolge19.zig:200-205`, el dispatch aplica offsets dependientes de la región (`offs = [0, 117, 140]` indexado por `region = c // 3^18`), mientras que `MalbolgeFree` aplica `(c + mem[c]) % 94` uniformemente en todo el espacio de direcciones $[0, 3^{19})$.
+Las expectativas se pre-registraron en `docs/F14_REGION_OFFSETS_V1_PREGISTRATION.md` y se midieron en `evidence/f14_region_offsets_20261018.json` (`1ee0de13…`):
+- `F14 EXPECTATIONS=17 MATCH=17 FALSIFIED=0`, exit 0 (0.19 s wall, RSS 32 764 kB).
+- D1-D5: acuerdo al 100% en Región 0; desplazamiento sistemático de $+117 \equiv 23 \pmod{94}$ en Región 1 (100% de muestras); desplazamiento de $+140 \equiv 46 \pmod{94}$ en Región 2 (100% de muestras).
+- R0/R1/R2: confirmación mediante trazas de ejecución completas con saltos hacia Región 1 (`b"(aO"` y `b"'&B"`). En R1, el $+117$ hace que `bolge19` ejecute HALT en el paso 11, mientras que `MalbolgeFree` continúa hasta el paso 60. En R2, `bolge19` decodifica la instrucción en Región 1 como `invalid` (91) mientras que `MalbolgeFree` decodifica `nop` (68), una diferencia exacta de $+23$.
+
+**Consecuencia operativa para CI:** al igual que F13, F14 lee el checkout hermano `../MalbolgeLispSlop` y sale con código 3 cuando no está presente, imprimiendo `SKIP (NOT_DEMONSTRATED, missing external input)`. En CI se verá `52 PASS / 0 FAIL / 2 SKIP` con el manifiesto sellado pasando en ambos runners.
+
+**Evento de integridad:** cinco rutas selladas nuevas (`evidence/compare_f14_region_offsets.py` `a0e59679…`, `evidence/f14_region_offsets_20261018.json` `1ee0de13…`, y las tres capturas crudas `69bcd869…` / `22c78af3…` / `9e8df224…`) y una línea movida por bytes propios: `tests/run_all.py` (`6ba737c8…` -> `f7425683…`). Identidad del manifiesto `ad581d0a…` -> `7e3c9a09…`, rutas verificadas 60 -> 65, S1 `SEAL VERDICT: PASS`. `src/`, `corpus/` y `vendor/` intactos. Ledger entrada 40.
+

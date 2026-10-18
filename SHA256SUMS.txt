@@ -13,7 +13,7 @@ c365c50089d72a6859d33619f7c1987419f4d90c35efa7f1fc59a1683b0376d5  src/bfir1_back
 d7d6d1e34e70210ef2939828ec6593efcaa52f32edf51122eff2638c92efe598  corpus/free/cross_3pow19.mal
 5f6e11aebc6801b4fb89908c5ae4bb13a871e9422793fab1f9cb0a5a4ed0790c  malbolge_cli.py
 0f143886b9fc6f43f0d5e41b0ea3176890bab361bdd9e75a580c469b65379ead  GUIA.md
-6ba737c8f2de476e88746f2e3c8aa1b21f88b7946cd3d271ccae69b587e2269b  tests/run_all.py
+f742568369207082294fab313f6adba97b89c17dcd0fe0f54323e6591dc5e299  tests/run_all.py
 44157cc8bdd6de4bdd7578f8ba19e3b16d6f5d030f768de29475dcb4764b9557  evidence/f4_classic_parity.json
 c8fd681f739fbb88f31ecb6d52e2d7cdee81d7b0e7c4cb5fec7327901378d5ca  evidence/f9_repeated_frontier.json
 b523e463980c9a265f5f18567856b60027d93fdabcc1491b0fe248be7f5b7dc5  tests/fixtures/free_pure/vertical_slice.hell
@@ -197,3 +197,19 @@ e9c6cbea7003f770c16c14648b589f0f5f4602605fb77604b17ba9b4a618dac0  evidence/run_f
 1e9b8f98964bd51a73325107224b9d18132c214676b7fc5426354f957fe109b8  evidence/F13_UNSHACKLED_K19_PARITY_20261018/console.txt
 185c84bb7e1d7489574928b0f2ba907c186acf791ef6eafad87855f7dd0114f2  evidence/F13_UNSHACKLED_K19_PARITY_20261018/resource_usage.txt
 cd1e800336c2ee5342ac6c5adafa83843eab7fa0c2cfb3bab8e98d15bf808f70  evidence/F13_UNSHACKLED_K19_PARITY_20261018/PROVENANCE.md
+# Appended 2026-10-18T19:30:00Z (HONESTY_LEDGER entry 40): gate F14 opens, measuring
+# the regional dispatch divergence V1 (+117 in Region 1, +140 in Region 2) against the
+# same deterministic third-party fixed-3^19 reference as F13. Formula sampling across
+# 150 000 pairs and jump cases reaching Region 1 are verified.
+# One already-published line moves because its bytes changed:
+#   tests/run_all.py  supersedes 6ba737c8f2de476e88746f2e3c8aa1b21f88b7946cd3d271ccae69b587e2269b
+#                     (one GATES entry added; gate count 53 -> 54)
+# Checked-sealed paths go from 60 to 65. src/, corpus/ and vendor/ bytes are
+# untouched. docs/ remains unsealed by construction, including
+# docs/F14_REGION_OFFSETS_V1_PREGISTRATION.md.
+a0e59679ad5e2ca5f68bcf2a77c96073c0b4d257dd063a148400c57bf3c6021b  evidence/compare_f14_region_offsets.py
+1ee0de136589993a57532869d46ed0cc5d24d283debd25cb987f780a95b30fb9  evidence/f14_region_offsets_20261018.json
+69bcd8693648566cc65bdcac5cef69935658ebf9c817345028d377a5be4b4c76  evidence/F14_REGION_OFFSETS_20261018/console.txt
+22c78af3c87728ac4224963cc5be2980b0abc27fced6950d3acb1a3f6abfab5b  evidence/F14_REGION_OFFSETS_20261018/resource_usage.txt
+9e8df224eb569f4042aced105bc78984429c74b6bb1a6eb22fb0373f70006cbd  evidence/F14_REGION_OFFSETS_20261018/PROVENANCE.md
+

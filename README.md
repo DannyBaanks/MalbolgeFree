@@ -157,6 +157,16 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > re-run 2:11.71 / 92 228 kB). Six sealed paths joined the manifest (checker, Zig probe, report
 > JSON, three raw captures) and two moved (`tests/run_all.py`, `GUIA.md`): the identity went
 > `a39adde9…` -> `ad581d0a…`, checked paths 54 -> 60, S1 `SEAL VERDICT: PASS`. Ledger entry 39.
+>
+> **Appended 2026-10-18 (F14) — gate count moves 53 → 54; regional dispatch divergence V1 measured.**
+> Gate F14 extends the deterministic comparison against `MalbolgeLispSlop/src/bolge19.zig` to
+> Regions 1 and 2 ($c \ge 3^{18}$). The reference machine introduces offsets `offs = [0, 117, 140]`
+> based on `region = c // 3^18`, while `MalbolgeFree` evaluates $(c + \text{mem}[c]) \bmod 94$
+> uniformly. Expectations pre-registered in `docs/F14_REGION_OFFSETS_V1_PREGISTRATION.md`
+> are 100% matched: `F14 EXPECTATIONS=17 MATCH=17 FALSIFIED=0`, exit 0, covering 150 000 formula
+> sample pairs across all three regions and execution traces jumping into Region 1 (`b"(aO"` and `b"'&B"`).
+> Five sealed paths joined the manifest and one moved (`tests/run_all.py`): identity went
+> `ad581d0a…` -> `7e3c9a09…`, checked paths 60 -> 65, S1 `SEAL VERDICT: PASS`. Ledger entry 40.
 
 
 ## What this is, in one minute

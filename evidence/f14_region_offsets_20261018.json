@@ -1,0 +1,106 @@
+{
+  "gate": "F14",
+  "title": "Regional dispatch divergence (V1)",
+  "ts": "2026-10-18T19:25:49Z",
+  "reference": {
+    "src": "MalbolgeLispSlop/src/bolge19.zig",
+    "src_sha256": "47758a3f667f4089f6029d86130b94f14f082d4c113a212b8ff571d84113e8a3",
+    "profile": "MalbolgeLispSlop/profiles/fixed19.json",
+    "profile_sha256": "6cc0afa10b050a36673e131b2efc69fa29e9589136f52b5f27a7dabe23b6ac1f",
+    "bin": "MalbolgeLispSlop/build/bolge19",
+    "bin_sha256": "04b294d37f8f200ea30ba1b301424d4c0358551817cdd94db12a7235ddd10c4e"
+  },
+  "ours": {
+    "python": "src/malbolge_core.py",
+    "zig": "src/malbolge_free.zig"
+  },
+  "expectations": [
+    {
+      "name": "D1_end_equals_pow3_19",
+      "match": true,
+      "detail": "json.end=1162261467 3**19=1162261467"
+    },
+    {
+      "name": "D2_third_equals_pow3_18",
+      "match": true,
+      "detail": "json.end//3=387420489 3**18=387420489"
+    },
+    {
+      "name": "D3_ref_offset_region_0",
+      "match": true,
+      "detail": "offs[0]=0"
+    },
+    {
+      "name": "D4_ref_offset_region_1",
+      "match": true,
+      "detail": "offs[1]=117 (117 % 94 = 23)"
+    },
+    {
+      "name": "D5_ref_offset_region_2",
+      "match": true,
+      "detail": "offs[2]=140 (140 % 94 = 46)"
+    },
+    {
+      "name": "P1_R0_FORMULA_EQUALITY",
+      "match": true,
+      "detail": "50000 seeded pairs in Region 0 (c < 387420489), mismatches=0"
+    },
+    {
+      "name": "P2_R1_FORMULA_DIVERGENCE",
+      "match": true,
+      "detail": "50000 seeded pairs in Region 1: delta mismatches=0, identical count=0"
+    },
+    {
+      "name": "P3_R2_FORMULA_DIVERGENCE",
+      "match": true,
+      "detail": "50000 seeded pairs in Region 2: delta mismatches=0, identical count=0"
+    },
+    {
+      "name": "R0_CONTROL_REGION_0",
+      "match": true,
+      "detail": "ref=HALTED@(2,2) out=da py=HALTED@(2,2) zg=HALTED@(2,2)"
+    },
+    {
+      "name": "R1_STATUS_HALT",
+      "match": true,
+      "detail": "ref=HALTED py=HALTED zg=HALTED"
+    },
+    {
+      "name": "R1_REGION_ARRIVAL",
+      "match": true,
+      "detail": "ref_halt_c=581130727 (reg 1) py_halt_c=581130775 (reg 1)"
+    },
+    {
+      "name": "R1_HALT_DIVERGENCE",
+      "match": true,
+      "detail": "ref halts at step=11 c=581130727 (due to +117); ours halts at step=60 c=581130775"
+    },
+    {
+      "name": "R1_CROSS_CORE_AGREEMENT",
+      "match": true,
+      "detail": "py steps=60 c=581130775 d=581130767 | zg steps=60 c=581130775 d=581130767"
+    },
+    {
+      "name": "R2_STATUS_MAX_STEPS",
+      "match": true,
+      "detail": "ref=MAX_STEPS py=MAX_STEPS zg=MAX_STEPS"
+    },
+    {
+      "name": "R2_REGION_ARRIVAL",
+      "match": true,
+      "detail": "py_final_c=581130751 (reg 1) zg_final_c=581130751"
+    },
+    {
+      "name": "R2_OPCODE_DELTA",
+      "match": true,
+      "detail": "step 4 at c=581130750: ours op=68 (nop) ref idx=91 (invalid) delta=23 (117 % 94 = 23)"
+    },
+    {
+      "name": "R2_CROSS_CORE_AGREEMENT",
+      "match": true,
+      "detail": "py c=581130751 d=5 | zg c=581130751 d=5"
+    }
+  ],
+  "elapsed_sec": 0.15,
+  "verdict": "PASS"
+}

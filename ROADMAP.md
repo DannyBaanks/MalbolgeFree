@@ -418,10 +418,32 @@ copiar-y-revalidar en lugar de importar, así que meterla en `vendor/` es una de
 licencia. El gate lee el checkout hermano, se auto-pinea los dos hashes y sale con exit 3
 si falta — por eso en CI F13 aparece como `SKIP (NOT_DEMONSTRATED, missing external input)`
 mientras el local da `53 PASS / 0 FAIL / 0 SKIP`. Siguientes pasos reales, en orden de coste:
-(1) decidir licencia y vendorizar o fijar un fixture mínimo; (2) un gate para región 1/2, que
-es donde vive V1; (3) la cascada del cifrado (V3), que requiere programas más largos que 4
-instrucciones. Gates: 52 -> 53. Rutas selladas 54 -> 60 (checker, sonda Zig, JSON y tres
-capturas crudas), y dos líneas movidas por bytes propios: `tests/run_all.py`
+(1) decidir licencia y vendorizar o fijar un fixture mínimo; (2) un gate para región 1/2, que es donde vive V1; (3) la cascada del cifrado (V3), que requiere
+programas más largos que 4 instrucciones. Gates: 52 -> 53. Rutas selladas 54 -> 60 (checker,
+sonda Zig, JSON y tres capturas crudas), y dos líneas movidas por bytes propios: `tests/run_all.py`
 (`e49210fa…` -> `6ba737c8…`) y `GUIA.md` (`92fc4a50…` -> `0f143886…`). Identidad del
 manifiesto `a39adde9…` -> `ad581d0a…`; S1 `SEAL VERDICT: PASS` y suite completa rc 0
 (2:03.79, RSS 92 276 kB; repetida 2:11.71 / 92 228 kB). `src/` intacto. Ledger entrada 39.
+
+**Anexo 2026-10-18 (6) — F14: medición de la divergencia regional V1 (+117/+140) demostrada.**
+El segundo paso del anexo anterior queda cerrado: F14 mide la divergencia V1 contra
+`MalbolgeLispSlop/src/bolge19.zig` a través de 150 000 muestras estadísticas y casos de salto
+que penetran la Región 1 ($c \ge 3^{18} = 387\,420\,489$). Las 17 expectativas se escribieron
+antes de ejecutar (`docs/F14_REGION_OFFSETS_V1_PREGISTRATION.md`). Resultado:
+`F14 EXPECTATIONS=17 MATCH=17 FALSIFIED=0`, exit 0.
+
+**Lo que demuestra:** en Región 0 ($c < 3^{18}$) la fórmula coincide al 100% (0 discrepancias);
+en Región 1 ($3^{18} \le c < 2 \cdot 3^{18}$) el offset $+117 \equiv 23 \pmod{94}$ desfasa el
+índice de opcode en el 100% de las muestras; en Región 2 ($c \ge 2 \cdot 3^{18}$) el offset
+$+140 \equiv 46 \pmod{94}$ desfasa en el 100%. Bajo ejecución real, el caso R1 (`(aO`) salta
+a $c = 581\,130\,700$ (Región 1), donde el offset $+117$ hace que `bolge19` alcance `HALT`
+en el paso 11 ($c = 581\,130\,727$), mientras que nuestros cores (sin offset de región)
+continúan hasta el paso 60 ($c = 581\,130\,775$), coincidiendo Python y Zig byte a byte.
+El caso R2 (`'&B`) comprueba el desfase aritmético $+23$ en el paso 4 ($c = 581\,130\,750$,
+opcode 68 en el nuestro vs 91 en la referencia).
+
+Gates: 53 -> 54. Rutas selladas 60 -> 65 (checker, JSON y tres capturas crudas), y una línea
+movida en `tests/run_all.py` (`6ba737c8…` -> `f7425683…`). Identidad del manifiesto
+`ad581d0a…` -> `7e3c9a09…`; S1 `SEAL VERDICT: PASS` y suite completa rc 0 (54 PASS / 0 FAIL / 0 SKIP).
+`src/` intacto. Ledger entrada 40. Siguiente paso del roadmap: la cascada del cifrado (V3).
+

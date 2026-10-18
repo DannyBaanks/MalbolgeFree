@@ -1,0 +1,26 @@
+F14 reference src=MalbolgeLispSlop/src/bolge19.zig sha=47758a3f667f4089
+F14 reference profile=MalbolgeLispSlop/profiles/fixed19.json sha=6cc0afa10b050a36
+F14 reference bin=MalbolgeLispSlop/build/bolge19 sha=04b294d37f8f200e (build product, recorded not pinned)
+F14 ours python=src/malbolge_core.py zig=src/malbolge_free.zig
+F14 regional geometry: END=1162261467 THIRD=387420489 REF_OFFS=(0, 117, 140)
+F14 EXP D1_end_equals_pow3_19: MATCH (json.end=1162261467 3**19=1162261467)
+F14 EXP D2_third_equals_pow3_18: MATCH (json.end//3=387420489 3**18=387420489)
+F14 EXP D3_ref_offset_region_0: MATCH (offs[0]=0)
+F14 EXP D4_ref_offset_region_1: MATCH (offs[1]=117 (117 % 94 = 23))
+F14 EXP D5_ref_offset_region_2: MATCH (offs[2]=140 (140 % 94 = 46))
+F14 EXP P1_R0_FORMULA_EQUALITY: MATCH (50000 seeded pairs in Region 0 (c < 387420489), mismatches=0)
+F14 EXP P2_R1_FORMULA_DIVERGENCE: MATCH (50000 seeded pairs in Region 1: delta mismatches=0, identical count=0)
+F14 EXP P3_R2_FORMULA_DIVERGENCE: MATCH (50000 seeded pairs in Region 2: delta mismatches=0, identical count=0)
+F14 EXP R0_CONTROL_REGION_0: MATCH (ref=HALTED@(2,2) out=da py=HALTED@(2,2) zg=HALTED@(2,2))
+F14 EXP R1_STATUS_HALT: MATCH (ref=HALTED py=HALTED zg=HALTED)
+F14 EXP R1_REGION_ARRIVAL: MATCH (ref_halt_c=581130727 (reg 1) py_halt_c=581130775 (reg 1))
+F14 EXP R1_HALT_DIVERGENCE: MATCH (ref halts at step=11 c=581130727 (due to +117); ours halts at step=60 c=581130775)
+F14 EXP R1_CROSS_CORE_AGREEMENT: MATCH (py steps=60 c=581130775 d=581130767 | zg steps=60 c=581130775 d=581130767)
+F14 EXP R2_STATUS_MAX_STEPS: MATCH (ref=MAX_STEPS py=MAX_STEPS zg=MAX_STEPS)
+F14 EXP R2_REGION_ARRIVAL: MATCH (py_final_c=581130751 (reg 1) zg_final_c=581130751)
+F14 EXP R2_OPCODE_DELTA: MATCH (step 4 at c=581130750: ours op=68 (nop) ref idx=91 (invalid) delta=23 (117 % 94 = 23))
+F14 EXP R2_CROSS_CORE_AGREEMENT: MATCH (py c=581130751 d=5 | zg c=581130751 d=5)
+F14 EXPECTATIONS=17 MATCH=17 FALSIFIED=0
+F14 report written to MalbolgeFree/evidence/f14_region_offsets_20261018.json
+F14 REGION_1_2_DISPATCH_DIVERGENCE_V1=PASS (scoped: regional offsets +117/+140 verified)
+F14_RC=0

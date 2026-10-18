@@ -85,6 +85,11 @@ GATES = [
     # is made. Locally it is measured, not skipped. See
     # docs/F13_UNSHACKLED_K19_PREGISTRATION.md and HONESTY_LEDGER entry 39.
     ("F13 deterministic fixed-3^19 parity differential", [sys.executable, str(ROOT / "evidence" / "compare_unshackled_k19.py")], 300),
+    # F14 measures the regional dispatch divergence V1 (+117 in Region 1, +140 in
+    # Region 2) against the same reference: formula sampling across 150 000 pairs
+    # and execution jumps reaching Region 1. Exits 3 if the reference is absent.
+    # See docs/F14_REGION_OFFSETS_V1_PREGISTRATION.md and HONESTY_LEDGER entry 40.
+    ("F14 region 1 and 2 dispatch divergence (V1)", [sys.executable, str(ROOT / "evidence" / "compare_f14_region_offsets.py")], 300),
     ("M1 numeric and EOF", zig_test("tests/t_m1_contract.zig")),
     ("negative contracts", zig_test("tests/t_negative.zig")),
     ("execution profiles", zig_test("tests/t_profiles.zig")),
