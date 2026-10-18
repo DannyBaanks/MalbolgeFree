@@ -12,9 +12,10 @@ Malbolge Free       :   ^w^   (Malbolgato)
 > parity re-measured against canonical interpreters. The canonical Python
 > interpreter is now **vendored** (`vendor/canonical_malbolge_py/`, hash-pinned),
 > so a fresh clone measures that parity instead of skipping it. See
-> [Canonical parity](#canonical-parity-2026-10-17) and ledger entries 24 and 25.
-> Harness 49/49 PASS on the machine that produced the sealed evidence; CI runs
-> the same gate against the vendored oracle on ubuntu + windows. Where no
+> [Canonical parity](#canonical-parity-2026-10-17) and ledger entries 24, 25, 26, 27, 28.
+> Harness 49/49 PASS on the machine that produced the sealed evidence, and 49 PASS /
+> 0 SKIP on both CI runners, where F4c measures 10 cases × 2 cores × 1 vendored oracle
+> = 20 comparisons (run `39108877995`, entry 28). Where no
 > canonical interpreter is usable at all the gate exits 3 and the harness prints
 > `SKIP (NOT_DEMONSTRATED, missing external input)` — measured, not assumed; it
 > never reports a PASS it did not obtain. Turing completeness holds
@@ -286,6 +287,10 @@ The pin disagreed and CI failed loudly instead of certifying a program nobody re
 stray `\r` reached the Zig core as an input byte, producing a `MISMATCH` that was our
 harness rather than Classic, and was fixed by writing the manifest as bytes and trimming
 a trailing CR in the driver. Neither time was the core touched (ledger entry 27).
+Both defects fixed, run `39108877995` is green on ubuntu **and** windows with F4c
+measuring `10 cases x 2 cores x 1 oracle = 20 stdout-hash comparisons` and
+`49 PASS / 0 SKIP` on each runner — so this claim no longer depends on one workstation
+(ledger entry 28).
 
 Comparisons are on stdout bytes only: the C oracle exposes no step count.
 

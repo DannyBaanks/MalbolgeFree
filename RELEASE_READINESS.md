@@ -19,7 +19,9 @@ oráculo (el pin lo detectó, exit 4; `.gitattributes`), y en el segundo F4c dio
 por un `\r` que el manifest del gate metía como byte de entrada en el núcleo Zig —
 defecto del arnés, no de Classic. Ver entradas 26 y 27,
 `evidence/F4C_WINDOWS_EOL_DRIFT_20261018.json` y
-`evidence/F4C_WINDOWS_MANIFEST_CRLF_20261018.json`. Ver
+`evidence/F4C_WINDOWS_MANIFEST_CRLF_20261018.json`. Con ambos arreglos, el run
+`39108877995` (`cc6d26d`) quedó **verde en ubuntu y en windows** con F4c midiendo 20
+comparaciones y 49 PASS / 0 SKIP en cada runner (entrada 28). Ver
 `docs/HONESTY_LEDGER.md` entrada 24.
 
 ---

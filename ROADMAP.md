@@ -216,7 +216,9 @@ guía.
   en modo texto y el `\r` sobrante llegaba al núcleo Zig como byte de entrada `0x0d`
   (era un defecto de nuestro arnés, no de Classic; el núcleo no se tocó). Ver
   `evidence/F4C_WINDOWS_EOL_DRIFT_20261018.json`,
-  `evidence/F4C_WINDOWS_MANIFEST_CRLF_20261018.json` y ledger entradas 26 y 27. El pin es un
+  `evidence/F4C_WINDOWS_MANIFEST_CRLF_20261018.json` y ledger entradas 26, 27 y 28 —
+  la 28 registra el run `39108877995` (`cc6d26d`) ya **verde en ambos runners**, con
+  F4c midiendo 20 comparaciones y `49 PASS / 0 SKIP` en ubuntu y en windows. El pin es un
   SHA-256: si el
   fichero vendorizado deriva, el gate falla con código 4; si se quita y no queda ningún
   oráculo, sale con código 3 (`NOT_DEMONSTRATED`), que CI reporta como skip explícito,

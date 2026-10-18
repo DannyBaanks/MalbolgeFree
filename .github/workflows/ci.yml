@@ -41,7 +41,8 @@ jobs:
       # The same default also corrupted the gate's own case manifest (text-mode write
       # left 0x0d in the stdin field, ledger entry 27), so run_f4c.zig trims a
       # trailing CR and the manifest is written as bytes: a runner must hand the core
-      # exactly the input each case declares.
+      # exactly the input each case declares. With both fixes in place, run 39108877995
+      # measured 20 comparisons and passed on ubuntu and on windows (ledger entry 28).
       - name: Checkout Malbolge-Translator (M6/TC oracle)
         uses: actions/checkout@v4
         with:
